@@ -28,6 +28,8 @@ header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,.92);backdrop-
 .btn-ghost:hover{color:var(--text);border-color:var(--border)}
 .user-chip{display:flex;align-items:center;gap:.4rem;background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:.28rem .7rem .28rem .5rem;font-size:.82rem;color:var(--muted2)}
 .user-chip .av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;font-weight:700}
+.msg-btn{position:relative;display:flex;align-items:center;gap:.35rem}
+.unread-badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:99px;font-size:.65rem;font-weight:800;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;padding:0 3px}
 
 /* Main */
 main{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 4rem;position:relative;z-index:1}
@@ -116,6 +118,10 @@ select:focus{outline:none;border-color:var(--cyan)}
 .btn-contact.phone:hover{background:#2563eb}
 .btn-contact.email{background:var(--purple);color:#fff}
 .btn-contact.email:hover{background:#7c3aed}
+.btn-contact.messenger{background:#1877f2;color:#fff}
+.btn-contact.messenger:hover{background:#166fe5}
+.btn-contact.chat{background:var(--surface2);border:1px solid var(--cyan);color:var(--cyan)}
+.btn-contact.chat:hover{background:rgba(6,182,212,.1)}
 .d-manage{display:flex;gap:.55rem;margin-top:.2rem}
 .btn-sm{flex:1;padding:.5rem;border-radius:8px;border:1px solid;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
 .btn-sold{border-color:var(--amber);color:var(--amber);background:transparent}
@@ -169,9 +175,37 @@ select:focus{outline:none;border-color:var(--cyan)}
 .d-img{flex:1;border-radius:10px;overflow:hidden;max-height:200px;background:var(--surface2)}
 .d-img img{width:100%;height:100%;object-fit:cover;display:block}
 
-/* Messenger button */
-.btn-contact.messenger{background:#1877f2;color:#fff}
-.btn-contact.messenger:hover{background:#166fe5}
+/* Chat */
+.chat-modal{max-width:480px;display:flex;flex-direction:column;height:70vh;max-height:600px}
+.chat-header{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:.2rem}
+.chat-header h3{font-size:.95rem;font-weight:800}
+.chat-header small{font-size:.75rem;color:var(--muted)}
+.chat-body{flex:1;overflow-y:auto;padding:.9rem;display:flex;flex-direction:column;gap:.55rem}
+.chat-bubble{max-width:75%;padding:.55rem .85rem;border-radius:14px;font-size:.86rem;line-height:1.5;word-break:break-word}
+.bubble-me{align-self:flex-end;background:var(--cyan);color:#0b0f1a;border-bottom-right-radius:4px}
+.bubble-them{align-self:flex-start;background:var(--surface2);color:var(--text);border-bottom-left-radius:4px}
+.bubble-time{font-size:.68rem;margin-top:.2rem;opacity:.65;text-align:right}
+.bubble-them .bubble-time{text-align:left}
+.chat-footer{padding:.75rem;border-top:1px solid var(--border);display:flex;gap:.55rem}
+.chat-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:.55rem .8rem;font-size:.88rem;font-family:inherit;resize:none;height:42px;max-height:120px;overflow-y:auto}
+.chat-input:focus{outline:none;border-color:var(--cyan)}
+.chat-send{background:var(--cyan);border:none;border-radius:10px;color:#0b0f1a;font-size:1.1rem;width:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+.chat-send:hover{background:#22d3ee}
+
+/* Inbox */
+.inbox-modal{max-width:480px}
+.conv-list{max-height:70vh;overflow-y:auto}
+.conv-item{display:flex;align-items:center;gap:.8rem;padding:.85rem 1.1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.conv-item:hover{background:var(--surface2)}
+.conv-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:#fff;flex-shrink:0}
+.conv-info{flex:1;min-width:0}
+.conv-top{display:flex;justify-content:space-between;align-items:center;gap:.4rem;margin-bottom:.18rem}
+.conv-name{font-size:.88rem;font-weight:700}
+.conv-time{font-size:.72rem;color:var(--muted);flex-shrink:0}
+.conv-book{font-size:.75rem;color:var(--cyan);margin-bottom:.12rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-last{font-size:.78rem;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-unread{background:var(--red);color:#fff;border-radius:99px;font-size:.65rem;font-weight:800;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 4px;flex-shrink:0}
+.inbox-empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.88rem}
 </style>
 </head>
 <body>
@@ -223,6 +257,16 @@ select:focus{outline:none;border-color:var(--cyan)}
   <div class="modal" style="max-width:380px"><button class="mc" onclick="closeAuthBtn()">✕</button><div id="authInner"></div></div>
 </div>
 
+<!-- Inbox modal -->
+<div class="overlay" id="inboxOv" onclick="closeInbox(event)">
+  <div class="modal inbox-modal"><button class="mc" onclick="closeInboxBtn()">✕</button><div id="inboxInner"></div></div>
+</div>
+
+<!-- Chat modal -->
+<div class="overlay" id="chatOv" onclick="closeChat(event)">
+  <div class="modal chat-modal"><button class="mc" onclick="closeChatBtn()">✕</button><div id="chatInner" style="display:flex;flex-direction:column;height:100%"></div></div>
+</div>
+
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
 const auth = {
@@ -232,6 +276,9 @@ const auth = {
 let viewMine = false;
 let searchTimer = null;
 let currentLid = null;
+let currentCid = null;
+let chatPollTimer = null;
+let unreadPollTimer = null;
 
 const EMOJI = {
   微積分:'∫',線性代數:'⊕',統計學:'📊',機率論:'🎲',
@@ -254,6 +301,16 @@ async function api(method, path, body) {
 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function bodyLock(on){ document.body.style.overflow = on ? 'hidden' : ''; }
+function fmtTime(ts){
+  if(!ts) return '';
+  const d = new Date(ts);
+  const now = new Date();
+  const diff = now - d;
+  if(diff < 60000) return '剛剛';
+  if(diff < 3600000) return Math.floor(diff/60000)+'分鐘前';
+  if(diff < 86400000) return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
+  return (d.getMonth()+1)+'/'+ d.getDate();
+}
 
 // ── Header ─────────────────────────────────────────────────────────────────
 function renderHeader() {
@@ -262,13 +319,36 @@ function renderHeader() {
     el.innerHTML =
       '<button class="btn btn-ghost" onclick="toggleMine()" id="mineBtn">' + (viewMine?'📋 全部書籍':'👤 我的刊登') + '</button>' +
       '<div class="user-chip"><div class="av">' + esc(auth.username[0].toUpperCase()) + '</div>' + esc(auth.username) + '</div>' +
+      '<div class="msg-btn"><button class="btn" onclick="openInbox()" title="訊息">💬<span id="unreadBadge" style="display:none" class="unread-badge">0</span></button></div>' +
       '<button class="btn" onclick="doLogout()" style="color:var(--red);border-color:rgba(239,68,68,.3)">登出</button>' +
       '<button class="btn btn-primary" onclick="openPost()">＋ 刊登書籍</button>';
+    startUnreadPoll();
   } else {
     el.innerHTML =
       '<button class="btn" onclick="openAuth(\'login\')">登入</button>' +
       '<button class="btn btn-primary" onclick="openAuth(\'register\')">註冊</button>';
+    stopUnreadPoll();
   }
+}
+
+// ── Unread poll ────────────────────────────────────────────────────────────
+function startUnreadPoll() {
+  checkUnread();
+  unreadPollTimer = setInterval(checkUnread, 8000);
+}
+function stopUnreadPoll() {
+  clearInterval(unreadPollTimer);
+}
+async function checkUnread() {
+  if (!auth.token) return;
+  try {
+    const d = await api('GET', '/api/conversations/unread');
+    const badge = document.getElementById('unreadBadge');
+    if (badge) {
+      if (d.count > 0) { badge.style.display='flex'; badge.textContent = d.count > 99 ? '99+' : d.count; }
+      else { badge.style.display='none'; }
+    }
+  } catch(e) {}
 }
 
 // ── Auth flow ──────────────────────────────────────────────────────────────
@@ -462,6 +542,15 @@ function renderDetail(b) {
     html += '<button class="btn-contact '+cClass+'" onclick="copyText(\''+esc(b.contact_info)+'\')">'+cIcon+' '+cLabel+'：'+esc(b.contact_info)+' （點擊複製）</button>';
   }
 
+  // 站內聊聊（非自己的書才顯示）
+  if (!b.is_mine) {
+    if (auth.token) {
+      html += '<button class="btn-contact chat" onclick="startChat('+b.id+')">💬 站內聊聊</button>';
+    } else {
+      html += '<button class="btn-contact chat" onclick="closeDetailBtn();openAuth(\'login\')">💬 登入後才能聊聊</button>';
+    }
+  }
+
   // Manage buttons (only for owner)
   if (b.is_mine) {
     html += '<div class="d-manage">' +
@@ -594,6 +683,127 @@ async function submitPost() {
     msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>';
     btn.disabled=false; btn.textContent='📤 刊登書籍';
   }
+}
+
+// ── Inbox ──────────────────────────────────────────────────────────────────
+function openInbox() {
+  document.getElementById('inboxOv').classList.add('open');
+  bodyLock(true);
+  loadInbox();
+}
+function closeInbox(e){ if(e.target===document.getElementById('inboxOv')) closeInboxBtn(); }
+function closeInboxBtn(){ document.getElementById('inboxOv').classList.remove('open'); bodyLock(false); }
+
+async function loadInbox() {
+  document.getElementById('inboxInner').innerHTML =
+    '<div style="padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-weight:800;font-size:1rem">💬 我的聊聊</div>' +
+    '<div class="conv-list"><div class="spinner"></div></div>';
+  try {
+    const convs = await api('GET', '/api/conversations');
+    const list = document.querySelector('#inboxInner .conv-list');
+    if (!convs.length) {
+      list.innerHTML = '<div class="inbox-empty">還沒有任何對話<br><small>點擊書籍的「站內聊聊」開始對話</small></div>';
+      return;
+    }
+    list.innerHTML = convs.map(c => {
+      const initial = (c.other_name||'?')[0].toUpperCase();
+      return '<div class="conv-item" onclick="openChat('+c.id+',\''+esc(c.other_name)+'\',\''+esc(c.listing_title)+'\')">' +
+        '<div class="conv-av">'+initial+'</div>' +
+        '<div class="conv-info">' +
+          '<div class="conv-top"><span class="conv-name">'+esc(c.other_name)+'</span><span class="conv-time">'+fmtTime(c.last_at)+'</span></div>' +
+          '<div class="conv-book">📚 '+esc(c.listing_title)+'</div>' +
+          '<div class="conv-last">'+(c.last_msg?esc(c.last_msg):'<i>開始對話吧</i>')+'</div>' +
+        '</div>' +
+        (c.unread>0?'<div class="conv-unread">'+c.unread+'</div>':'') +
+      '</div>';
+    }).join('');
+  } catch(e) {
+    document.querySelector('#inboxInner .conv-list').innerHTML = '<div class="inbox-empty">載入失敗</div>';
+  }
+}
+
+// ── Chat ───────────────────────────────────────────────────────────────────
+async function startChat(lid) {
+  try {
+    const d = await api('POST', '/api/conversations', {listing_id: lid});
+    closeDetailBtn();
+    // load listing title
+    const listing = await api('GET', '/api/listings/' + lid);
+    openChat(d.id, listing.username, listing.title);
+  } catch(e) { alert('❌ ' + e.message); }
+}
+
+function openChat(cid, otherName, listingTitle) {
+  currentCid = cid;
+  // Close inbox if open
+  document.getElementById('inboxOv').classList.remove('open');
+  document.getElementById('chatOv').classList.add('open');
+  bodyLock(true);
+  renderChatShell(otherName, listingTitle);
+  loadMessages();
+  startChatPoll();
+}
+
+function renderChatShell(otherName, listingTitle) {
+  document.getElementById('chatInner').innerHTML =
+    '<div class="chat-header">' +
+      '<h3>'+esc(otherName)+'</h3>' +
+      '<small>📚 '+esc(listingTitle)+'</small>' +
+    '</div>' +
+    '<div class="chat-body" id="chatBody"><div class="spinner"></div></div>' +
+    '<div class="chat-footer">' +
+      '<textarea class="chat-input" id="chatInput" placeholder="輸入訊息..." onkeydown="chatEnter(event)" rows="1"></textarea>' +
+      '<button class="chat-send" onclick="sendMsg()">➤</button>' +
+    '</div>';
+}
+
+async function loadMessages() {
+  if (!currentCid) return;
+  try {
+    const msgs = await api('GET', '/api/conversations/'+currentCid+'/messages');
+    const body = document.getElementById('chatBody');
+    if (!body) return;
+    const wasAtBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 60;
+    body.innerHTML = msgs.length ? msgs.map(m => {
+      const isMe = m.sender_name === auth.username;
+      return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+'">' +
+        '<div class="chat-bubble '+(isMe?'bubble-me':'bubble-them')+'">'+esc(m.content)+
+        '<div class="bubble-time">'+fmtTime(m.created_at)+'</div></div></div>';
+    }).join('') : '<div style="text-align:center;color:var(--muted);font-size:.82rem;padding:1rem">說聲嗨吧 👋</div>';
+    if (wasAtBottom || msgs.length < 5) body.scrollTop = body.scrollHeight;
+    checkUnread();
+  } catch(e) {}
+}
+
+function startChatPoll() {
+  stopChatPoll();
+  chatPollTimer = setInterval(loadMessages, 4000);
+}
+function stopChatPoll() {
+  clearInterval(chatPollTimer);
+}
+
+function closeChat(e){ if(e.target===document.getElementById('chatOv')) closeChatBtn(); }
+function closeChatBtn(){
+  stopChatPoll();
+  currentCid = null;
+  document.getElementById('chatOv').classList.remove('open');
+  bodyLock(false);
+}
+
+function chatEnter(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+}
+
+async function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const content = input.value.trim();
+  if (!content || !currentCid) return;
+  input.value = '';
+  try {
+    await api('POST', '/api/conversations/'+currentCid+'/messages', {content});
+    loadMessages();
+  } catch(e) { input.value = content; alert('❌ 發送失敗'); }
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────

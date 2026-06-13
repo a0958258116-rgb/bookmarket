@@ -61,6 +61,31 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS conversations (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            listing_id INTEGER NOT NULL,
+            buyer_id   INTEGER NOT NULL,
+            seller_id  INTEGER NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(listing_id, buyer_id),
+            FOREIGN KEY (listing_id) REFERENCES listings(id),
+            FOREIGN KEY (buyer_id)   REFERENCES users(id),
+            FOREIGN KEY (seller_id)  REFERENCES users(id)
+        )
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS messages (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            conversation_id INTEGER NOT NULL,
+            sender_id       INTEGER NOT NULL,
+            content         TEXT NOT NULL,
+            is_read         INTEGER DEFAULT 0,
+            created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (conversation_id) REFERENCES conversations(id),
+            FOREIGN KEY (sender_id)       REFERENCES users(id)
+        )
+    """)
     # 新增圖片欄位（若已存在則略過）
     for col in ("image1", "image2"):
         try:
@@ -252,7 +277,6 @@ def create_listing():
     if err:
         return err
 
-    # 支援 multipart/form-data（有圖片）與 JSON（無圖片）
     ct = request.content_type or ""
     if "multipart/form-data" in ct:
         data = request.form
@@ -291,8 +315,7 @@ def create_listing():
           price,
           data.get("description", "").strip(),
           data.get("contact_type", "line"),
-          contact_info,
-          image1, image2])
+          contact_info, image1, image2])
     lid = cur.lastrowid
     conn.commit()
     conn.close()
@@ -322,6 +345,131 @@ def delete_listing(lid):
         return owner_err
     conn = get_db()
     conn.execute("DELETE FROM listings WHERE id = ?", [lid])
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True})
+
+# ── Conversation routes ────────────────────────────────────────────────────
+
+@app.route("/api/conversations")
+def list_conversations():
+    user, err = require_user()
+    if err:
+        return err
+    conn = get_db()
+    rows = conn.execute("""
+        SELECT c.id, c.listing_id, c.buyer_id, c.seller_id,
+               l.title AS listing_title,
+               ub.username AS buyer_name,
+               us.username AS seller_name,
+               (SELECT content FROM messages WHERE conversation_id=c.id ORDER BY created_at DESC LIMIT 1) AS last_msg,
+               (SELECT created_at FROM messages WHERE conversation_id=c.id ORDER BY created_at DESC LIMIT 1) AS last_at,
+               (SELECT COUNT(*) FROM messages WHERE conversation_id=c.id AND is_read=0 AND sender_id != ?) AS unread
+        FROM conversations c
+        JOIN listings l ON c.listing_id = l.id
+        JOIN users ub ON c.buyer_id = ub.id
+        JOIN users us ON c.seller_id = us.id
+        WHERE c.buyer_id = ? OR c.seller_id = ?
+        ORDER BY last_at DESC
+    """, [user["id"], user["id"], user["id"]]).fetchall()
+    conn.close()
+    result = []
+    for r in rows:
+        d = dict(r)
+        d["other_name"] = d["seller_name"] if d["buyer_id"] == user["id"] else d["buyer_name"]
+        result.append(d)
+    return jsonify(result)
+
+@app.route("/api/conversations/unread")
+def unread_count():
+    user, err = require_user()
+    if err:
+        return jsonify({"count": 0})
+    conn = get_db()
+    row = conn.execute("""
+        SELECT COUNT(*) as cnt FROM messages m
+        JOIN conversations c ON m.conversation_id = c.id
+        WHERE (c.buyer_id=? OR c.seller_id=?) AND m.sender_id != ? AND m.is_read = 0
+    """, [user["id"], user["id"], user["id"]]).fetchone()
+    conn.close()
+    return jsonify({"count": row["cnt"] if row else 0})
+
+@app.route("/api/conversations", methods=["POST"])
+def start_conversation():
+    user, err = require_user()
+    if err:
+        return err
+    data = request.get_json() or {}
+    lid = data.get("listing_id")
+    if not lid:
+        return jsonify({"detail": "缺少 listing_id"}), 400
+    conn = get_db()
+    listing = conn.execute("SELECT user_id FROM listings WHERE id=?", [lid]).fetchone()
+    if not listing:
+        conn.close()
+        return jsonify({"detail": "找不到此刊登"}), 404
+    seller_id = listing["user_id"]
+    if seller_id == user["id"]:
+        conn.close()
+        return jsonify({"detail": "不能向自己發起對話"}), 400
+    existing = conn.execute(
+        "SELECT id FROM conversations WHERE listing_id=? AND buyer_id=?", [lid, user["id"]]
+    ).fetchone()
+    if existing:
+        conn.close()
+        return jsonify({"id": existing["id"]})
+    cur = conn.execute(
+        "INSERT INTO conversations (listing_id, buyer_id, seller_id) VALUES (?,?,?)",
+        [lid, user["id"], seller_id]
+    )
+    cid = cur.lastrowid
+    conn.commit()
+    conn.close()
+    return jsonify({"id": cid})
+
+@app.route("/api/conversations/<int:cid>/messages")
+def get_messages(cid):
+    user, err = require_user()
+    if err:
+        return err
+    conn = get_db()
+    conv = conn.execute("SELECT * FROM conversations WHERE id=?", [cid]).fetchone()
+    if not conv or (conv["buyer_id"] != user["id"] and conv["seller_id"] != user["id"]):
+        conn.close()
+        return jsonify({"detail": "無權限"}), 403
+    # 標記已讀
+    conn.execute(
+        "UPDATE messages SET is_read=1 WHERE conversation_id=? AND sender_id != ?",
+        [cid, user["id"]]
+    )
+    conn.commit()
+    rows = conn.execute("""
+        SELECT m.id, m.sender_id, m.content, m.created_at, u.username AS sender_name
+        FROM messages m JOIN users u ON m.sender_id = u.id
+        WHERE m.conversation_id=? ORDER BY m.created_at ASC
+    """, [cid]).fetchall()
+    conn.close()
+    return jsonify([dict(r) for r in rows])
+
+@app.route("/api/conversations/<int:cid>/messages", methods=["POST"])
+def send_message(cid):
+    user, err = require_user()
+    if err:
+        return err
+    conn = get_db()
+    conv = conn.execute("SELECT * FROM conversations WHERE id=?", [cid]).fetchone()
+    if not conv or (conv["buyer_id"] != user["id"] and conv["seller_id"] != user["id"]):
+        conn.close()
+        return jsonify({"detail": "無權限"}), 403
+    data = request.get_json() or {}
+    content = data.get("content", "").strip()
+    if not content:
+        conn.close()
+        return jsonify({"detail": "訊息不能為空"}), 400
+    conn.execute(
+        "INSERT INTO messages (conversation_id, sender_id, content) VALUES (?,?,?)",
+        [cid, user["id"], content]
+    )
     conn.commit()
     conn.close()
     return jsonify({"ok": True})
