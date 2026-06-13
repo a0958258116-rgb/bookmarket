@@ -2,13 +2,28 @@ import sqlite3
 import hashlib
 import os
 import uuid
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, send_from_directory
 from flask_cors import CORS
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "books.db")
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "uploads")
+ALLOWED_EXT = {"png", "jpg", "jpeg", "gif", "webp"}
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app = Flask(__name__)
 CORS(app)
+
+# ── Image helper ───────────────────────────────────────────────────────────
+
+def save_image(f):
+    if not f or f.filename == "":
+        return ""
+    ext = f.filename.rsplit(".", 1)[-1].lower() if "." in f.filename else ""
+    if ext not in ALLOWED_EXT:
+        return ""
+    fname = uuid.uuid4().hex + "." + ext
+    f.save(os.path.join(UPLOAD_FOLDER, fname))
+    return fname
 
 # ── DB ─────────────────────────────────────────────────────────────────────
 
@@ -46,6 +61,12 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)
+    # 新增圖片欄位（若已存在則略過）
+    for col in ("image1", "image2"):
+        try:
+            conn.execute(f"ALTER TABLE listings ADD COLUMN {col} TEXT DEFAULT ''")
+        except Exception:
+            pass
     conn.commit()
     conn.close()
 
@@ -69,7 +90,6 @@ def new_token():
     return uuid.uuid4().hex + uuid.uuid4().hex
 
 def get_user():
-    """從 Authorization header 取得目前使用者，無則回傳 None。"""
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer "):
         return None
@@ -82,14 +102,12 @@ def get_user():
     return dict(row) if row else None
 
 def require_user():
-    """回傳 (user, None) 或 (None, error_response)。"""
     user = get_user()
     if not user:
         return None, (jsonify({"detail": "請先登入"}), 401)
     return user, None
 
 def check_owner(lid, user_id):
-    """確認刊登屬於此使用者，不是則回傳 error response，是則回傳 None。"""
     conn = get_db()
     row = conn.execute("SELECT user_id FROM listings WHERE id = ?", [lid]).fetchone()
     conn.close()
@@ -104,6 +122,10 @@ def check_owner(lid, user_id):
 @app.route("/")
 def root():
     return send_file("index.html")
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 # ── Auth routes ────────────────────────────────────────────────────────────
 
@@ -230,14 +252,27 @@ def create_listing():
     if err:
         return err
 
-    data         = request.get_json() or {}
+    # 支援 multipart/form-data（有圖片）與 JSON（無圖片）
+    ct = request.content_type or ""
+    if "multipart/form-data" in ct:
+        data = request.form
+        image1 = save_image(request.files.get("image1"))
+        image2 = save_image(request.files.get("image2"))
+    else:
+        data = request.get_json() or {}
+        image1 = ""
+        image2 = ""
+
     title        = data.get("title", "").strip()
-    price        = data.get("price", 0)
     contact_info = data.get("contact_info", "").strip()
+    try:
+        price = int(data.get("price", 0))
+    except (ValueError, TypeError):
+        price = -1
 
     if not title:
         return jsonify({"detail": "書名不能為空"}), 400
-    if not isinstance(price, int) or price < 0:
+    if price < 0:
         return jsonify({"detail": "價格不能為負數"}), 400
     if not contact_info:
         return jsonify({"detail": "請填寫聯絡方式"}), 400
@@ -246,8 +281,8 @@ def create_listing():
     cur = conn.execute("""
         INSERT INTO listings
             (user_id, title, author, subject, edition, condition,
-             price, description, contact_type, contact_info)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             price, description, contact_type, contact_info, image1, image2)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, [user["id"], title,
           data.get("author", "").strip(),
           data.get("subject", ""),
@@ -256,7 +291,8 @@ def create_listing():
           price,
           data.get("description", "").strip(),
           data.get("contact_type", "line"),
-          contact_info])
+          contact_info,
+          image1, image2])
     lid = cur.lastrowid
     conn.commit()
     conn.close()
