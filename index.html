@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>📚 資料科學系 二手教科書</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0b0f1a; --surface:#141927; --surface2:#1c2438;
+  --border:rgba(148,163,184,.11); --text:#e2e8f0; --muted:#64748b; --muted2:#94a3b8;
+  --cyan:#06b6d4; --purple:#8b5cf6; --green:#22c55e; --amber:#f59e0b; --red:#ef4444;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 40% at 15% 0%,rgba(6,182,212,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 85% 100%,rgba(139,92,246,.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+
+/* Header */
+header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.hdr{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:.75rem;height:60px}
+.logo{display:flex;align-items:center;gap:.55rem;font-weight:800;font-size:1rem;white-space:nowrap;margin-right:auto}
+.logo-icon{font-size:1.35rem}
+.logo span{color:var(--cyan)}
+.btn{padding:.42rem .85rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;font-size:.84rem;font-family:inherit;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn-primary{background:var(--cyan);border-color:var(--cyan);color:#0b0f1a;font-weight:700}
+.btn-primary:hover{background:#22d3ee;border-color:#22d3ee}
+.btn-ghost{border-color:transparent;color:var(--muted2)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border)}
+.user-chip{display:flex;align-items:center;gap:.4rem;background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:.28rem .7rem .28rem .5rem;font-size:.82rem;color:var(--muted2)}
+.user-chip .av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;font-weight:700}
+
+/* Main */
+main{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 4rem;position:relative;z-index:1}
+
+/* Toolbar */
+.toolbar{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:1.2rem}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:.55rem .9rem .55rem 2.4rem;font-size:.9rem;font-family:inherit;transition:border-color .15s}
+.search-wrap input:focus{outline:none;border-color:var(--cyan)}
+.search-wrap input::placeholder{color:var(--muted)}
+.s-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+select{background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:.55rem .85rem;font-size:.85rem;font-family:inherit;cursor:pointer;transition:border-color .15s}
+select:focus{outline:none;border-color:var(--cyan)}
+
+/* Section label */
+.section-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.section-title{font-size:.82rem;color:var(--muted)}
+.section-title b{color:var(--cyan)}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .18s;overflow:hidden;display:flex;flex-direction:column}
+.card:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 8px 24px rgba(6,182,212,.12)}
+.card.sold{opacity:.55;cursor:default}
+.card.sold:hover{border-color:var(--border);transform:none;box-shadow:none}
+.card-thumb{height:110px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:2.8rem;position:relative}
+.sold-tag{position:absolute;inset:0;background:rgba(11,15,26,.65);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:#fca5a5;letter-spacing:.05em}
+.card-body{padding:.85rem;flex:1;display:flex;flex-direction:column;gap:.3rem}
+.card-subject{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.card-title{font-weight:700;font-size:.93rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-author{font-size:.78rem;color:var(--muted2)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.45rem}
+.price{font-size:1.05rem;font-weight:800;color:var(--cyan)}
+.price small{font-size:.72rem;color:var(--muted);font-weight:400;margin-left:1px}
+.mine-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 5px var(--cyan);flex-shrink:0}
+
+/* Badges */
+.badge{display:inline-block;padding:.17rem .52rem;border-radius:99px;font-size:.7rem;font-weight:700}
+.badge-全新{background:rgba(34,197,94,.15);color:#86efac}
+.badge-近全新{background:rgba(6,182,212,.15);color:#67e8f9}
+.badge-良好{background:rgba(59,130,246,.15);color:#93c5fd}
+.badge-普通{background:rgba(245,158,11,.15);color:#fcd34d}
+.badge-有筆記{background:rgba(139,92,246,.15);color:#c4b5fd}
+
+/* Subject colors */
+.subj-微積分,.subj-線性代數,.subj-統計學,.subj-機率論{color:#f472b6}
+.subj-計算機概論,.subj-程式設計{color:#fb923c}
+.subj-資料結構,.subj-演算法{color:#4ade80}
+.subj-資料庫系統,.subj-大數據分析{color:#60a5fa}
+.subj-機器學習,.subj-深度學習{color:#c084fc}
+.subj-資料視覺化,.subj-自然語言處理{color:#34d399}
+.subj-資訊安全{color:#f87171}
+.subj-其他{color:var(--muted2)}
+
+/* Empty / spinner */
+.empty{text-align:center;padding:4rem 1rem;color:var(--muted)}
+.empty .ei{font-size:2.8rem;margin-bottom:.7rem}
+.empty p{font-size:.88rem}
+.spinner{width:26px;height:26px;border:2.5px solid rgba(148,163,184,.2);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;margin:3rem auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Overlay / Modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;padding:1rem;overflow-y:auto;backdrop-filter:blur(4px)}
+.overlay.open{display:flex;align-items:flex-start;justify-content:center;padding-top:3vh}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:500px;margin:auto;position:relative;overflow:hidden}
+.mc{position:absolute;top:.85rem;right:.85rem;background:var(--surface2);border:none;color:var(--muted2);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s;z-index:1}
+.mc:hover{color:var(--text)}
+
+/* Detail modal */
+.d-thumb{height:150px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:3.8rem}
+.d-body{padding:1.3rem}
+.d-subject{font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.35rem}
+.d-title{font-size:1.2rem;font-weight:800;line-height:1.3;margin-bottom:.2rem}
+.d-author{font-size:.86rem;color:var(--muted2);margin-bottom:.85rem}
+.d-meta{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.9rem}
+.meta-chip{background:var(--surface2);border-radius:7px;padding:.28rem .65rem;font-size:.78rem;color:var(--muted2)}
+.meta-chip b{color:var(--text)}
+.d-desc{font-size:.86rem;color:var(--muted2);background:var(--surface2);border-radius:9px;padding:.7rem;margin-bottom:.9rem;line-height:1.65;white-space:pre-wrap}
+.d-price{font-size:1.65rem;font-weight:900;color:var(--cyan);margin-bottom:1rem}
+.d-price small{font-size:.85rem;color:var(--muted);font-weight:400;margin-left:3px}
+.d-actions{display:flex;flex-direction:column;gap:.55rem}
+.btn-contact{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;padding:.72rem;border-radius:9px;border:none;font-size:.93rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none}
+.btn-contact.line{background:#06c755;color:#fff}
+.btn-contact.line:hover{background:#05b84d}
+.btn-contact.phone{background:#3b82f6;color:#fff}
+.btn-contact.phone:hover{background:#2563eb}
+.btn-contact.email{background:var(--purple);color:#fff}
+.btn-contact.email:hover{background:#7c3aed}
+.d-manage{display:flex;gap:.55rem;margin-top:.2rem}
+.btn-sm{flex:1;padding:.5rem;border-radius:8px;border:1px solid;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-sold{border-color:var(--amber);color:var(--amber);background:transparent}
+.btn-sold:hover{background:rgba(245,158,11,.1)}
+.btn-del{border-color:var(--red);color:var(--red);background:transparent}
+.btn-del:hover{background:rgba(239,68,68,.1)}
+.msg{font-size:.81rem;padding:.38rem .65rem;border-radius:6px;margin-top:.3rem}
+.msg.ok{background:rgba(34,197,94,.12);color:#86efac}
+.msg.err{background:rgba(239,68,68,.12);color:#fca5a5}
+
+/* Post / Auth modal form */
+.f-wrap{padding:1.35rem}
+.f-wrap h2{font-size:1.1rem;font-weight:800;margin-bottom:1.1rem}
+.fg{margin-bottom:.82rem}
+.fg label{display:block;font-size:.77rem;color:var(--muted2);margin-bottom:.28rem}
+.fg label .req{color:var(--cyan)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:.82rem}
+@media(max-width:440px){.f2{grid-template-columns:1fr}}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.56rem .78rem;font-size:.88rem;font-family:inherit;transition:border-color .15s}
+.fg textarea{resize:vertical;min-height:78px}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--cyan)}
+.fg input::placeholder,.fg textarea::placeholder{color:#334155}
+.f-tip{background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.2);border-radius:8px;padding:.5rem .85rem;font-size:.79rem;color:#67e8f9;margin-bottom:.82rem}
+.btn-sub{width:100%;padding:.75rem;margin-top:.3rem;background:var(--cyan);border:none;border-radius:9px;color:#0b0f1a;font-size:.95rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .18s}
+.btn-sub:hover:not(:disabled){background:#22d3ee}
+.btn-sub:disabled{opacity:.4;cursor:not-allowed}
+.f-msg{margin-bottom:.5rem}
+
+/* Auth tabs */
+.auth-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.2rem}
+.auth-tab{flex:1;padding:.6rem;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:.9rem;font-family:inherit;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.auth-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* Success */
+.suc{text-align:center;padding:2rem 1rem}
+.suc .si{font-size:2.8rem;margin-bottom:.55rem}
+.suc h3{font-size:1.05rem;font-weight:800;color:var(--green);margin-bottom:.35rem}
+.suc p{font-size:.84rem;color:var(--muted2);line-height:1.6}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="logo"><span class="logo-icon">📚</span>資料科學系 <span>二手教科書</span></div>
+    <div id="hdrRight"></div>
+  </div>
+</header>
+
+<main>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="s-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜尋書名、作者..." oninput="onSearch()">
+    </div>
+    <select id="subjectFilter" onchange="loadListings()">
+      <option value="all">所有科目</option>
+      <option>微積分</option><option>線性代數</option><option>統計學</option>
+      <option>機率論</option><option>計算機概論</option><option>程式設計</option>
+      <option>資料結構</option><option>演算法</option><option>資料庫系統</option>
+      <option>機器學習</option><option>深度學習</option><option>資料視覺化</option>
+      <option>大數據分析</option><option>自然語言處理</option><option>資訊安全</option>
+      <option>其他</option>
+    </select>
+    <select id="conditionFilter" onchange="loadListings()">
+      <option value="all">所有成色</option>
+      <option>全新</option><option>近全新</option><option>良好</option>
+      <option>普通</option><option>有筆記</option>
+    </select>
+  </div>
+  <div class="section-bar"><div class="section-title" id="sectionTitle"></div></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<!-- Detail modal -->
+<div class="overlay" id="detailOv" onclick="closeDetail(event)">
+  <div class="modal"><button class="mc" onclick="closeDetailBtn()">✕</button><div id="detailInner"></div></div>
+</div>
+
+<!-- Post modal -->
+<div class="overlay" id="postOv" onclick="closePost(event)">
+  <div class="modal"><button class="mc" onclick="closePostBtn()">✕</button><div id="postInner"></div></div>
+</div>
+
+<!-- Auth modal -->
+<div class="overlay" id="authOv" onclick="closeAuth(event)">
+  <div class="modal" style="max-width:380px"><button class="mc" onclick="closeAuthBtn()">✕</button><div id="authInner"></div></div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const auth = {
+  token: localStorage.getItem('ds_token') || null,
+  username: localStorage.getItem('ds_username') || null,
+};
+let viewMine = false;
+let searchTimer = null;
+let currentLid = null;
+
+const EMOJI = {
+  微積分:'∫',線性代數:'⊕',統計學:'📊',機率論:'🎲',
+  計算機概論:'💻',程式設計:'🐍',資料結構:'🌳',演算法:'⚙️',
+  資料庫系統:'🗄️',機器學習:'🤖',深度學習:'🧠',資料視覺化:'📈',
+  大數據分析:'🔬',自然語言處理:'💬',資訊安全:'🔐',其他:'📖',
+};
+
+// ── API helper ─────────────────────────────────────────────────────────────
+async function api(method, path, body) {
+  const headers = {'Content-Type':'application/json'};
+  if (auth.token) headers['Authorization'] = 'Bearer ' + auth.token;
+  const opts = {method, headers};
+  if (body != null) opts.body = JSON.stringify(body);
+  const res = await fetch(path, opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || '操作失敗');
+  return data;
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function bodyLock(on){ document.body.style.overflow = on ? 'hidden' : ''; }
+
+// ── Header ─────────────────────────────────────────────────────────────────
+function renderHeader() {
+  const el = document.getElementById('hdrRight');
+  if (auth.token) {
+    el.innerHTML =
+      '<button class="btn btn-ghost" onclick="toggleMine()" id="mineBtn">' + (viewMine?'📋 全部書籍':'👤 我的刊登') + '</button>' +
+      '<div class="user-chip"><div class="av">' + esc(auth.username[0].toUpperCase()) + '</div>' + esc(auth.username) + '</div>' +
+      '<button class="btn" onclick="doLogout()" style="color:var(--red);border-color:rgba(239,68,68,.3)">登出</button>' +
+      '<button class="btn btn-primary" onclick="openPost()">＋ 刊登書籍</button>';
+  } else {
+    el.innerHTML =
+      '<button class="btn" onclick="openAuth(\'login\')">登入</button>' +
+      '<button class="btn btn-primary" onclick="openAuth(\'register\')">註冊</button>';
+  }
+}
+
+// ── Auth flow ──────────────────────────────────────────────────────────────
+function openAuth(tab) {
+  renderAuthModal(tab || 'login');
+  document.getElementById('authOv').classList.add('open');
+  bodyLock(true);
+}
+function closeAuth(e){ if(e.target===document.getElementById('authOv')) closeAuthBtn(); }
+function closeAuthBtn(){ document.getElementById('authOv').classList.remove('open'); bodyLock(false); }
+
+function renderAuthModal(tab) {
+  document.getElementById('authInner').innerHTML =
+    '<div class="f-wrap">' +
+    '<div class="auth-tabs">' +
+      '<button class="auth-tab' + (tab==='login'?' active':'') + '" onclick="renderAuthModal(\'login\')">登入</button>' +
+      '<button class="auth-tab' + (tab==='register'?' active':'') + '" onclick="renderAuthModal(\'register\')">註冊帳號</button>' +
+    '</div>' +
+    '<div id="authFormMsg" class="f-msg"></div>' +
+    (tab === 'login' ? buildLoginForm() : buildRegisterForm()) +
+    '</div>';
+}
+
+function buildLoginForm() {
+  return '<div class="fg"><label>帳號</label><input id="a-user" type="text" placeholder="輸入帳號"></div>' +
+    '<div class="fg"><label>密碼</label><input id="a-pass" type="password" placeholder="輸入密碼"></div>' +
+    '<button class="btn-sub" onclick="submitLogin()">登入</button>';
+}
+function buildRegisterForm() {
+  return '<div class="fg"><label>帳號 <span class="req">*</span><small style="color:var(--muted);font-weight:400"> 英文、數字、底線，3-20字</small></label><input id="a-user" type="text" placeholder="自訂帳號名稱"></div>' +
+    '<div class="fg"><label>密碼 <span class="req">*</span><small style="color:var(--muted);font-weight:400"> 至少6個字元</small></label><input id="a-pass" type="password" placeholder="設定密碼"></div>' +
+    '<div class="fg"><label>確認密碼 <span class="req">*</span></label><input id="a-pass2" type="password" placeholder="再輸入一次密碼"></div>' +
+    '<button class="btn-sub" onclick="submitRegister()">建立帳號</button>';
+}
+
+async function submitLogin() {
+  const u = document.getElementById('a-user').value.trim();
+  const p = document.getElementById('a-pass').value;
+  const msg = document.getElementById('authFormMsg');
+  if (!u||!p){ msg.innerHTML='<div class="msg err">請填寫所有欄位</div>'; return; }
+  try {
+    const d = await api('POST','/api/auth/login',{username:u,password:p});
+    setAuth(d.token, d.username);
+    closeAuthBtn();
+  } catch(e){ msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+}
+async function submitRegister() {
+  const u = document.getElementById('a-user').value.trim();
+  const p = document.getElementById('a-pass').value;
+  const p2 = document.getElementById('a-pass2').value;
+  const msg = document.getElementById('authFormMsg');
+  if (!u||!p||!p2){ msg.innerHTML='<div class="msg err">請填寫所有欄位</div>'; return; }
+  if (p !== p2){ msg.innerHTML='<div class="msg err">❌ 兩次密碼不一致</div>'; return; }
+  try {
+    const d = await api('POST','/api/auth/register',{username:u,password:p});
+    setAuth(d.token, d.username);
+    closeAuthBtn();
+  } catch(e){ msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+}
+
+function setAuth(token, username) {
+  auth.token = token; auth.username = username;
+  localStorage.setItem('ds_token', token);
+  localStorage.setItem('ds_username', username);
+  renderHeader(); loadListings();
+}
+
+async function doLogout() {
+  try { await api('POST','/api/auth/logout'); } catch(e){}
+  auth.token = null; auth.username = null;
+  localStorage.removeItem('ds_token'); localStorage.removeItem('ds_username');
+  viewMine = false;
+  renderHeader(); loadListings();
+}
+
+// ── Listings ───────────────────────────────────────────────────────────────
+function toggleMine() {
+  viewMine = !viewMine;
+  renderHeader();
+  loadListings();
+}
+
+function onSearch(){ clearTimeout(searchTimer); searchTimer=setTimeout(loadListings,350); }
+
+async function loadListings() {
+  const grid = document.getElementById('grid');
+  const title = document.getElementById('sectionTitle');
+  grid.innerHTML = '<div class="spinner"></div>';
+  title.innerHTML = '';
+
+  const params = new URLSearchParams();
+  if (!viewMine) {
+    const s = document.getElementById('searchInput').value.trim();
+    const sub = document.getElementById('subjectFilter').value;
+    const cond = document.getElementById('conditionFilter').value;
+    if (s) params.set('search', s);
+    if (sub !== 'all') params.set('subject', sub);
+    if (cond !== 'all') params.set('condition', cond);
+  } else {
+    params.set('mine', 'true');
+  }
+
+  try {
+    const data = await api('GET', '/api/listings?' + params);
+    renderGrid(data);
+    if (viewMine) {
+      title.innerHTML = '👤 我的刊登（共 <b>' + data.length + '</b> 筆）';
+    } else {
+      title.innerHTML = '在售書籍 <b>' + data.length + '</b> 筆';
+    }
+  } catch(e) {
+    grid.innerHTML = '<div class="empty"><div class="ei">⚠️</div><p>無法連線到伺服器</p></div>';
+  }
+}
+
+function renderGrid(items) {
+  const grid = document.getElementById('grid');
+  if (!items.length) {
+    const msg = viewMine ? '你還沒有刊登任何書籍' : '找不到符合條件的書籍';
+    grid.innerHTML = '<div class="empty"><div class="ei">📭</div><p>'+msg+'</p></div>';
+    return;
+  }
+  grid.innerHTML = items.map(b => {
+    const emoji = EMOJI[b.subject] || '📖';
+    const sc = 'subj-' + (b.subject||'其他');
+    const sold = b.is_sold ? ' sold' : '';
+    const mine = b.is_mine ? '<div class="mine-dot" title="我的刊登"></div>' : '';
+    return '<div class="card'+sold+'" onclick="'+(b.is_sold?'':('openDetail('+b.id+')'))+'">' +
+      '<div class="card-thumb">' + emoji + (b.is_sold?'<div class="sold-tag">已售出</div>':'') + '</div>' +
+      '<div class="card-body">' +
+        (b.subject?'<div class="card-subject '+sc+'">'+esc(b.subject)+'</div>':'') +
+        '<div class="card-title">'+esc(b.title)+'</div>' +
+        (b.author?'<div class="card-author">'+esc(b.author)+'</div>':'') +
+        '<div class="card-footer">' +
+          '<div class="price">$'+b.price+'<small>元</small></div>' +
+          '<div style="display:flex;align-items:center;gap:.4rem">'+mine+'<span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></div>' +
+        '</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+// ── Detail modal ───────────────────────────────────────────────────────────
+async function openDetail(lid) {
+  currentLid = lid;
+  document.getElementById('detailInner').innerHTML = '<div class="spinner"></div>';
+  document.getElementById('detailOv').classList.add('open');
+  bodyLock(true);
+  try {
+    const b = await api('GET', '/api/listings/' + lid);
+    renderDetail(b);
+  } catch(e) { document.getElementById('detailInner').innerHTML = '<div style="padding:2rem;color:#fca5a5">載入失敗</div>'; }
+}
+
+function renderDetail(b) {
+  const emoji = EMOJI[b.subject] || '📖';
+  const sc = 'subj-' + (b.subject||'其他');
+  const ctype = b.contact_type;
+  const cLabel = {line:'LINE ID',phone:'電話',email:'Email'}[ctype]||'聯絡方式';
+  const cClass = {line:'line',phone:'phone',email:'email'}[ctype]||'line';
+  const cIcon = {line:'💬',phone:'📞',email:'📧'}[ctype]||'📬';
+  const cHref = ctype==='email'?'mailto:'+b.contact_info : ctype==='phone'?'tel:'+b.contact_info : null;
+  const date = new Date(b.created_at).toLocaleDateString('zh-TW');
+  const seller = b.username ? '由 <b>'+esc(b.username)+'</b> 刊登' : '';
+
+  let html = '<div class="d-thumb">' + emoji + '</div><div class="d-body">' +
+    (b.subject?'<div class="d-subject '+sc+'">'+esc(b.subject)+'</div>':'') +
+    '<div class="d-title">'+esc(b.title)+'</div>' +
+    (b.author?'<div class="d-author">作者：'+esc(b.author)+'</div>':'') +
+    '<div class="d-meta">' +
+      '<span class="meta-chip"><b>成色</b> <span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></span>' +
+      (b.edition?'<span class="meta-chip"><b>版次</b> '+esc(b.edition)+'</span>':'') +
+      '<span class="meta-chip">'+date+'</span>' +
+      (seller?'<span class="meta-chip">'+seller+'</span>':'') +
+    '</div>' +
+    (b.description?'<div class="d-desc">'+esc(b.description)+'</div>':'') +
+    '<div class="d-price">$'+b.price+'<small>元</small></div>' +
+    '<div class="d-actions">';
+
+  // Contact button
+  if (cHref) {
+    html += '<a href="'+cHref+'" class="btn-contact '+cClass+'">'+cIcon+' '+cLabel+'：'+esc(b.contact_info)+'</a>';
+  } else {
+    html += '<button class="btn-contact '+cClass+'" onclick="copyText(\''+esc(b.contact_info)+'\')">'+cIcon+' '+cLabel+'：'+esc(b.contact_info)+' （點擊複製）</button>';
+  }
+
+  // Manage buttons (only for owner)
+  if (b.is_mine) {
+    html += '<div class="d-manage">' +
+      '<button class="btn-sm btn-sold" onclick="doSold()">✅ 標記售出</button>' +
+      '<button class="btn-sm btn-del" onclick="doDel()">🗑️ 刪除刊登</button>' +
+      '</div>';
+  }
+
+  html += '<div id="actionMsg"></div></div></div>';
+  document.getElementById('detailInner').innerHTML = html;
+}
+
+function copyText(t){ navigator.clipboard.writeText(t).then(()=>alert('已複製：'+t)); }
+
+async function doSold() {
+  if (!confirm('確定要將此書標記為已售出？')) return;
+  try {
+    await api('POST', '/api/listings/'+currentLid+'/sold');
+    document.getElementById('actionMsg').innerHTML = '<div class="msg ok">✅ 已標記為售出</div>';
+    setTimeout(()=>{ closeDetailBtn(); loadListings(); }, 1200);
+  } catch(e){ document.getElementById('actionMsg').innerHTML = '<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+}
+async function doDel() {
+  if (!confirm('確定要刪除此刊登？此動作無法復原。')) return;
+  try {
+    await api('DELETE', '/api/listings/'+currentLid);
+    document.getElementById('actionMsg').innerHTML = '<div class="msg ok">🗑️ 已刪除</div>';
+    setTimeout(()=>{ closeDetailBtn(); loadListings(); }, 1000);
+  } catch(e){ document.getElementById('actionMsg').innerHTML = '<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+}
+
+function closeDetail(e){ if(e.target===document.getElementById('detailOv')) closeDetailBtn(); }
+function closeDetailBtn(){ document.getElementById('detailOv').classList.remove('open'); bodyLock(false); }
+
+// ── Post modal ─────────────────────────────────────────────────────────────
+function openPost() {
+  if (!auth.token) { openAuth('login'); return; }
+  renderPostForm();
+  document.getElementById('postOv').classList.add('open');
+  bodyLock(true);
+}
+function closePost(e){ if(e.target===document.getElementById('postOv')) closePostBtn(); }
+function closePostBtn(){ document.getElementById('postOv').classList.remove('open'); bodyLock(false); }
+
+function renderPostForm() {
+  const sOpts = ['微積分','線性代數','統計學','機率論','計算機概論','程式設計','資料結構','演算法','資料庫系統','機器學習','深度學習','資料視覺化','大數據分析','自然語言處理','資訊安全','其他']
+    .map(s=>'<option>'+s+'</option>').join('');
+  const cOpts = ['全新','近全新','良好','普通','有筆記'].map(c=>'<option>'+c+'</option>').join('');
+
+  document.getElementById('postInner').innerHTML =
+    '<div class="f-wrap"><h2>📖 刊登二手書</h2>' +
+    '<div id="postMsg" class="f-msg"></div>' +
+    '<div class="fg"><label>書名 <span class="req">*</span></label><input id="f-title" type="text" placeholder="例：Introduction to Statistical Learning"></div>' +
+    '<div class="f2">' +
+      '<div class="fg"><label>作者</label><input id="f-author" type="text" placeholder="例：Gareth James"></div>' +
+      '<div class="fg"><label>版次</label><input id="f-ed" type="text" placeholder="例：第3版"></div>' +
+    '</div>' +
+    '<div class="f2">' +
+      '<div class="fg"><label>科目 <span class="req">*</span></label><select id="f-subj">'+sOpts+'</select></div>' +
+      '<div class="fg"><label>成色 <span class="req">*</span></label><select id="f-cond">'+cOpts+'</select></div>' +
+    '</div>' +
+    '<div class="fg"><label>售價（元）<span class="req">*</span></label><input id="f-price" type="text" placeholder="例：250"></div>' +
+    '<div class="fg"><label>補充說明</label><textarea id="f-desc" placeholder="書況、有無劃線、附贈講義..."></textarea></div>' +
+    '<div class="f2">' +
+      '<div class="fg"><label>聯絡方式 <span class="req">*</span></label><select id="f-ctype"><option value="line">LINE ID</option><option value="phone">電話</option><option value="email">Email</option></select></div>' +
+      '<div class="fg"><label>聯絡資訊 <span class="req">*</span></label><input id="f-cinfo" type="text" placeholder="LINE ID / 電話 / Email"></div>' +
+    '</div>' +
+    '<button class="btn-sub" id="f-sub" onclick="submitPost()">📤 刊登書籍</button>' +
+    '</div>';
+}
+
+async function submitPost() {
+  const g = id => document.getElementById(id).value.trim();
+  const msg = document.getElementById('postMsg');
+  const btn = document.getElementById('f-sub');
+  const title = g('f-title');
+  const price = parseInt(g('f-price'));
+  if (!title){ msg.innerHTML='<div class="msg err">❌ 請填寫書名</div>'; return; }
+  if (isNaN(price)||price<0){ msg.innerHTML='<div class="msg err">❌ 請填寫正確的價格</div>'; return; }
+  if (!g('f-cinfo')){ msg.innerHTML='<div class="msg err">❌ 請填寫聯絡資訊</div>'; return; }
+  btn.disabled=true; btn.textContent='刊登中...';
+  try {
+    await api('POST','/api/listings',{
+      title, author:g('f-author'), subject:g('f-subj'), edition:g('f-ed'),
+      condition:g('f-cond'), price, description:g('f-desc'),
+      contact_type:g('f-ctype'), contact_info:g('f-cinfo'),
+    });
+    document.getElementById('postInner').innerHTML =
+      '<div class="suc"><div class="si">🎉</div><h3>刊登成功！</h3>' +
+      '<p>你的書籍已上架，同學可以搜尋到它。</p><br>' +
+      '<button class="btn btn-primary" onclick="closePostBtn();loadListings()" style="display:block;margin:0 auto">回到書籍列表</button></div>';
+    loadListings();
+  } catch(e){
+    msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>';
+    btn.disabled=false; btn.textContent='📤 刊登書籍';
+  }
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+renderHeader();
+loadListings();
+</script>
+</body>
+</html>
