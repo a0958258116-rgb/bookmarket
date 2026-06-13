@@ -417,6 +417,39 @@ def send_message(cid):
 
 # ── Transactions ───────────────────────────────────────────────────────────
 
+@app.route("/api/users/<username>")
+def get_user_profile(username):
+    viewer = get_user()
+    conn = get_db()
+    u = conn.execute("SELECT id, username, created_at FROM users WHERE username=?", [username]).fetchone()
+    if not u:
+        conn.close()
+        return jsonify({"detail": "找不到此用戶"}), 404
+    uid = u["id"]
+    listings = conn.execute(
+        "SELECT * FROM listings WHERE user_id=? ORDER BY created_at DESC", [uid]
+    ).fetchall()
+    items = [dict(r) for r in listings]
+    if viewer:
+        fav_ids = set(r[0] for r in conn.execute(
+            "SELECT listing_id FROM favorites WHERE user_id=?", [viewer["id"]]
+        ).fetchall())
+        for item in items:
+            item["is_favorited"] = (item["id"] in fav_ids)
+            item["is_mine"] = (item["user_id"] == viewer["id"])
+    total = len(items)
+    sold  = sum(1 for i in items if i["is_sold"])
+    active = sum(1 for i in items if not i["is_sold"])
+    conn.close()
+    return jsonify({
+        "username": u["username"],
+        "created_at": u["created_at"],
+        "total": total,
+        "sold": sold,
+        "active": active,
+        "listings": items,
+    })
+
 @app.route("/api/listings/<int:lid>/transaction")
 def get_transaction(lid):
     user, err = require_user()

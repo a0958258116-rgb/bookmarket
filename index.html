@@ -222,6 +222,39 @@ select:focus{outline:none;border-color:var(--cyan)}
 /* Meet proposal modal */
 .meet-form{padding:1.2rem}
 .meet-form h3{font-size:1rem;font-weight:800;margin-bottom:1rem;color:var(--amber)}
+
+/* Seller profile modal */
+.seller-modal{max-width:600px;display:flex;flex-direction:column;max-height:90vh}
+.seller-header{padding:1.4rem 1.4rem 1rem;border-bottom:1px solid var(--border)}
+.seller-hdr-top{display:flex;align-items:center;gap:1rem;margin-bottom:.9rem}
+.seller-av{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#fff;flex-shrink:0}
+.seller-info h2{font-size:1.1rem;font-weight:800;margin-bottom:.2rem}
+.seller-info .join{font-size:.76rem;color:var(--muted)}
+.seller-stats{display:flex;gap:.6rem}
+.stat-chip{flex:1;background:var(--surface2);border-radius:10px;padding:.55rem;text-align:center}
+.stat-chip .sv{font-size:1.15rem;font-weight:800;color:var(--cyan)}
+.stat-chip .sl{font-size:.7rem;color:var(--muted);margin-top:.1rem}
+.stat-chip.sold .sv{color:#fca5a5}
+.stat-chip.active .sv{color:#86efac}
+.seller-body{flex:1;overflow-y:auto;padding:1rem}
+.seller-body .sub-title{font-size:.78rem;color:var(--muted);margin-bottom:.75rem;font-weight:600}
+.mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.7rem}
+.mini-card{background:var(--surface2);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .15s}
+.mini-card:hover{border-color:var(--cyan);transform:translateY(-1px)}
+.mini-card.sold{opacity:.6;cursor:default}
+.mini-card.sold:hover{border-color:var(--border);transform:none}
+.mini-card.reserved{border-color:var(--amber);opacity:.8}
+.mini-thumb{height:75px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--surface);position:relative;overflow:hidden}
+.mini-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.mini-sold-tag{position:absolute;inset:0;background:rgba(11,15,26,.6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fca5a5}
+.mini-reserved-tag{position:absolute;inset:0;background:rgba(11,15,26,.55);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fcd34d}
+.mini-body{padding:.55rem .6rem}
+.mini-title{font-size:.8rem;font-weight:700;margin-bottom:.18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-sub{font-size:.68rem;color:var(--muted2);margin-bottom:.25rem}
+.mini-footer{display:flex;justify-content:space-between;align-items:center}
+.mini-price{font-size:.88rem;font-weight:800;color:var(--cyan)}
+.seller-name-link{color:var(--muted2);text-decoration:none;cursor:pointer;border-bottom:1px dashed var(--border);transition:color .15s}
+.seller-name-link:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
 </style>
 </head>
 <body>
@@ -288,6 +321,14 @@ select:focus{outline:none;border-color:var(--cyan)}
 <!-- Meet proposal modal -->
 <div class="overlay" id="meetOv" onclick="closeMeetForm(event)">
   <div class="modal" style="max-width:360px"><button class="mc" onclick="closeMeetFormBtn()">✕</button><div id="meetInner"></div></div>
+</div>
+
+<!-- Seller profile modal -->
+<div class="overlay" id="sellerOv" onclick="closeSellerProfile(event)">
+  <div class="modal seller-modal">
+    <button class="mc" onclick="closeSellerProfileBtn()">✕</button>
+    <div id="sellerInner" style="display:flex;flex-direction:column;height:100%"></div>
+  </div>
 </div>
 
 <script>
@@ -495,7 +536,7 @@ function renderDetail(b, txn){
   const cIcon={line:'💬',phone:'📞',email:'📧',messenger:'💙'}[ctype]||'📬';
   const cHref=ctype==='email'?'mailto:'+b.contact_info:ctype==='phone'?'tel:'+b.contact_info:null;
   const date=new Date(b.created_at).toLocaleDateString('zh-TW');
-  const seller=b.username?'由 <b>'+esc(b.username)+'</b> 刊登':'';
+  const seller=b.username&&!b.is_mine?'由 <span class="seller-name-link" onclick="openSellerProfile(\''+esc(b.username)+'\')">'+esc(b.username)+'</span> 刊登':b.username&&b.is_mine?'由 <b>我</b> 刊登':'';
   const isReserved=(b.status==='reserved'||b.status==='pending')&&!b.is_sold;
 
   let statusBanner='';
@@ -848,6 +889,67 @@ async function submitMeetForm(listingId, convId){
     loadMessages();
   }catch(e){ msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
 }
+
+// ── Seller profile ─────────────────────────────────────────────────────────
+async function openSellerProfile(username){
+  document.getElementById('sellerOv').classList.add('open');
+  bodyLock(true);
+  document.getElementById('sellerInner').innerHTML='<div class="spinner" style="margin-top:3rem"></div>';
+  try{
+    const d = await api('GET', '/api/users/'+encodeURIComponent(username));
+    renderSellerProfile(d);
+  }catch(e){
+    document.getElementById('sellerInner').innerHTML='<div style="padding:2rem;color:#fca5a5;text-align:center">找不到此用戶</div>';
+  }
+}
+function renderSellerProfile(d){
+  const initial = (d.username||'?')[0].toUpperCase();
+  const joinDate = d.created_at ? new Date(d.created_at).toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'}) : '';
+  const listings = d.listings || [];
+
+  const miniCards = listings.length ? listings.map(b=>{
+    const emoji = EMOJI[b.subject]||'📖';
+    const sc = 'subj-'+(b.subject||'其他');
+    const isReserved = (b.status==='reserved'||b.status==='pending')&&!b.is_sold;
+    const cls = b.is_sold?' sold' : isReserved?' reserved' : '';
+    const thumb = b.image1 ? '<img src="/uploads/'+esc(b.image1)+'" alt="">' : emoji;
+    const overlay = b.is_sold ? '<div class="mini-sold-tag">已售出</div>' : isReserved ? '<div class="mini-reserved-tag">占售中</div>' : '';
+    const click = b.is_sold ? '' : 'onclick="openDetailFromSeller('+b.id+')"';
+    return '<div class="mini-card'+cls+'" '+click+'>' +
+      '<div class="mini-thumb">'+thumb+overlay+'</div>' +
+      '<div class="mini-body">' +
+        '<div class="mini-title">'+esc(b.title)+'</div>' +
+        (b.subject?'<div class="mini-sub '+sc+'">'+esc(b.subject)+'</div>':'') +
+        '<div class="mini-footer"><span class="mini-price">$'+b.price+'</span><span class="badge badge-'+b.condition+'" style="font-size:.62rem">'+esc(b.condition)+'</span></div>' +
+      '</div></div>';
+  }).join('') : '<div class="empty" style="padding:2rem"><div class="ei">📭</div><p>還沒有刊登任何書籍</p></div>';
+
+  document.getElementById('sellerInner').innerHTML =
+    '<div class="seller-header">' +
+      '<div class="seller-hdr-top">' +
+        '<div class="seller-av">'+initial+'</div>' +
+        '<div class="seller-info">' +
+          '<h2>'+esc(d.username)+'</h2>' +
+          (joinDate?'<div class="join">加入於 '+joinDate+'</div>':'') +
+        '</div>' +
+      '</div>' +
+      '<div class="seller-stats">' +
+        '<div class="stat-chip"><div class="sv">'+d.total+'</div><div class="sl">刊登數量</div></div>' +
+        '<div class="stat-chip active"><div class="sv">'+d.active+'</div><div class="sl">在售中</div></div>' +
+        '<div class="stat-chip sold"><div class="sv">'+d.sold+'</div><div class="sl">已售出</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="seller-body">' +
+      '<div class="sub-title">📚 刊登的書籍（'+listings.length+'）</div>' +
+      '<div class="mini-grid">'+miniCards+'</div>' +
+    '</div>';
+}
+async function openDetailFromSeller(lid){
+  closeSellerProfileBtn();
+  await openDetail(lid);
+}
+function closeSellerProfile(e){ if(e.target===document.getElementById('sellerOv')) closeSellerProfileBtn(); }
+function closeSellerProfileBtn(){ document.getElementById('sellerOv').classList.remove('open'); bodyLock(false); }
 
 // ── Init ───────────────────────────────────────────────────────────────────
 renderHeader();
