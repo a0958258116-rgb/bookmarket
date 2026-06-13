@@ -90,7 +90,7 @@ def init_db():
         buyer_done INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (listing_id) REFERENCES listings(id))""")
-    for col in ("image1", "image2", "status", "contacts"):
+    for col in ("image1", "image2", "status", "contacts", "images"):
         try:
             default = "'available'" if col == "status" else "''"
             conn.execute(f"ALTER TABLE listings ADD COLUMN {col} TEXT DEFAULT {default}")
@@ -294,13 +294,27 @@ def create_listing():
         if not contact_info:
             return jsonify({"detail": "請填寫聯絡方式"}), 400
         contacts_raw = json.dumps([{"type": contact_type, "info": contact_info}], ensure_ascii=False)
+    # Handle unlimited images via 'images' field (list of files)
+    image_files = request.files.getlist('images') if "multipart/form-data" in ct else []
+    saved_imgs = [save_image(f) for f in image_files if f and f.filename]
+    saved_imgs = [x for x in saved_imgs if x]
+    # Backward compat: also accept old image1/image2
+    if not saved_imgs and "multipart/form-data" in ct:
+        i1 = save_image(request.files.get('image1'))
+        i2 = save_image(request.files.get('image2'))
+        if i1: saved_imgs.append(i1)
+        if i2: saved_imgs.append(i2)
+    images_json = json.dumps(saved_imgs, ensure_ascii=False)
+    image1 = saved_imgs[0] if saved_imgs else ""
+    image2 = saved_imgs[1] if len(saved_imgs) > 1 else ""
     conn = get_db()
     cur = conn.execute("""INSERT INTO listings
-        (user_id,title,author,subject,edition,condition,price,description,contact_type,contact_info,image1,image2,status,contacts)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'available',?)""",
+        (user_id,title,author,subject,edition,condition,price,description,contact_type,contact_info,image1,image2,status,contacts,images)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'available',?,?)""",
         [user["id"], title, data.get("author","").strip(), data.get("subject",""),
          data.get("edition","").strip(), data.get("condition","全新"), price,
-         data.get("description","").strip(), contact_type, contact_info, image1, image2, contacts_raw])
+         data.get("description","").strip(), contact_type, contact_info, image1, image2,
+         contacts_raw, images_json])
     lid = cur.lastrowid; conn.commit(); conn.close()
     return jsonify({"id": lid})
 
@@ -431,6 +445,23 @@ def send_message(cid):
     conn.execute("INSERT INTO messages (conversation_id, sender_id, content) VALUES (?,?,?)", [cid, user["id"], content])
     conn.commit(); conn.close()
     return jsonify({"ok": True})
+
+@app.route("/api/conversations/<int:cid>/image", methods=["POST"])
+def send_chat_image(cid):
+    user, err = require_user()
+    if err: return err
+    conn = get_db()
+    conv = conn.execute("SELECT * FROM conversations WHERE id=?", [cid]).fetchone()
+    if not conv or (conv["buyer_id"] != user["id"] and conv["seller_id"] != user["id"]):
+        conn.close(); return jsonify({"detail": "無權限"}), 403
+    f = request.files.get("image")
+    if not f: conn.close(); return jsonify({"detail": "沒有圖片"}), 400
+    fname = save_image(f)
+    if not fname: conn.close(); return jsonify({"detail": "不支援的格式（請上傳 jpg/png/gif/webp）"}), 400
+    content = "__IMG__" + fname
+    conn.execute("INSERT INTO messages (conversation_id, sender_id, content) VALUES (?,?,?)", [cid, user["id"], content])
+    conn.commit(); conn.close()
+    return jsonify({"ok": True, "filename": fname})
 
 # ── Transactions ───────────────────────────────────────────────────────────
 

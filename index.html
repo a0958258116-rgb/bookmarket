@@ -264,6 +264,22 @@ select:focus{outline:none;border-color:var(--cyan)}
 .mini-price{font-size:.88rem;font-weight:800;color:var(--cyan)}
 .seller-name-link{color:var(--muted2);text-decoration:none;cursor:pointer;border-bottom:1px dashed var(--border);transition:color .15s}
 .seller-name-link:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
+/* Multi-image upload */
+.img-upload-grid{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.3rem}
+.img-slot{position:relative;width:76px;height:76px;border-radius:9px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
+.img-slot img{width:100%;height:100%;object-fit:cover;display:block}
+.img-slot-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.65);border:none;color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;line-height:1}
+.img-slot-del:hover{background:rgba(239,68,68,.85)}
+.img-add-btn{width:76px;height:76px;border-radius:9px;border:1.5px dashed var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;font-size:.7rem;transition:border-color .15s;flex-shrink:0}
+.img-add-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.img-add-btn .ia{font-size:1.3rem}
+/* Chat image bubble */
+.chat-img-bubble{max-width:200px;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid var(--border)}
+.chat-img-bubble img{width:100%;display:block}
+.chat-img-sending{align-self:flex-end;padding:.4rem .7rem;background:var(--surface2);border-radius:10px;font-size:.78rem;color:var(--muted);animation:pulse .8s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.4}to{opacity:1}}
+.chat-cam-btn{background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted2);width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:all .15s}
+.chat-cam-btn:hover{border-color:var(--cyan);color:var(--cyan)}
 </style>
 </head>
 <body>
@@ -583,7 +599,7 @@ function renderDetail(b, txn){
       (seller?'<span class="meta-chip">'+seller+'</span>':'') +
     '</div>' +
     (b.description?'<div class="d-desc">'+esc(b.description)+'</div>':'') +
-    ((b.image1||b.image2)?'<div class="d-imgs">'+(b.image1?'<div class="d-img"><img src="/uploads/'+esc(b.image1)+'" alt="封面"></div>':'')+(b.image2?'<div class="d-img"><img src="/uploads/'+esc(b.image2)+'" alt="內頁"></div>':'')+'</div>':'') +
+    (()=>{let imgs=[];try{if(b.images)imgs=JSON.parse(b.images);}catch(e){}if(!imgs.length){if(b.image1)imgs.push(b.image1);if(b.image2)imgs.push(b.image2);}return imgs.length?'<div class="d-imgs" style="flex-wrap:wrap">'+imgs.map(fn=>'<div class="d-img"><img src="/uploads/'+esc(fn)+'" alt="" onclick="window.open(this.src)" style="cursor:zoom-in"></div>').join('')+'</div>':''})() +
     '<div class="d-price">$'+b.price+'<small>元</small></div>' +
     '<div class="d-contact" style="display:flex;flex-direction:column;gap:.5rem">'+renderContactBtns(b)+'</div>';
 
@@ -699,14 +715,16 @@ function renderPostForm(){
       '<div id="contacts-list"></div>' +
       '<button type="button" class="btn" style="margin-top:.45rem;font-size:.8rem;width:100%;justify-content:center;display:flex;gap:.3rem" onclick="addContact()">＋ 新增聯絡方式</button>' +
     '</div>' +
-    '<div class="fg"><label>書況照片（最多 2 張）</label>' +
-    '<div class="img-upload-area">' +
-      '<div class="img-upload-box" id="ub1"><span class="up-icon">📷</span><span class="up-label">封面照片</span><input type="file" accept="image/*" id="f-img1" onchange="previewImg(1)"></div>' +
-      '<div class="img-upload-box" id="ub2"><span class="up-icon">📄</span><span class="up-label">內頁照片</span><input type="file" accept="image/*" id="f-img2" onchange="previewImg(2)"></div>' +
-    '</div></div>' +
+    '<div class="fg"><label>書況照片 <small style="color:var(--muted);font-weight:400">不限張數</small></label>' +
+    '<div class="img-upload-grid" id="imgGrid"></div>' +
+    '<input type="file" id="f-imgs-hidden" accept="image/*" multiple style="display:none" onchange="onImagesSelected(event)">' +
+    '</div>' +
     '<button class="btn-sub" id="f-sub" onclick="submitPost()">📤 刊登書籍</button></div>';
   // Add first contact row
   addContact();
+  // Init image grid
+  selectedImages = [];
+  renderImgGrid();
 }
 let contactRowCount = 0;
 const CTYPE_OPTS = [
@@ -745,9 +763,19 @@ function updatePlaceholder(n){
   if(sel&&inp) inp.placeholder=CTYPE_PLACEHOLDER[sel.value]||'聯絡資訊';
 }
 
-function previewImg(n){
-  const input=document.getElementById('f-img'+n), box=document.getElementById('ub'+n);
-  if(input.files&&input.files[0]){ const old=box.querySelector('img.up-prev'); if(old)old.remove(); const img=document.createElement('img'); img.src=URL.createObjectURL(input.files[0]); img.className='up-prev'; box.appendChild(img); }
+let selectedImages = [];
+function onImagesSelected(e){
+  for(const f of e.target.files) selectedImages.push(f);
+  e.target.value = '';
+  renderImgGrid();
+}
+function removeImage(i){ selectedImages.splice(i,1); renderImgGrid(); }
+function renderImgGrid(){
+  const grid = document.getElementById('imgGrid'); if(!grid) return;
+  grid.innerHTML = selectedImages.map((f,i)=>
+    '<div class="img-slot"><img src="'+URL.createObjectURL(f)+'"><button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button></div>'
+  ).join('') +
+  '<button type="button" class="img-add-btn" onclick="document.getElementById(\'f-imgs-hidden\').click()"><span class="ia">📷</span><span>新增</span></button>';
 }
 async function submitPost(){
   const g=id=>document.getElementById(id).value.trim();
@@ -768,9 +796,7 @@ async function submitPost(){
   fd.append('title',title); fd.append('author',g('f-author')); fd.append('subject',g('f-subj'));
   fd.append('edition',g('f-ed')); fd.append('condition',g('f-cond')); fd.append('price',price);
   fd.append('description',g('f-desc')); fd.append('contacts',JSON.stringify(contacts));
-  const i1=document.getElementById('f-img1'), i2=document.getElementById('f-img2');
-  if(i1&&i1.files[0]) fd.append('image1',i1.files[0]);
-  if(i2&&i2.files[0]) fd.append('image2',i2.files[0]);
+  selectedImages.forEach(f => fd.append('images', f));
   try{
     const headers={}; if(auth.token) headers['Authorization']='Bearer '+auth.token;
     const res=await fetch('/api/listings',{method:'POST',headers,body:fd});
@@ -842,6 +868,8 @@ function renderChatShell(otherName, listingTitle, sellerId){
     '<div class="chat-body" id="chatBody"><div class="spinner"></div></div>' +
     '<div id="chatTxnBar"></div>' +
     '<div class="chat-footer">' +
+      '<button class="chat-cam-btn" onclick="document.getElementById(\'chatImgFile\').click()" title="傳送圖片">📷</button>' +
+      '<input type="file" id="chatImgFile" accept="image/*" style="display:none" onchange="sendChatImage(event)">' +
       '<textarea class="chat-input" id="chatInput" placeholder="輸入訊息..." onkeydown="chatEnter(event)"></textarea>' +
       '<button class="chat-send" onclick="sendMsg()">➤</button>' +
     '</div>';
@@ -892,6 +920,15 @@ async function loadMessages(){
       if(m.content==='__MEET_CONFIRMED__'){
         return '<div class="meet-confirmed-card">✅ 買家已確認面交！</div>';
       }
+      if(m.content.startsWith('__IMG__')){
+        const fn=m.content.slice(7);
+        return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+';gap:.15rem">' +
+          '<div class="chat-img-bubble" onclick="window.open(\'/uploads/'+esc(fn)+'\')">' +
+            '<img src="/uploads/'+esc(fn)+'" alt="圖片">' +
+          '</div>' +
+          '<div class="bubble-time" style="'+(isMe?'text-align:right':'text-align:left')+';font-size:.68rem;opacity:.6">'+fmtTime(m.created_at)+'</div>' +
+        '</div>';
+      }
       return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+'">' +
         '<div class="chat-bubble '+(isMe?'bubble-me':'bubble-them')+'">'+esc(m.content)+'<div class="bubble-time">'+fmtTime(m.created_at)+'</div></div></div>';
     }).join('') : '<div style="text-align:center;color:var(--muted);font-size:.82rem;padding:1.5rem">說聲嗨吧 👋</div>';
@@ -932,6 +969,25 @@ async function sendMsg(){
   input.value='';
   try{ await api('POST','/api/conversations/'+currentCid+'/messages',{content}); loadMessages(); }
   catch(e){ input.value=content; alert('❌ 發送失敗'); }
+}
+
+async function sendChatImage(e){
+  const file = e.target.files[0]; e.target.value='';
+  if(!file||!currentCid) return;
+  // Optimistic: show sending indicator
+  const body=document.getElementById('chatBody');
+  const sending=document.createElement('div');
+  sending.className='chat-img-sending'; sending.textContent='傳送圖片中...';
+  if(body){ body.appendChild(sending); body.scrollTop=body.scrollHeight; }
+  try{
+    const fd=new FormData(); fd.append('image',file);
+    const headers={}; if(auth.token) headers['Authorization']='Bearer '+auth.token;
+    const res=await fetch('/api/conversations/'+currentCid+'/image',{method:'POST',headers,body:fd});
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.detail||'上傳失敗');
+    loadMessages();
+  }catch(ex){ alert('❌ '+ex.message); }
+  finally{ if(sending.parentNode) sending.remove(); }
 }
 
 // ── Meet form ──────────────────────────────────────────────────────────────
