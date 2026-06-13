@@ -106,8 +106,6 @@ select:focus{outline:none;border-color:var(--cyan)}
 .btn-contact.email{background:var(--purple);color:#fff}.btn-contact.email:hover{background:#7c3aed}
 .btn-contact.messenger{background:#1877f2;color:#fff}.btn-contact.messenger:hover{background:#166fe5}
 .btn-contact.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff}
-.btn-contact.discord{background:#5865f2;color:#fff}.btn-contact.discord:hover{background:#4752c4}
-.btn-contact.telegram{background:#26a5e4;color:#fff}.btn-contact.telegram:hover{background:#1c93d0}
 .btn-contact.other{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
 .contact-row{display:flex;gap:.4rem;align-items:center;margin-bottom:.45rem}
 .contact-row select{flex:0 0 130px;padding:.5rem .6rem}
@@ -557,9 +555,7 @@ const CTYPES={
   phone:  {label:'電話',      cls:'phone',     icon:'📞', href:'tel:'},
   email:  {label:'Email',     cls:'email',     icon:'📧', href:'mailto:'},
   messenger:{label:'Messenger',cls:'messenger',icon:'💙', href:null},
-  ig:     {label:'Instagram', cls:'ig',        icon:'📷', href:null},
-  discord:{label:'Discord',   cls:'discord',   icon:'🎮', href:null},
-  telegram:{label:'Telegram', cls:'telegram',  icon:'✈️', href:null},
+  ig:     {label:'IG',        cls:'ig',        icon:'📸', href:null},
   other:  {label:'其他',      cls:'other',     icon:'📬', href:null},
 };
 function renderContactBtns(b){
@@ -729,19 +725,16 @@ function renderPostForm(){
 }
 let contactRowCount = 0;
 const CTYPE_OPTS = [
-  {v:'line',    l:'💬 LINE ID'},
-  {v:'phone',   l:'📞 電話'},
-  {v:'email',   l:'📧 Email'},
-  {v:'messenger',l:'💙 Messenger'},
-  {v:'ig',      l:'📷 Instagram'},
-  {v:'discord', l:'🎮 Discord'},
-  {v:'telegram',l:'✈️ Telegram'},
-  {v:'other',   l:'📬 其他'},
+  {v:'line',      l:'💬 LINE ID'},
+  {v:'phone',     l:'📞 電話'},
+  {v:'email',     l:'📧 Email'},
+  {v:'messenger', l:'💙 Messenger'},
+  {v:'ig',        l:'📸 IG'},
+  {v:'other',     l:'📬 其他'},
 ];
 const CTYPE_PLACEHOLDER = {
   line:'例：my_line_id',phone:'例：0912345678',email:'例：abc@gmail.com',
-  messenger:'貼上 Messenger 連結',ig:'例：@username',discord:'例：username#1234',
-  telegram:'例：@username',other:'聯絡資訊',
+  messenger:'貼上 Messenger 連結',ig:'例：@ig_username',other:'聯絡資訊',
 };
 function addContact(){
   const list = document.getElementById('contacts-list');
