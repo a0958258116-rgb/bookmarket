@@ -105,6 +105,15 @@ select:focus{outline:none;border-color:var(--cyan)}
 .btn-contact.phone{background:#3b82f6;color:#fff}.btn-contact.phone:hover{background:#2563eb}
 .btn-contact.email{background:var(--purple);color:#fff}.btn-contact.email:hover{background:#7c3aed}
 .btn-contact.messenger{background:#1877f2;color:#fff}.btn-contact.messenger:hover{background:#166fe5}
+.btn-contact.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff}
+.btn-contact.discord{background:#5865f2;color:#fff}.btn-contact.discord:hover{background:#4752c4}
+.btn-contact.telegram{background:#26a5e4;color:#fff}.btn-contact.telegram:hover{background:#1c93d0}
+.btn-contact.other{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.contact-row{display:flex;gap:.4rem;align-items:center;margin-bottom:.45rem}
+.contact-row select{flex:0 0 130px;padding:.5rem .6rem}
+.contact-row input{flex:1;padding:.5rem .7rem}
+.contact-row .del-btn{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--red);border-radius:8px;width:32px;height:34px;cursor:pointer;flex-shrink:0;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.contact-row .del-btn:hover{background:rgba(239,68,68,.1)}
 
 /* Status banner */
 .status-banner{padding:.55rem 1.3rem;font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
@@ -527,14 +536,31 @@ async function openDetail(lid){
   }catch(e){ document.getElementById('detailScroll').innerHTML='<div style="padding:2rem;color:#fca5a5">載入失敗</div>'; }
 }
 
+const CTYPES={
+  line:   {label:'LINE ID',   cls:'line',      icon:'💬', href:null},
+  phone:  {label:'電話',      cls:'phone',     icon:'📞', href:'tel:'},
+  email:  {label:'Email',     cls:'email',     icon:'📧', href:'mailto:'},
+  messenger:{label:'Messenger',cls:'messenger',icon:'💙', href:null},
+  ig:     {label:'Instagram', cls:'ig',        icon:'📷', href:null},
+  discord:{label:'Discord',   cls:'discord',   icon:'🎮', href:null},
+  telegram:{label:'Telegram', cls:'telegram',  icon:'✈️', href:null},
+  other:  {label:'其他',      cls:'other',     icon:'📬', href:null},
+};
+function renderContactBtns(b){
+  let contacts=[];
+  if(b.contacts){try{contacts=JSON.parse(b.contacts);}catch(e){}}
+  if(!contacts.length && b.contact_info) contacts=[{type:b.contact_type||'line',info:b.contact_info}];
+  return contacts.map(c=>{
+    const cfg=CTYPES[c.type]||{label:c.type,cls:'other',icon:'📬',href:null};
+    const href=cfg.href?cfg.href+c.info:null;
+    if(href) return '<a href="'+esc(href)+'" class="btn-contact '+cfg.cls+'">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'</a>';
+    return '<button class="btn-contact '+cfg.cls+'" onclick="copyText(\''+esc(c.info).replace(/'/g,"&#39;")+'\')">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'<span style="opacity:.6;font-size:.8em;margin-left:.4rem">點擊複製</span></button>';
+  }).join('');
+}
+
 function renderDetail(b, txn){
   const emoji=EMOJI[b.subject]||'📖';
   const sc='subj-'+(b.subject||'其他');
-  const ctype=b.contact_type;
-  const cLabel={line:'LINE ID',phone:'電話',email:'Email',messenger:'Facebook Messenger'}[ctype]||'聯絡方式';
-  const cClass={line:'line',phone:'phone',email:'email',messenger:'messenger'}[ctype]||'line';
-  const cIcon={line:'💬',phone:'📞',email:'📧',messenger:'💙'}[ctype]||'📬';
-  const cHref=ctype==='email'?'mailto:'+b.contact_info:ctype==='phone'?'tel:'+b.contact_info:null;
   const date=new Date(b.created_at).toLocaleDateString('zh-TW');
   const seller=b.username&&!b.is_mine?'由 <span class="seller-name-link" onclick="openSellerProfile(\''+esc(b.username)+'\')">'+esc(b.username)+'</span> 刊登':b.username&&b.is_mine?'由 <b>我</b> 刊登':'';
   const isReserved=(b.status==='reserved'||b.status==='pending')&&!b.is_sold;
@@ -559,12 +585,9 @@ function renderDetail(b, txn){
     (b.description?'<div class="d-desc">'+esc(b.description)+'</div>':'') +
     ((b.image1||b.image2)?'<div class="d-imgs">'+(b.image1?'<div class="d-img"><img src="/uploads/'+esc(b.image1)+'" alt="封面"></div>':'')+(b.image2?'<div class="d-img"><img src="/uploads/'+esc(b.image2)+'" alt="內頁"></div>':'')+'</div>':'') +
     '<div class="d-price">$'+b.price+'<small>元</small></div>' +
-    '<div class="d-contact">';
+    '<div class="d-contact" style="display:flex;flex-direction:column;gap:.5rem">'+renderContactBtns(b)+'</div>';
 
-  if(cHref) scrollHtml+='<a href="'+cHref+'" class="btn-contact '+cClass+'">'+cIcon+' '+cLabel+'：'+esc(b.contact_info)+'</a>';
-  else scrollHtml+='<button class="btn-contact '+cClass+'" onclick="copyText(\''+esc(b.contact_info)+'\')">'+cIcon+' '+cLabel+'：'+esc(b.contact_info)+' （點擊複製）</button>';
-
-  scrollHtml+='</div><div id="actionMsg" style="margin:.3rem 0"></div></div>';
+  scrollHtml+='<div id="actionMsg" style="margin:.3rem 0"></div></div>';
   document.getElementById('detailScroll').innerHTML=scrollHtml;
 
   // Bottom bar
@@ -672,15 +695,56 @@ function renderPostForm(){
     '<div class="fg"><label>成色 <span class="req">*</span></label><select id="f-cond">'+cOpts+'</select></div></div>' +
     '<div class="fg"><label>售價（元）<span class="req">*</span></label><input id="f-price" type="text" placeholder="例：250"></div>' +
     '<div class="fg"><label>補充說明</label><textarea id="f-desc" placeholder="書況、有無劃線..."></textarea></div>' +
-    '<div class="f2"><div class="fg"><label>聯絡方式 <span class="req">*</span></label><select id="f-ctype"><option value="line">LINE ID</option><option value="phone">電話</option><option value="email">Email</option><option value="messenger">Facebook Messenger</option></select></div>' +
-    '<div class="fg"><label>聯絡資訊 <span class="req">*</span></label><input id="f-cinfo" type="text" placeholder="LINE ID / 電話 / Email"></div></div>' +
+    '<div class="fg"><label>聯絡方式 <span class="req">*</span> <small style="color:var(--muted);font-weight:400">可新增多種</small></label>' +
+      '<div id="contacts-list"></div>' +
+      '<button type="button" class="btn" style="margin-top:.45rem;font-size:.8rem;width:100%;justify-content:center;display:flex;gap:.3rem" onclick="addContact()">＋ 新增聯絡方式</button>' +
+    '</div>' +
     '<div class="fg"><label>書況照片（最多 2 張）</label>' +
     '<div class="img-upload-area">' +
       '<div class="img-upload-box" id="ub1"><span class="up-icon">📷</span><span class="up-label">封面照片</span><input type="file" accept="image/*" id="f-img1" onchange="previewImg(1)"></div>' +
       '<div class="img-upload-box" id="ub2"><span class="up-icon">📄</span><span class="up-label">內頁照片</span><input type="file" accept="image/*" id="f-img2" onchange="previewImg(2)"></div>' +
     '</div></div>' +
     '<button class="btn-sub" id="f-sub" onclick="submitPost()">📤 刊登書籍</button></div>';
+  // Add first contact row
+  addContact();
 }
+let contactRowCount = 0;
+const CTYPE_OPTS = [
+  {v:'line',    l:'💬 LINE ID'},
+  {v:'phone',   l:'📞 電話'},
+  {v:'email',   l:'📧 Email'},
+  {v:'messenger',l:'💙 Messenger'},
+  {v:'ig',      l:'📷 Instagram'},
+  {v:'discord', l:'🎮 Discord'},
+  {v:'telegram',l:'✈️ Telegram'},
+  {v:'other',   l:'📬 其他'},
+];
+const CTYPE_PLACEHOLDER = {
+  line:'例：my_line_id',phone:'例：0912345678',email:'例：abc@gmail.com',
+  messenger:'貼上 Messenger 連結',ig:'例：@username',discord:'例：username#1234',
+  telegram:'例：@username',other:'聯絡資訊',
+};
+function addContact(){
+  const list = document.getElementById('contacts-list');
+  if(!list) return;
+  const n = ++contactRowCount;
+  const opts = CTYPE_OPTS.map(o=>'<option value="'+o.v+'">'+o.l+'</option>').join('');
+  const row = document.createElement('div');
+  row.className = 'contact-row'; row.id = 'crow-'+n;
+  row.innerHTML =
+    '<select id="ct-'+n+'" onchange="updatePlaceholder('+n+')" style="flex:0 0 140px">'+opts+'</select>' +
+    '<input id="ci-'+n+'" type="text" placeholder="'+CTYPE_PLACEHOLDER.line+'">' +
+    (contactRowCount>1?'<button type="button" class="del-btn" onclick="removeContact('+n+')">✕</button>':'<div style="width:32px"></div>');
+  list.appendChild(row);
+}
+function removeContact(n){
+  const row=document.getElementById('crow-'+n); if(row) row.remove();
+}
+function updatePlaceholder(n){
+  const sel=document.getElementById('ct-'+n), inp=document.getElementById('ci-'+n);
+  if(sel&&inp) inp.placeholder=CTYPE_PLACEHOLDER[sel.value]||'聯絡資訊';
+}
+
 function previewImg(n){
   const input=document.getElementById('f-img'+n), box=document.getElementById('ub'+n);
   if(input.files&&input.files[0]){ const old=box.querySelector('img.up-prev'); if(old)old.remove(); const img=document.createElement('img'); img.src=URL.createObjectURL(input.files[0]); img.className='up-prev'; box.appendChild(img); }
@@ -691,12 +755,19 @@ async function submitPost(){
   const title=g('f-title'), price=parseInt(g('f-price'));
   if(!title){msg.innerHTML='<div class="msg err">❌ 請填寫書名</div>';return;}
   if(isNaN(price)||price<0){msg.innerHTML='<div class="msg err">❌ 請填寫正確的價格</div>';return;}
-  if(!g('f-cinfo')){msg.innerHTML='<div class="msg err">❌ 請填寫聯絡資訊</div>';return;}
+  // Collect contacts
+  const contactRows=document.querySelectorAll('#contacts-list .contact-row');
+  const contacts=[];
+  contactRows.forEach(row=>{
+    const sel=row.querySelector('select'), inp=row.querySelector('input');
+    if(sel&&inp&&inp.value.trim()) contacts.push({type:sel.value, info:inp.value.trim()});
+  });
+  if(!contacts.length){msg.innerHTML='<div class="msg err">❌ 請填寫至少一種聯絡方式</div>';return;}
   btn.disabled=true; btn.textContent='刊登中...';
   const fd=new FormData();
   fd.append('title',title); fd.append('author',g('f-author')); fd.append('subject',g('f-subj'));
   fd.append('edition',g('f-ed')); fd.append('condition',g('f-cond')); fd.append('price',price);
-  fd.append('description',g('f-desc')); fd.append('contact_type',g('f-ctype')); fd.append('contact_info',g('f-cinfo'));
+  fd.append('description',g('f-desc')); fd.append('contacts',JSON.stringify(contacts));
   const i1=document.getElementById('f-img1'), i2=document.getElementById('f-img2');
   if(i1&&i1.files[0]) fd.append('image1',i1.files[0]);
   if(i2&&i2.files[0]) fd.append('image2',i2.files[0]);

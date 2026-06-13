@@ -2,6 +2,7 @@ import sqlite3
 import hashlib
 import os
 import uuid
+import json
 from flask import Flask, jsonify, request, send_file, send_from_directory
 from flask_cors import CORS
 
@@ -89,7 +90,7 @@ def init_db():
         buyer_done INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (listing_id) REFERENCES listings(id))""")
-    for col in ("image1", "image2", "status"):
+    for col in ("image1", "image2", "status", "contacts"):
         try:
             default = "'available'" if col == "status" else "''"
             conn.execute(f"ALTER TABLE listings ADD COLUMN {col} TEXT DEFAULT {default}")
@@ -270,20 +271,36 @@ def create_listing():
     else:
         data = request.get_json() or {}
         image1 = image2 = ""
-    title        = data.get("title", "").strip()
-    contact_info = data.get("contact_info", "").strip()
+    title = data.get("title", "").strip()
     try: price = int(data.get("price", 0))
     except: price = -1
     if not title: return jsonify({"detail": "書名不能為空"}), 400
     if price < 0: return jsonify({"detail": "價格不能為負數"}), 400
-    if not contact_info: return jsonify({"detail": "請填寫聯絡方式"}), 400
+    # Support new multi-contacts JSON field, fallback to single contact_info
+    contacts_raw = data.get("contacts", "")
+    contact_info = data.get("contact_info", "").strip()
+    contact_type = data.get("contact_type", "line")
+    if contacts_raw:
+        try:
+            contacts_list = json.loads(contacts_raw)
+            if not contacts_list:
+                return jsonify({"detail": "請填寫至少一種聯絡方式"}), 400
+            # Also keep legacy fields for backward compat
+            contact_type = contacts_list[0].get("type", "line")
+            contact_info = contacts_list[0].get("info", "")
+        except Exception:
+            contacts_raw = ""
+    else:
+        if not contact_info:
+            return jsonify({"detail": "請填寫聯絡方式"}), 400
+        contacts_raw = json.dumps([{"type": contact_type, "info": contact_info}], ensure_ascii=False)
     conn = get_db()
     cur = conn.execute("""INSERT INTO listings
-        (user_id,title,author,subject,edition,condition,price,description,contact_type,contact_info,image1,image2,status)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'available')""",
+        (user_id,title,author,subject,edition,condition,price,description,contact_type,contact_info,image1,image2,status,contacts)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'available',?)""",
         [user["id"], title, data.get("author","").strip(), data.get("subject",""),
          data.get("edition","").strip(), data.get("condition","全新"), price,
-         data.get("description","").strip(), data.get("contact_type","line"), contact_info, image1, image2])
+         data.get("description","").strip(), contact_type, contact_info, image1, image2, contacts_raw])
     lid = cur.lastrowid; conn.commit(); conn.close()
     return jsonify({"id": lid})
 
