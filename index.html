@@ -722,8 +722,9 @@ function renderPostForm(){
     '<button class="btn-sub" id="f-sub" onclick="submitPost()">📤 刊登書籍</button></div>';
   // Add first contact row
   addContact();
-  // Init image grid
-  selectedImages = [];
+  // Init image grid: 封面(必) + 內頁(必) + 其餘選填
+  selectedImages = [null, null];
+  imgTargetIdx = null;
   renderImgGrid();
 }
 let contactRowCount = 0;
@@ -763,19 +764,62 @@ function updatePlaceholder(n){
   if(sel&&inp) inp.placeholder=CTYPE_PLACEHOLDER[sel.value]||'聯絡資訊';
 }
 
-let selectedImages = [];
+// selectedImages[0]=封面(必), [1]=內頁(必), [2+]=選填
+let selectedImages = [null, null];
+let imgTargetIdx = null;   // which slot the next file-pick targets
+
+function triggerImgPick(idx){
+  imgTargetIdx = idx;
+  document.getElementById('f-imgs-hidden').click();
+}
 function onImagesSelected(e){
-  for(const f of e.target.files) selectedImages.push(f);
+  const files = Array.from(e.target.files);
+  if(imgTargetIdx !== null && imgTargetIdx < 2){
+    // Fill a required slot; extra files become optional
+    if(files[0]) selectedImages[imgTargetIdx] = files[0];
+    for(let i=1;i<files.length;i++) selectedImages.push(files[i]);
+  } else {
+    // Append optional
+    for(const f of files) selectedImages.push(f);
+  }
+  imgTargetIdx = null;
   e.target.value = '';
   renderImgGrid();
 }
-function removeImage(i){ selectedImages.splice(i,1); renderImgGrid(); }
+function removeImage(i){
+  if(i < 2) selectedImages[i] = null;   // keep required slot, just clear
+  else selectedImages.splice(i, 1);
+  renderImgGrid();
+}
 function renderImgGrid(){
   const grid = document.getElementById('imgGrid'); if(!grid) return;
-  grid.innerHTML = selectedImages.map((f,i)=>
-    '<div class="img-slot"><img src="'+URL.createObjectURL(f)+'"><button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button></div>'
-  ).join('') +
-  '<button type="button" class="img-add-btn" onclick="document.getElementById(\'f-imgs-hidden\').click()"><span class="ia">📷</span><span>新增</span></button>';
+  const REQ_LABELS = ['封面', '內頁'];
+  let html = '';
+  // Required slots 0 & 1
+  for(let i=0;i<2;i++){
+    if(selectedImages[i]){
+      html += '<div class="img-slot">' +
+        '<img src="'+URL.createObjectURL(selectedImages[i])+'">' +
+        '<button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button>' +
+        '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:.6rem;color:#fff;text-align:center;padding:1px 0">'+REQ_LABELS[i]+'</div>' +
+      '</div>';
+    } else {
+      html += '<button type="button" class="img-add-btn" onclick="triggerImgPick('+i+')" style="border-color:var(--cyan);color:var(--cyan)">' +
+        '<span class="ia">📷</span>' +
+        '<span style="font-size:.65rem">'+REQ_LABELS[i]+'<span style="color:var(--red)"> *</span></span>' +
+      '</button>';
+    }
+  }
+  // Optional slots 2+
+  for(let i=2;i<selectedImages.length;i++){
+    if(selectedImages[i]) html += '<div class="img-slot">' +
+      '<img src="'+URL.createObjectURL(selectedImages[i])+'">' +
+      '<button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button>' +
+    '</div>';
+  }
+  // Add-more button
+  html += '<button type="button" class="img-add-btn" onclick="triggerImgPick(99)"><span class="ia">📷</span><span>新增</span></button>';
+  grid.innerHTML = html;
 }
 async function submitPost(){
   const g=id=>document.getElementById(id).value.trim();
@@ -791,12 +835,13 @@ async function submitPost(){
     if(sel&&inp&&inp.value.trim()) contacts.push({type:sel.value, info:inp.value.trim()});
   });
   if(!contacts.length){msg.innerHTML='<div class="msg err">❌ 請填寫至少一種聯絡方式</div>';return;}
+  if(!selectedImages[0]||!selectedImages[1]){msg.innerHTML='<div class="msg err">❌ 請上傳封面和內頁照片（必填）</div>';return;}
   btn.disabled=true; btn.textContent='刊登中...';
   const fd=new FormData();
   fd.append('title',title); fd.append('author',g('f-author')); fd.append('subject',g('f-subj'));
   fd.append('edition',g('f-ed')); fd.append('condition',g('f-cond')); fd.append('price',price);
   fd.append('description',g('f-desc')); fd.append('contacts',JSON.stringify(contacts));
-  selectedImages.forEach(f => fd.append('images', f));
+  selectedImages.filter(f=>f).forEach(f => fd.append('images', f));
   try{
     const headers={}; if(auth.token) headers['Authorization']='Bearer '+auth.token;
     const res=await fetch('/api/listings',{method:'POST',headers,body:fd});
