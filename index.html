@@ -745,7 +745,7 @@ function addContact(){
   row.className = 'contact-row'; row.id = 'crow-'+n;
   row.innerHTML =
     '<select id="ct-'+n+'" onchange="updatePlaceholder('+n+')" style="flex:0 0 140px">'+opts+'</select>' +
-    '<input id="ci-'+n+'" type="text" placeholder="'+CTYPE_PLACEHOLDER.line+'">' +
+    '<input id="ci-'+n+'" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="'+CTYPE_PLACEHOLDER.line+'">' +
     (contactRowCount>1?'<button type="button" class="del-btn" onclick="removeContact('+n+')">✕</button>':'<div style="width:32px"></div>');
   list.appendChild(row);
 }
