@@ -124,26 +124,30 @@ select:focus{outline:none;border-color:var(--accent)}
 .d-img img{width:100%;height:100%;object-fit:cover;display:block}
 .d-price{font-size:1.6rem;font-weight:900;color:var(--text);margin-bottom:.75rem}
 .d-price small{font-size:.82rem;color:var(--muted);font-weight:400;margin-left:3px}
-.d-contact{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.5rem}
-.btn-contact{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.68rem;border-radius:9px;border:none;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none}
-.btn-contact.line{background:#06c755;color:#fff}.btn-contact.line:hover{background:#05b84d}
-.btn-contact.phone{background:#2563eb;color:#fff}.btn-contact.phone:hover{background:#1d4ed8}
-.btn-contact.email{background:var(--purple);color:#fff}.btn-contact.email:hover{background:#6d28d9}
-.btn-contact.messenger{background:#1877f2;color:#fff}.btn-contact.messenger:hover{background:#166fe5}
-.btn-contact.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff}
-.btn-contact.other{background:var(--surface2);color:var(--text);border:1.5px solid var(--border)}
-.status-banner{padding:.5rem 1.2rem;font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:.45rem}
+.d-contact{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.5rem}
+.btn-contact{display:flex;align-items:center;justify-content:space-between;width:100%;padding:.62rem .9rem;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:.87rem;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;color:var(--text)}
+.btn-contact:hover{border-color:var(--border2);background:var(--surface2)}
+.btn-contact .c-left{display:flex;align-items:center;gap:.6rem}
+.btn-contact .c-tag{font-size:.72rem;font-weight:700;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:.1rem .42rem;letter-spacing:.02em}
+.btn-contact .c-copy{font-size:.73rem;color:var(--muted2);font-weight:400}
+/* brand color dots */
+.btn-contact.line .c-tag{color:#06c755;border-color:#bbf7d0;background:#f0fdf4}
+.btn-contact.phone .c-tag{color:#2563eb;border-color:#bfdbfe;background:#eff6ff}
+.btn-contact.email .c-tag{color:var(--purple);border-color:#ddd6fe;background:#f5f3ff}
+.btn-contact.messenger .c-tag{color:#1877f2;border-color:#bfdbfe;background:#eff6ff}
+.btn-contact.ig .c-tag{color:#dc2743;border-color:#fecaca;background:#fef2f2}
+.status-banner{padding:.48rem 1.2rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.45rem;letter-spacing:.01em}
 .status-banner.reserved{background:#fffbeb;color:var(--amber);border-top:1px solid #fde68a}
 .status-banner.sold{background:#fef2f2;color:#991b1b;border-top:1px solid #fecaca}
 
 /* ── Bottom action bar ── */
-.detail-bar{border-top:1px solid var(--border);padding:.7rem 1rem;display:flex;align-items:center;gap:.6rem;background:#fff}
-.icon-btn{display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.35rem .5rem;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:.66rem;border-radius:8px;transition:color .15s;flex-shrink:0}
+.detail-bar{border-top:1px solid var(--border);padding:.65rem 1rem;display:flex;align-items:center;gap:.5rem;background:#fff}
+.icon-btn{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.3rem .55rem;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:.64rem;border-radius:6px;transition:color .15s;flex-shrink:0;letter-spacing:.02em}
 .icon-btn:hover{color:var(--text)}
-.icon-btn .ib{font-size:1.2rem;line-height:1}
+.icon-btn svg{display:block}
 .icon-btn.active{color:var(--red)}
 .icon-btn.active-cyan{color:var(--accent)}
-.bar-btn{flex:1;padding:.68rem;border-radius:9px;border:none;font-size:.9rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .18s;text-align:center}
+.bar-btn{flex:1;padding:.66rem;border-radius:7px;border:none;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;text-align:center;letter-spacing:.02em}
 .bar-btn.buy{background:var(--accent);color:#fff}.bar-btn.buy:hover{background:var(--accent2)}
 .bar-btn.reserved{background:#fffbeb;color:var(--amber);border:1.5px solid #fde68a;cursor:default}
 .bar-btn.done-btn{background:var(--green);color:#fff}.bar-btn.done-btn:hover{background:#15803d}
@@ -570,10 +574,11 @@ function renderContactBtns(b){
   if(b.contacts){try{contacts=JSON.parse(b.contacts);}catch(e){}}
   if(!contacts.length && b.contact_info) contacts=[{type:b.contact_type||'line',info:b.contact_info}];
   return contacts.map(c=>{
-    const cfg=CTYPES[c.type]||{label:c.type,cls:'other',icon:'📬',href:null};
+    const cfg=CTYPES[c.type]||{label:c.type,cls:'other',icon:'',href:null};
     const href=cfg.href?cfg.href+c.info:null;
-    if(href) return '<a href="'+esc(href)+'" class="btn-contact '+cfg.cls+'">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'</a>';
-    return '<button class="btn-contact '+cfg.cls+'" onclick="copyText(\''+esc(c.info).replace(/'/g,"&#39;")+'\')">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'<span style="opacity:.55;font-size:.8em;margin-left:.4rem">複製</span></button>';
+    const inner='<span class="c-left"><span class="c-tag">'+cfg.label+'</span><span>'+esc(c.info)+'</span></span><span class="c-copy">'+(href?'前往 →':'複製')+'</span>';
+    if(href) return '<a href="'+esc(href)+'" class="btn-contact '+cfg.cls+'" target="_blank" rel="noopener">'+inner+'</a>';
+    return '<button class="btn-contact '+cfg.cls+'" onclick="copyText(\''+esc(c.info).replace(/'/g,"&#39;")+'\')" title="點擊複製">'+inner+'</button>';
   }).join('');
 }
 
@@ -611,12 +616,16 @@ function renderDetail(b,txn){
 
   // Bottom bar
   const isFav=b.is_favorited;
-  const favHtml='<button class="icon-btn'+(isFav?' active':'')+'" onclick="toggleFav('+b.id+',this)"><span class="ib">'+(isFav?'❤️':'🤍')+'</span><span>收藏</span></button>';
+  const svgHeart=(filled)=>filled
+    ?'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35z"/></svg>'
+    :'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  const svgChat='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+  const favHtml='<button class="icon-btn'+(isFav?' active':'')+'" onclick="toggleFav('+b.id+',this)">'+svgHeart(isFav)+'<span>收藏</span></button>';
   let barHtml='';
   if(b.is_mine){
     if(txn&&txn.is_seller){
       barHtml=favHtml+'<div style="flex:1;display:flex;gap:.45rem">'+
-        '<button class="btn-sm2 btn-sold2" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+(txn.seller_done?'✅ 已完成':'✅ 面交完成')+'</button>'+
+        '<button class="btn-sm2 btn-sold2" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+(txn.seller_done?'已完成':'面交完成')+'</button>'+
         '<button class="btn-sm2 btn-del2" onclick="doDel()">刪除</button>'+
       '</div>';
     } else {
@@ -626,15 +635,15 @@ function renderDetail(b,txn){
       '</div>';
     }
   } else {
-    const chatHtml='<button class="icon-btn'+(auth.token?' active-cyan':'')+'" onclick="'+(auth.token?'startChat('+b.id+')':'openAuth(\'login\')')+'" ><span class="ib">💬</span><span>聊聊</span></button>';
+    const chatHtml='<button class="icon-btn'+(auth.token?' active-cyan':'')+'" onclick="'+(auth.token?'startChat('+b.id+')':'openAuth(\'login\')')+'" >'+svgChat+'<span>聊聊</span></button>';
     if(b.is_sold){
       barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>已售出</button>';
     } else if(txn&&txn.is_buyer){
-      barHtml=favHtml+chatHtml+'<button class="bar-btn done-btn" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+(txn.buyer_done?'✅ 已收到':'📦 確認已收到')+'</button>';
+      barHtml=favHtml+chatHtml+'<button class="bar-btn done-btn" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+(txn.buyer_done?'已收到':'確認已收到')+'</button>';
     } else if(isReserved){
-      barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>🔒 暫時保留中</button>';
+      barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>暫時保留中</button>';
     } else {
-      barHtml=favHtml+chatHtml+'<button class="bar-btn buy" onclick="startChat('+b.id+')">📦 我要買</button>';
+      barHtml=favHtml+chatHtml+'<button class="bar-btn buy" onclick="startChat('+b.id+')">我要買</button>';
     }
   }
   document.getElementById('detailBar').innerHTML=barHtml;
@@ -645,8 +654,11 @@ async function toggleFav(lid,btn){
   if(!auth.token){ openAuth('login'); return; }
   try{
     const d=await api('POST','/api/listings/'+lid+'/favorite');
+    const svgHeart=(filled)=>filled
+      ?'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35z"/></svg>'
+      :'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
     btn.className='icon-btn'+(d.favorited?' active':'');
-    btn.innerHTML='<span class="ib">'+(d.favorited?'❤️':'🤍')+'</span><span>收藏</span>';
+    btn.innerHTML=svgHeart(d.favorited)+'<span>收藏</span>';
   }catch(e){}
 }
 async function doSold(){
