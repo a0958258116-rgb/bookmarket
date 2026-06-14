@@ -126,14 +126,19 @@ select:focus{outline:none;border-color:var(--accent)}
 .d-img img{width:100%;height:100%;object-fit:cover;display:block}
 .d-price{font-size:1.6rem;font-weight:900;color:var(--text);margin-bottom:.75rem}
 .d-price small{font-size:.82rem;color:var(--muted);font-weight:400;margin-left:3px}
-.d-contact{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.5rem}
-.btn-contact{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.68rem;border-radius:8px;border:none;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none}
-.btn-contact.line{background:#06c755;color:#fff}.btn-contact.line:hover{background:#05b84d}
-.btn-contact.phone{background:#2563eb;color:#fff}.btn-contact.phone:hover{background:#1d4ed8}
-.btn-contact.email{background:var(--purple);color:#fff}.btn-contact.email:hover{background:#4c1d95}
-.btn-contact.messenger{background:#1877f2;color:#fff}.btn-contact.messenger:hover{background:#166fe5}
-.btn-contact.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff}
-.btn-contact.other{background:var(--surface2);color:var(--text);border:1.5px solid var(--border)}
+.d-contact{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.5rem}
+.btn-contact{display:flex;align-items:center;gap:.65rem;width:100%;padding:.65rem .85rem;border-radius:8px;border:none;font-size:.875rem;font-weight:500;cursor:pointer;font-family:inherit;transition:filter .15s;text-decoration:none;color:#fff}
+.btn-contact:hover{filter:brightness(.9)}
+.btn-contact .bc-info{flex:1;text-align:left}
+.btn-contact .bc-label{font-size:.7rem;font-weight:700;opacity:.75;letter-spacing:.04em;text-transform:uppercase;display:block;line-height:1;margin-bottom:.18rem}
+.btn-contact .bc-val{font-size:.88rem;font-weight:600;letter-spacing:.01em}
+.btn-contact .bc-act{font-size:.72rem;opacity:.65;font-weight:400;flex-shrink:0;margin-left:auto}
+.btn-contact.line{background:#06c755}
+.btn-contact.phone{background:#1e3a8a}
+.btn-contact.email{background:#5b21b6}
+.btn-contact.messenger{background:#0866ff}
+.btn-contact.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.btn-contact.other{background:#44403c}
 .status-banner{padding:.48rem 1.2rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.45rem;letter-spacing:.01em}
 .status-banner.reserved{background:#fffbeb;color:var(--amber);border-top:1px solid #fde68a}
 .status-banner.sold{background:#fef2f2;color:#991b1b;border-top:1px solid #fecaca}
@@ -390,12 +395,18 @@ const EMOJI = {
   大數據分析:'🔬',自然語言處理:'💬',資訊安全:'🔐',其他:'📖',
 };
 const CTYPES={
-  line:   {label:'LINE ID',  cls:'line',     icon:'💬', href:null},
-  phone:  {label:'電話',     cls:'phone',    icon:'📞', href:'tel:'},
-  email:  {label:'Email',    cls:'email',    icon:'📧', href:'mailto:'},
-  messenger:{label:'Messenger',cls:'messenger',icon:'💙',href:null},
-  ig:     {label:'IG',       cls:'ig',       icon:'📸', href:null},
-  other:  {label:'其他',     cls:'other',    icon:'📬', href:null},
+  line:{label:'LINE ID',cls:'line',href:null,
+    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M21 11.5C21 16.75 16.76 21 12 21a10.5 10.5 0 0 1-4.1-.82L3 21l1.02-3.9A10.05 10.05 0 0 1 2 11.5C2 6.25 6.48 2 12 2s9 4.25 9 9.5z"/></svg>'},
+  phone:{label:'電話',cls:'phone',href:'tel:',
+    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.51 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.68 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'},
+  email:{label:'Email',cls:'email',href:'mailto:',
+    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>'},
+  messenger:{label:'Messenger',cls:'messenger',href:null,
+    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="white" style="flex-shrink:0;display:block"><path d="M12 2C6.48 2 2 6.14 2 11.25c0 2.93 1.46 5.54 3.75 7.26V22l3.34-1.85A11 11 0 0 0 12 20.5c5.52 0 10-4.14 10-9.25S17.52 2 12 2zm1 12.46L10.5 12l-4.9 2.96 5.39-5.74 2.51 2.96 4.87-2.92L13 14.46z"/></svg>'},
+  ig:{label:'IG',cls:'ig',href:null,
+    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="white"/></svg>'},
+  other:{label:'其他',cls:'other',href:null,
+    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'},
 };
 
 async function api(method, path, body) {
@@ -572,10 +583,12 @@ function renderContactBtns(b){
   if(b.contacts){try{contacts=JSON.parse(b.contacts);}catch(e){}}
   if(!contacts.length && b.contact_info) contacts=[{type:b.contact_type||'line',info:b.contact_info}];
   return contacts.map(c=>{
-    const cfg=CTYPES[c.type]||{label:c.type,cls:'other',icon:'📬',href:null};
+    const cfg=CTYPES[c.type]||CTYPES.other;
     const href=cfg.href?cfg.href+c.info:null;
-    if(href) return '<a href="'+esc(href)+'" class="btn-contact '+cfg.cls+'" target="_blank" rel="noopener">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'</a>';
-    return '<button class="btn-contact '+cfg.cls+'" onclick="copyText(\''+esc(c.info).replace(/'/g,"&#39;")+'\')">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'<span style="opacity:.6;font-size:.8em;margin-left:.4rem">複製</span></button>';
+    const actLabel=href?(c.type==='phone'?'撥打':'寄信'):'複製';
+    const inner=cfg.icon+'<span class="bc-info"><span class="bc-label">'+cfg.label+'</span><span class="bc-val">'+esc(c.info)+'</span></span><span class="bc-act">'+actLabel+' →</span>';
+    if(href) return '<a href="'+esc(href)+'" class="btn-contact '+cfg.cls+'" target="_blank" rel="noopener">'+inner+'</a>';
+    return '<button class="btn-contact '+cfg.cls+'" onclick="copyText(\''+esc(c.info).replace(/'/g,"&#39;")+'\')">'+inner+'</button>';
   }).join('');
 }
 
@@ -716,8 +729,8 @@ function renderPostForm(){
 // Contact rows
 let contactRowCount=0;
 const CTYPE_OPTS=[
-  {v:'line',l:'💬 LINE ID'},{v:'phone',l:'📞 電話'},{v:'email',l:'📧 Email'},
-  {v:'messenger',l:'💙 Messenger'},{v:'ig',l:'📸 IG'},{v:'other',l:'📬 其他'},
+  {v:'line',l:'LINE ID'},{v:'phone',l:'電話'},{v:'email',l:'Email'},
+  {v:'messenger',l:'Messenger'},{v:'ig',l:'IG'},{v:'other',l:'其他'},
 ];
 const CTYPE_PH={line:'例：my_line_id',phone:'例：0912345678',email:'例：abc@gmail.com',messenger:'Messenger 連結',ig:'例：@ig_username',other:'聯絡資訊'};
 function addContact(){
