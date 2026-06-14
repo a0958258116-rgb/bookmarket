@@ -954,16 +954,42 @@ function addContact(){
 function removeContact(n){ const r=document.getElementById('crow-'+n); if(r) r.remove(); }
 function updatePH(n){ const s=document.getElementById('ct-'+n),i=document.getElementById('ci-'+n); if(s&&i) i.placeholder=CTYPE_PH[s.value]||'聯絡資訊'; }
 
+// ── Image compression (canvas, client-side, no backend change needed) ──────────
+function compressImage(file, maxDim=1200, quality=0.82){
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const img=new Image();
+      img.onload=()=>{
+        let w=img.width, h=img.height;
+        if(w>maxDim||h>maxDim){
+          if(w>h){h=Math.round(h*maxDim/w);w=maxDim;}
+          else{w=Math.round(w*maxDim/h);h=maxDim;}
+        }
+        const c=document.createElement('canvas');
+        c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        c.toBlob(blob=>{
+          resolve(new File([blob], file.name.replace(/\.[^.]+$/,'.jpg'), {type:'image/jpeg'}));
+        },'image/jpeg',quality);
+      };
+      img.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 // Image upload
 let selectedImages=[null,null], imgTargetIdx=null;
 function triggerImgPick(idx){ imgTargetIdx=idx; document.getElementById('f-imgs-hidden').click(); }
-function onImagesSelected(e){
+async function onImagesSelected(e){
   const files=Array.from(e.target.files);
+  const compressed=await Promise.all(files.map(f=>compressImage(f)));
   if(imgTargetIdx!==null&&imgTargetIdx<2){
-    if(files[0]) selectedImages[imgTargetIdx]=files[0];
-    for(let i=1;i<files.length;i++) selectedImages.push(files[i]);
+    if(compressed[0]) selectedImages[imgTargetIdx]=compressed[0];
+    for(let i=1;i<compressed.length;i++) selectedImages.push(compressed[i]);
   } else {
-    for(const f of files) selectedImages.push(f);
+    for(const f of compressed) selectedImages.push(f);
   }
   imgTargetIdx=null; e.target.value=''; renderImgGrid();
 }
@@ -1135,11 +1161,12 @@ async function sendMsg(){
 }
 async function sendChatImage(e){
   const file=e.target.files[0]; e.target.value=''; if(!file||!currentCid) return;
+  const compressed=await compressImage(file, 1000, 0.80);
   const body=document.getElementById('chatBody');
   const sending=document.createElement('div'); sending.className='chat-img-sending'; sending.textContent='傳送圖片中...';
   if(body){ body.appendChild(sending); body.scrollTop=body.scrollHeight; }
   try{
-    const fd=new FormData(); fd.append('image',file);
+    const fd=new FormData(); fd.append('image',compressed);
     const headers={}; if(auth.token) headers['Authorization']='Bearer '+auth.token;
     const res=await fetch('/api/conversations/'+currentCid+'/image',{method:'POST',headers,body:fd});
     const data=await res.json(); if(!res.ok) throw new Error(data.detail||'上傳失敗');
