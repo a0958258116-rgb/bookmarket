@@ -127,18 +127,18 @@ select:focus{outline:none;border-color:var(--accent)}
 .d-price{font-size:1.6rem;font-weight:900;color:var(--text);margin-bottom:.75rem}
 .d-price small{font-size:.82rem;color:var(--muted);font-weight:400;margin-left:3px}
 .d-contact{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.5rem}
-.btn-contact{display:flex;align-items:center;gap:.65rem;width:100%;padding:.65rem .85rem;border-radius:8px;border:none;font-size:.875rem;font-weight:500;cursor:pointer;font-family:inherit;transition:filter .15s;text-decoration:none;color:#fff}
-.btn-contact:hover{filter:brightness(.9)}
-.btn-contact .bc-info{flex:1;text-align:left}
-.btn-contact .bc-label{font-size:.7rem;font-weight:700;opacity:.75;letter-spacing:.04em;text-transform:uppercase;display:block;line-height:1;margin-bottom:.18rem}
-.btn-contact .bc-val{font-size:.88rem;font-weight:600;letter-spacing:.01em}
-.btn-contact .bc-act{font-size:.72rem;opacity:.65;font-weight:400;flex-shrink:0;margin-left:auto}
-.btn-contact.line{background:#06c755}
-.btn-contact.phone{background:#1e3a8a}
-.btn-contact.email{background:#5b21b6}
-.btn-contact.messenger{background:#0866ff}
-.btn-contact.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
-.btn-contact.other{background:#44403c}
+.btn-contact{display:flex;align-items:center;gap:.65rem;width:100%;padding:.6rem .8rem;border-radius:6px;border:1px solid var(--border);border-left-width:4px;background:#fff;font-size:.875rem;font-weight:500;cursor:pointer;font-family:inherit;transition:background .15s;text-decoration:none;color:var(--text);text-align:left}
+.btn-contact:hover{background:var(--surface2)}
+.btn-contact .bc-info{flex:1}
+.btn-contact .bc-label{font-size:.68rem;font-weight:700;display:block;line-height:1;margin-bottom:.15rem;letter-spacing:.02em}
+.btn-contact .bc-val{font-size:.88rem;font-weight:600;color:var(--text)}
+.btn-contact .bc-act{font-size:.72rem;color:var(--muted2);font-weight:400;flex-shrink:0;margin-left:auto}
+.btn-contact.line{border-left-color:#06c755}.btn-contact.line .bc-label{color:#06c755}
+.btn-contact.phone{border-left-color:#1e3a8a}.btn-contact.phone .bc-label{color:#1e3a8a}
+.btn-contact.email{border-left-color:#5b21b6}.btn-contact.email .bc-label{color:#5b21b6}
+.btn-contact.messenger{border-left-color:#0866ff}.btn-contact.messenger .bc-label{color:#0866ff}
+.btn-contact.ig{border-left-color:#dc2743}.btn-contact.ig .bc-label{color:#dc2743}
+.btn-contact.other{border-left-color:var(--border2)}.btn-contact.other .bc-label{color:var(--muted)}
 .status-banner{padding:.48rem 1.2rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.45rem;letter-spacing:.01em}
 .status-banner.reserved{background:#fffbeb;color:var(--amber);border-top:1px solid #fde68a}
 .status-banner.sold{background:#fef2f2;color:#991b1b;border-top:1px solid #fecaca}
@@ -472,17 +472,17 @@ const EMOJI = {
 };
 const CTYPES={
   line:{label:'LINE ID',cls:'line',href:null,
-    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M21 11.5C21 16.75 16.76 21 12 21a10.5 10.5 0 0 1-4.1-.82L3 21l1.02-3.9A10.05 10.05 0 0 1 2 11.5C2 6.25 6.48 2 12 2s9 4.25 9 9.5z"/></svg>'},
+    icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06c755" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M21 11.5C21 16.75 16.76 21 12 21a10.5 10.5 0 0 1-4.1-.82L3 21l1.02-3.9A10.05 10.05 0 0 1 2 11.5C2 6.25 6.48 2 12 2s9 4.25 9 9.5z"/></svg>'},
   phone:{label:'電話',cls:'phone',href:'tel:',
-    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.51 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.68 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'},
+    icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.51 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.68 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'},
   email:{label:'Email',cls:'email',href:'mailto:',
-    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>'},
+    icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>'},
   messenger:{label:'Messenger',cls:'messenger',href:null,
-    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="white" style="flex-shrink:0;display:block"><path d="M12 2C6.48 2 2 6.14 2 11.25c0 2.93 1.46 5.54 3.75 7.26V22l3.34-1.85A11 11 0 0 0 12 20.5c5.52 0 10-4.14 10-9.25S17.52 2 12 2zm1 12.46L10.5 12l-4.9 2.96 5.39-5.74 2.51 2.96 4.87-2.92L13 14.46z"/></svg>'},
+    icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#0866ff" style="flex-shrink:0;display:block"><path d="M12 2C6.48 2 2 6.14 2 11.25c0 2.93 1.46 5.54 3.75 7.26V22l3.34-1.85A11 11 0 0 0 12 20.5c5.52 0 10-4.14 10-9.25S17.52 2 12 2zm1 12.46L10.5 12l-4.9 2.96 5.39-5.74 2.51 2.96 4.87-2.92L13 14.46z"/></svg>'},
   ig:{label:'IG',cls:'ig',href:null,
-    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="white"/></svg>'},
+    icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2743" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="#dc2743"/></svg>'},
   other:{label:'其他',cls:'other',href:null,
-    icon:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'},
+    icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#78716c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;display:block"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'},
 };
 
 async function api(method, path, body) {
@@ -723,6 +723,7 @@ function renderDetailPage(b,txn,reviews){
     '<div class="dv-meta">'+
       '<span class="meta-chip"><b>成色</b> <span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></span>'+
       (b.edition?'<span class="meta-chip"><b>版次</b> '+esc(b.edition)+'</span>':'')+
+      (b.shipping==='yes'?'<span class="meta-chip" style="color:#0369a1;background:#e0f2fe;border-color:#bae6fd">📦 支援賣貨便</span>':'')+
       '<span class="meta-chip">刊登 '+date+'</span>'+
     '</div>'+
     (b.description?'<div class="dv-desc-box">'+esc(b.description)+'</div>':'')+
@@ -898,6 +899,12 @@ function renderPostForm(){
     '<div class="fg"><label>成色 <span class="req">*</span></label><select id="f-cond">'+cOpts+'</select></div></div>' +
     '<div class="fg"><label>售價（元）<span class="req">*</span></label><input id="f-price" type="text" placeholder="例：250"></div>' +
     '<div class="fg"><label>補充說明</label><textarea id="f-desc" placeholder="書況、有無劃線..."></textarea></div>' +
+    '<div class="fg"><label>運送方式</label>' +
+      '<label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:6px;background:#fff;font-size:.86rem;transition:border-color .15s" onmouseover="this.style.borderColor=\'var(--accent)\'" onmouseout="this.style.borderColor=\'var(--border)\'">' +
+        '<input type="checkbox" id="f-shipping" style="width:15px;height:15px;accent-color:var(--accent);flex-shrink:0">'+
+        '<span>支援賣貨便（7-11 / 全家 取貨付款）</span>' +
+      '</label>' +
+    '</div>' +
     '<div class="fg"><label>聯絡方式 <span class="req">*</span> <small style="color:var(--muted2);font-weight:400">可新增多種</small></label>' +
       '<div id="contacts-list"></div>' +
       '<button type="button" class="btn" style="margin-top:.4rem;font-size:.8rem;width:100%;justify-content:center;display:flex" onclick="addContact()">＋ 新增聯絡方式</button>' +
@@ -983,6 +990,8 @@ async function submitPost(){
   fd.append('title',title); fd.append('author',g('f-author')); fd.append('subject',g('f-subj'));
   fd.append('edition',g('f-ed')); fd.append('condition',g('f-cond')); fd.append('price',price);
   fd.append('description',g('f-desc')); fd.append('contacts',JSON.stringify(contacts));
+  const shippingEl=document.getElementById('f-shipping');
+  if(shippingEl&&shippingEl.checked) fd.append('shipping','yes');
   selectedImages.filter(f=>f).forEach(f=>fd.append('images',f));
   try{
     const headers={}; if(auth.token) headers['Authorization']='Bearer '+auth.token;

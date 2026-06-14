@@ -98,7 +98,7 @@ def init_db():
         comment TEXT DEFAULT '',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(listing_id, reviewer_id))""")
-    for col in ("image1", "image2", "status", "contacts", "images"):
+    for col in ("image1", "image2", "status", "contacts", "images", "shipping"):
         try:
             default = "'available'" if col == "status" else "''"
             conn.execute(f"ALTER TABLE listings ADD COLUMN {col} TEXT DEFAULT {default}")
@@ -315,14 +315,15 @@ def create_listing():
     images_json = json.dumps(saved_imgs, ensure_ascii=False)
     image1 = saved_imgs[0] if saved_imgs else ""
     image2 = saved_imgs[1] if len(saved_imgs) > 1 else ""
+    shipping = 'yes' if data.get("shipping") in ('yes','true','1','on') else ''
     conn = get_db()
     cur = conn.execute("""INSERT INTO listings
-        (user_id,title,author,subject,edition,condition,price,description,contact_type,contact_info,image1,image2,status,contacts,images)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'available',?,?)""",
+        (user_id,title,author,subject,edition,condition,price,description,contact_type,contact_info,image1,image2,status,contacts,images,shipping)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'available',?,?,?)""",
         [user["id"], title, data.get("author","").strip(), data.get("subject",""),
          data.get("edition","").strip(), data.get("condition","全新"), price,
          data.get("description","").strip(), contact_type, contact_info, image1, image2,
-         contacts_raw, images_json])
+         contacts_raw, images_json, shipping])
     lid = cur.lastrowid; conn.commit(); conn.close()
     return jsonify({"id": lid})
 
