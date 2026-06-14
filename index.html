@@ -245,6 +245,9 @@ select:focus{outline:none;border-color:var(--accent)}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent)}
 .fg input::placeholder,.fg textarea::placeholder{color:var(--muted2)}
 .fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2378716c' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center;padding-right:1.8rem}
+.shipping-label{display:flex;align-items:center;gap:.6rem;cursor:pointer;padding:.52rem .75rem;border:1.5px solid var(--border);border-radius:6px;background:#fff;font-size:.86rem;transition:border-color .15s;user-select:none}
+.shipping-label:hover{border-color:var(--border2)}
+.shipping-label input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
 .btn-sub{width:100%;padding:.72rem;margin-top:.3rem;background:var(--accent);border:none;border-radius:9px;color:#fff;font-size:.93rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .18s}
 .btn-sub:hover:not(:disabled){background:var(--accent2)}
 .btn-sub:disabled{opacity:.4;cursor:not-allowed}
@@ -400,6 +403,13 @@ select:focus{outline:none;border-color:var(--accent)}
         <option value="all">所有成色</option>
         <option>全新</option><option>近全新</option><option>良好</option>
         <option>普通</option><option>有筆記</option>
+      </select>
+      <select id="priceFilter" onchange="loadListings()">
+        <option value="all">所有價位</option>
+        <option value="0-150">$150 以下</option>
+        <option value="150-350">$150 – $350</option>
+        <option value="350-600">$350 – $600</option>
+        <option value="600-99999">$600 以上</option>
       </select>
     </div>
   </div>
@@ -601,10 +611,16 @@ async function loadListings(){
     if(cond!=='all') params.set('condition',cond);
   }
   try{
-    const data=await api('GET','/api/listings?'+params);
+    let data=await api('GET','/api/listings?'+params);
+    // Price range filter (client-side)
+    const priceVal=(document.getElementById('priceFilter')||{}).value||'all';
+    if(priceVal!=='all'){
+      const [pMin,pMax]=priceVal.split('-').map(Number);
+      data=data.filter(b=>b.price>=pMin&&b.price<=pMax);
+    }
     renderGrid(data);
-    if(viewMine) title.innerHTML='👤 我的刊登 <b>'+data.length+'</b> 筆';
-    else if(viewFavs) title.innerHTML='❤️ 收藏 <b>'+data.length+'</b> 筆';
+    if(viewMine) title.innerHTML='我的刊登 <b>'+data.length+'</b> 筆';
+    else if(viewFavs) title.innerHTML='收藏 <b>'+data.length+'</b> 筆';
     else title.innerHTML='共 <b>'+data.length+'</b> 本';
   }catch(e){ grid.innerHTML='<div class="empty"><div class="ei">⚠️</div><p>無法連線到伺服器</p></div>'; }
 }
@@ -900,9 +916,9 @@ function renderPostForm(){
     '<div class="fg"><label>售價（元）<span class="req">*</span></label><input id="f-price" type="text" placeholder="例：250"></div>' +
     '<div class="fg"><label>補充說明</label><textarea id="f-desc" placeholder="書況、有無劃線..."></textarea></div>' +
     '<div class="fg"><label>運送方式</label>' +
-      '<label style="display:flex;align-items:center;gap:.6rem;cursor:pointer;padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:6px;background:#fff;font-size:.86rem;transition:border-color .15s" onmouseover="this.style.borderColor=\'var(--accent)\'" onmouseout="this.style.borderColor=\'var(--border)\'">' +
-        '<input type="checkbox" id="f-shipping" style="width:15px;height:15px;accent-color:var(--accent);flex-shrink:0">'+
-        '<span>支援賣貨便（7-11 / 全家 取貨付款）</span>' +
+      '<label class="shipping-label">' +
+        '<input type="checkbox" id="f-shipping">'+
+        '<span>支援賣貨便（7-11 取貨付款）</span>' +
       '</label>' +
     '</div>' +
     '<div class="fg"><label>聯絡方式 <span class="req">*</span> <small style="color:var(--muted2);font-weight:400">可新增多種</small></label>' +
