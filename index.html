@@ -3,310 +3,307 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>📚 資料科學系 二手教科書</title>
+<title>資料科學系 二手教科書</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0b0f1a;--surface:#141927;--surface2:#1c2438;
-  --border:rgba(148,163,184,.11);--text:#e2e8f0;--muted:#64748b;--muted2:#94a3b8;
-  --cyan:#06b6d4;--purple:#8b5cf6;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;
+  --bg:#f5f2ee;--surface:#ffffff;--surface2:#f0ece6;
+  --border:#e2ddd6;--border2:#ccc8c0;
+  --text:#1c1917;--muted:#78716c;--muted2:#a8a29e;
+  --accent:#0d9488;--accent2:#0f766e;
+  --red:#dc2626;--amber:#b45309;--green:#16a34a;--purple:#7c3aed;
+  --shadow:0 1px 4px rgba(0,0,0,.07);
+  --shadow-md:0 4px 16px rgba(0,0,0,.1);
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 40% at 15% 0%,rgba(6,182,212,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 85% 100%,rgba(139,92,246,.06) 0%,transparent 60%);pointer-events:none;z-index:0}
-header{position:sticky;top:0;z-index:100;background:rgba(11,15,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.hdr{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:.75rem;height:60px}
-.logo{display:flex;align-items:center;gap:.55rem;font-weight:800;font-size:1rem;white-space:nowrap;margin-right:auto}
-.logo-icon{font-size:1.35rem}
-.logo span{color:var(--cyan)}
-.btn{padding:.42rem .85rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;font-size:.84rem;font-family:inherit;transition:all .15s;white-space:nowrap}
-.btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.btn-primary{background:var(--cyan);border-color:var(--cyan);color:#0b0f1a;font-weight:700}
-.btn-primary:hover{background:#22d3ee;border-color:#22d3ee}
-.btn-ghost{border-color:transparent;color:var(--muted2)}
-.btn-ghost:hover{color:var(--text);border-color:var(--border)}
-.user-chip{display:flex;align-items:center;gap:.4rem;background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:.28rem .7rem .28rem .5rem;font-size:.82rem;color:var(--muted2)}
-.user-chip .av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;font-weight:700}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
+
+/* ── Header ── */
+header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.hdr{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:62px}
+.logo{display:flex;align-items:center;gap:.55rem;font-weight:800;font-size:1rem;color:var(--text);white-space:nowrap;text-decoration:none;margin-right:.5rem}
+.logo-icon{font-size:1.4rem}
+.logo em{color:var(--accent);font-style:normal}
+.search-wrap{flex:1;max-width:420px;position:relative}
+.search-wrap input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:99px;color:var(--text);padding:.48rem 1rem .48rem 2.5rem;font-size:.88rem;font-family:inherit;transition:all .15s}
+.search-wrap input:focus{outline:none;border-color:var(--accent);background:#fff}
+.search-wrap input::placeholder{color:var(--muted2)}
+.s-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--muted2);pointer-events:none;font-size:.95rem}
+.hdr-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+.btn{padding:.42rem .85rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:.84rem;font-family:inherit;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.btn-primary:hover{background:var(--accent2);border-color:var(--accent2)}
+.btn-ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.btn-ghost:hover{color:var(--text);background:var(--surface2)}
+.icon-pill{display:flex;align-items:center;gap:.35rem;background:transparent;border:1.5px solid var(--border);border-radius:99px;padding:.35rem .75rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.icon-pill:hover{border-color:var(--accent);color:var(--accent)}
+.icon-pill.active-fav{border-color:var(--red);color:var(--red)}
+.user-chip{display:flex;align-items:center;gap:.4rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:99px;padding:.3rem .75rem .3rem .4rem;font-size:.82rem;color:var(--muted)}
+.user-chip .av{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:.72rem;color:#fff;font-weight:700}
 .msg-btn{position:relative}
-.unread-badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:99px;font-size:.65rem;font-weight:800;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;padding:0 3px}
-main{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 4rem;position:relative;z-index:1}
-.toolbar{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:1.2rem}
-.search-wrap{flex:1;min-width:200px;position:relative}
-.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:.55rem .9rem .55rem 2.4rem;font-size:.9rem;font-family:inherit;transition:border-color .15s}
-.search-wrap input:focus{outline:none;border-color:var(--cyan)}
-.search-wrap input::placeholder{color:var(--muted)}
-.s-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-select{background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:.55rem .85rem;font-size:.85rem;font-family:inherit;cursor:pointer;transition:border-color .15s}
-select:focus{outline:none;border-color:var(--cyan)}
-.section-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.section-title{font-size:.82rem;color:var(--muted)}
-.section-title b{color:var(--cyan)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .18s;overflow:hidden;display:flex;flex-direction:column}
-.card:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 8px 24px rgba(6,182,212,.12)}
-.card.sold,.card.reserved{cursor:default}
-.card.sold:hover,.card.reserved:hover{border-color:var(--border);transform:none;box-shadow:none}
-.card.reserved{opacity:.75;border-color:var(--amber)}
-.card-thumb{height:110px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:2.8rem;position:relative;overflow:hidden}
-.sold-tag{position:absolute;inset:0;background:rgba(11,15,26,.65);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:#fca5a5;letter-spacing:.05em}
-.reserved-tag{position:absolute;inset:0;background:rgba(11,15,26,.55);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:#fcd34d;letter-spacing:.05em}
-.card-body{padding:.85rem;flex:1;display:flex;flex-direction:column;gap:.3rem}
-.card-subject{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.card-title{font-weight:700;font-size:.93rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-author{font-size:.78rem;color:var(--muted2)}
-.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.45rem}
-.price{font-size:1.05rem;font-weight:800;color:var(--cyan)}
-.price small{font-size:.72rem;color:var(--muted);font-weight:400;margin-left:1px}
-.mine-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 5px var(--cyan);flex-shrink:0}
-.badge{display:inline-block;padding:.17rem .52rem;border-radius:99px;font-size:.7rem;font-weight:700}
-.badge-全新{background:rgba(34,197,94,.15);color:#86efac}
-.badge-近全新{background:rgba(6,182,212,.15);color:#67e8f9}
-.badge-良好{background:rgba(59,130,246,.15);color:#93c5fd}
-.badge-普通{background:rgba(245,158,11,.15);color:#fcd34d}
-.badge-有筆記{background:rgba(139,92,246,.15);color:#c4b5fd}
-.subj-微積分,.subj-線性代數,.subj-統計學,.subj-機率論{color:#f472b6}
-.subj-計算機概論,.subj-程式設計{color:#fb923c}
-.subj-資料結構,.subj-演算法{color:#4ade80}
-.subj-資料庫系統,.subj-大數據分析{color:#60a5fa}
-.subj-機器學習,.subj-深度學習{color:#c084fc}
-.subj-資料視覺化,.subj-自然語言處理{color:#34d399}
-.subj-資訊安全{color:#f87171}
-.subj-其他{color:var(--muted2)}
+.unread-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;border-radius:99px;font-size:.62rem;font-weight:800;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+
+/* ── Main ── */
+main{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
+.toolbar{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.1rem}
+.filter-row{display:flex;gap:.5rem;flex-wrap:wrap}
+select{background:#fff;border:1.5px solid var(--border);border-radius:99px;color:var(--text);padding:.42rem .85rem;font-size:.83rem;font-family:inherit;cursor:pointer;transition:border-color .15s;appearance:none;padding-right:1.8rem;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2378716c' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center}
+select:focus{outline:none;border-color:var(--accent)}
+.section-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+.section-title{font-size:.8rem;color:var(--muted)}
+.section-title b{color:var(--text);font-weight:700}
+
+/* ── Cards ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:1rem}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .18s;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.card:hover{border-color:var(--accent);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.card.sold{cursor:default;opacity:.6}
+.card.sold:hover{border-color:var(--border);box-shadow:var(--shadow);transform:none}
+.card.reserved{border-color:var(--amber);opacity:.85}
+.card.reserved:hover{border-color:var(--amber);transform:none;box-shadow:var(--shadow)}
+.card-thumb{height:148px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:3rem;position:relative;overflow:hidden}
+.card-thumb img{width:100%;height:100%;object-fit:cover}
+.sold-tag,.reserved-tag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;letter-spacing:.04em}
+.sold-tag{background:rgba(255,255,255,.75);color:#991b1b}
+.reserved-tag{background:rgba(255,255,255,.75);color:var(--amber)}
+.card-body{padding:.8rem;flex:1;display:flex;flex-direction:column;gap:.22rem}
+.card-subject{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.card-title{font-weight:700;font-size:.88rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
+.card-author{font-size:.75rem;color:var(--muted2)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.45rem;border-top:1px solid var(--border)}
+.price{font-size:1rem;font-weight:800;color:var(--text)}
+.price small{font-size:.7rem;color:var(--muted);font-weight:400;margin-left:1px}
+.badge{display:inline-block;padding:.13rem .45rem;border-radius:99px;font-size:.67rem;font-weight:600;border:1px solid}
+.badge-全新{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.badge-近全新{background:#f0fdfa;color:#0f766e;border-color:#99f6e4}
+.badge-良好{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.badge-普通{background:#fffbeb;color:#92400e;border-color:#fde68a}
+.badge-有筆記{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+.mine-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
 .empty{text-align:center;padding:4rem 1rem;color:var(--muted)}
 .empty .ei{font-size:2.8rem;margin-bottom:.7rem}
 .empty p{font-size:.88rem}
-.spinner{width:26px;height:26px;border:2.5px solid rgba(148,163,184,.2);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;margin:3rem auto}
+.spinner{width:24px;height:24px;border:2px solid rgba(13,148,136,.15);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:3rem auto}
 @keyframes spin{to{transform:rotate(360deg)}}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;padding:1rem;overflow-y:auto;backdrop-filter:blur(4px)}
-.overlay.open{display:flex;align-items:flex-start;justify-content:center;padding-top:3vh}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:500px;margin:auto;position:relative;overflow:hidden}
-.mc{position:absolute;top:.85rem;right:.85rem;background:var(--surface2);border:none;color:var(--muted2);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s;z-index:10}
-.mc:hover{color:var(--text)}
 
-/* Detail modal with bottom bar */
+/* ── Overlay / Modal ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;padding:1rem;overflow-y:auto;backdrop-filter:blur(3px)}
+.overlay.open{display:flex;align-items:flex-start;justify-content:center;padding-top:3vh}
+.modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:500px;margin:auto;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.mc{position:absolute;top:.8rem;right:.8rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .15s;z-index:10}
+.mc:hover{background:var(--border);color:var(--text)}
+
+/* ── Detail modal ── */
 .detail-modal{display:flex;flex-direction:column;max-height:90vh}
 .detail-scroll{flex:1;overflow-y:auto}
-.d-thumb{height:150px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:3.8rem;position:relative;overflow:hidden}
-.d-body{padding:1.3rem 1.3rem .5rem}
-.d-subject{font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.35rem}
-.d-title{font-size:1.2rem;font-weight:800;line-height:1.3;margin-bottom:.2rem}
-.d-author{font-size:.86rem;color:var(--muted2);margin-bottom:.85rem}
-.d-meta{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.9rem}
-.meta-chip{background:var(--surface2);border-radius:7px;padding:.28rem .65rem;font-size:.78rem;color:var(--muted2)}
+.d-thumb{height:200px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:4rem;position:relative;overflow:hidden}
+.d-thumb img{width:100%;height:100%;object-fit:cover}
+.d-body{padding:1.2rem}
+.d-subject{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+.d-title{font-size:1.15rem;font-weight:800;line-height:1.3;margin-bottom:.2rem;color:var(--text)}
+.d-author{font-size:.84rem;color:var(--muted);margin-bottom:.85rem}
+.d-meta{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
+.meta-chip{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.22rem .6rem;font-size:.76rem;color:var(--muted)}
 .meta-chip b{color:var(--text)}
-.d-desc{font-size:.86rem;color:var(--muted2);background:var(--surface2);border-radius:9px;padding:.7rem;margin-bottom:.9rem;line-height:1.65;white-space:pre-wrap}
-.d-imgs{display:flex;gap:.55rem;margin-bottom:.9rem}
-.d-img{flex:1;border-radius:10px;overflow:hidden;max-height:200px;background:var(--surface2)}
+.d-desc{font-size:.84rem;color:var(--muted);background:var(--surface2);border-radius:8px;padding:.7rem;margin-bottom:.85rem;line-height:1.7;white-space:pre-wrap;border:1px solid var(--border)}
+.d-imgs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.85rem}
+.d-img{flex:1;min-width:120px;border-radius:9px;overflow:hidden;max-height:180px;background:var(--surface2);border:1px solid var(--border)}
 .d-img img{width:100%;height:100%;object-fit:cover;display:block}
-.d-price{font-size:1.65rem;font-weight:900;color:var(--cyan);margin-bottom:.7rem}
-.d-price small{font-size:.85rem;color:var(--muted);font-weight:400;margin-left:3px}
-.d-contact{margin-bottom:.5rem}
-.btn-contact{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;padding:.72rem;border-radius:9px;border:none;font-size:.93rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none}
+.d-price{font-size:1.6rem;font-weight:900;color:var(--text);margin-bottom:.75rem}
+.d-price small{font-size:.82rem;color:var(--muted);font-weight:400;margin-left:3px}
+.d-contact{display:flex;flex-direction:column;gap:.45rem;margin-bottom:.5rem}
+.btn-contact{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.68rem;border-radius:9px;border:none;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none}
 .btn-contact.line{background:#06c755;color:#fff}.btn-contact.line:hover{background:#05b84d}
-.btn-contact.phone{background:#3b82f6;color:#fff}.btn-contact.phone:hover{background:#2563eb}
-.btn-contact.email{background:var(--purple);color:#fff}.btn-contact.email:hover{background:#7c3aed}
+.btn-contact.phone{background:#2563eb;color:#fff}.btn-contact.phone:hover{background:#1d4ed8}
+.btn-contact.email{background:var(--purple);color:#fff}.btn-contact.email:hover{background:#6d28d9}
 .btn-contact.messenger{background:#1877f2;color:#fff}.btn-contact.messenger:hover{background:#166fe5}
 .btn-contact.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff}
-.btn-contact.other{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
-.contact-row{display:flex;gap:.4rem;align-items:center;margin-bottom:.45rem}
-.contact-row select{flex:0 0 130px;padding:.5rem .6rem}
-.contact-row input{flex:1;padding:.5rem .7rem}
-.contact-row .del-btn{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--red);border-radius:8px;width:32px;height:34px;cursor:pointer;flex-shrink:0;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.contact-row .del-btn:hover{background:rgba(239,68,68,.1)}
+.btn-contact.other{background:var(--surface2);color:var(--text);border:1.5px solid var(--border)}
+.status-banner{padding:.5rem 1.2rem;font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:.45rem}
+.status-banner.reserved{background:#fffbeb;color:var(--amber);border-top:1px solid #fde68a}
+.status-banner.sold{background:#fef2f2;color:#991b1b;border-top:1px solid #fecaca}
 
-/* Status banner */
-.status-banner{padding:.55rem 1.3rem;font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
-.status-banner.reserved{background:rgba(245,158,11,.12);color:#fcd34d;border-top:1px solid rgba(245,158,11,.2)}
-.status-banner.sold{background:rgba(239,68,68,.1);color:#fca5a5;border-top:1px solid rgba(239,68,68,.15)}
-
-/* Bottom action bar */
-.detail-bar{border-top:1px solid var(--border);padding:.75rem 1rem;display:flex;align-items:center;gap:.6rem;background:var(--surface)}
-.icon-btn{display:flex;flex-direction:column;align-items:center;gap:.12rem;padding:.35rem .55rem;border:none;background:transparent;color:var(--muted2);cursor:pointer;font-size:.68rem;border-radius:8px;transition:color .15s;flex-shrink:0}
+/* ── Bottom action bar ── */
+.detail-bar{border-top:1px solid var(--border);padding:.7rem 1rem;display:flex;align-items:center;gap:.6rem;background:#fff}
+.icon-btn{display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.35rem .5rem;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:.66rem;border-radius:8px;transition:color .15s;flex-shrink:0}
 .icon-btn:hover{color:var(--text)}
-.icon-btn .ib{font-size:1.25rem;line-height:1}
+.icon-btn .ib{font-size:1.2rem;line-height:1}
 .icon-btn.active{color:var(--red)}
-.icon-btn.active-cyan{color:var(--cyan)}
-.bar-btn{flex:1;padding:.7rem;border-radius:10px;border:none;font-size:.93rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .18s;text-align:center}
-.bar-btn.buy{background:var(--cyan);color:#0b0f1a}
-.bar-btn.buy:hover{background:#22d3ee}
-.bar-btn.reserved{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.3);cursor:default}
-.bar-btn.done-btn{background:var(--green);color:#fff}
-.bar-btn.done-btn:hover{background:#16a34a}
-.bar-btn.seller-manage{display:flex;gap:.5rem;background:transparent;padding:0;flex:1}
-.btn-sm2{flex:1;padding:.62rem;border-radius:9px;border:1px solid;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
-.btn-sold2{border-color:var(--amber);color:var(--amber);background:transparent}
-.btn-sold2:hover{background:rgba(245,158,11,.1)}
-.btn-del2{border-color:var(--red);color:var(--red);background:transparent}
-.btn-del2:hover{background:rgba(239,68,68,.1)}
-.msg{font-size:.81rem;padding:.38rem .65rem;border-radius:6px;margin:.3rem 0}
-.msg.ok{background:rgba(34,197,94,.12);color:#86efac}
-.msg.err{background:rgba(239,68,68,.12);color:#fca5a5}
+.icon-btn.active-cyan{color:var(--accent)}
+.bar-btn{flex:1;padding:.68rem;border-radius:9px;border:none;font-size:.9rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .18s;text-align:center}
+.bar-btn.buy{background:var(--accent);color:#fff}.bar-btn.buy:hover{background:var(--accent2)}
+.bar-btn.reserved{background:#fffbeb;color:var(--amber);border:1.5px solid #fde68a;cursor:default}
+.bar-btn.done-btn{background:var(--green);color:#fff}.bar-btn.done-btn:hover{background:#15803d}
+.btn-sm2{flex:1;padding:.58rem;border-radius:8px;border:1.5px solid;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;background:#fff}
+.btn-sold2{border-color:var(--amber);color:var(--amber)}.btn-sold2:hover{background:#fffbeb}
+.btn-del2{border-color:var(--red);color:var(--red)}.btn-del2:hover{background:#fef2f2}
+.msg{font-size:.8rem;padding:.35rem .65rem;border-radius:6px;margin:.25rem 0}
+.msg.ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.msg.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
 
-/* Post / Auth form */
-.f-wrap{padding:1.35rem}
-.f-wrap h2{font-size:1.1rem;font-weight:800;margin-bottom:1.1rem}
-.fg{margin-bottom:.82rem}
-.fg label{display:block;font-size:.77rem;color:var(--muted2);margin-bottom:.28rem}
-.fg label .req{color:var(--cyan)}
-.f2{display:grid;grid-template-columns:1fr 1fr;gap:.82rem}
+/* ── Auth / Post forms ── */
+.f-wrap{padding:1.3rem}
+.f-wrap h2{font-size:1.05rem;font-weight:800;margin-bottom:1rem;color:var(--text)}
+.fg{margin-bottom:.78rem}
+.fg label{display:block;font-size:.75rem;color:var(--muted);margin-bottom:.25rem;font-weight:600}
+.fg label .req{color:var(--accent)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:.78rem}
 @media(max-width:440px){.f2{grid-template-columns:1fr}}
-.fg input,.fg select,.fg textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:.56rem .78rem;font-size:.88rem;font-family:inherit;transition:border-color .15s}
-.fg textarea{resize:vertical;min-height:78px}
-.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--cyan)}
-.fg input::placeholder,.fg textarea::placeholder{color:#334155}
-.btn-sub{width:100%;padding:.75rem;margin-top:.3rem;background:var(--cyan);border:none;border-radius:9px;color:#0b0f1a;font-size:.95rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .18s}
-.btn-sub:hover:not(:disabled){background:#22d3ee}
+.fg input,.fg select,.fg textarea{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:.5rem .75rem;font-size:.86rem;font-family:inherit;transition:border-color .15s;appearance:none}
+.fg textarea{resize:vertical;min-height:76px}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--muted2)}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2378716c' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center;padding-right:1.8rem}
+.btn-sub{width:100%;padding:.72rem;margin-top:.3rem;background:var(--accent);border:none;border-radius:9px;color:#fff;font-size:.93rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .18s}
+.btn-sub:hover:not(:disabled){background:var(--accent2)}
 .btn-sub:disabled{opacity:.4;cursor:not-allowed}
-.f-msg{margin-bottom:.5rem}
-.auth-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.2rem}
-.auth-tab{flex:1;padding:.6rem;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:.9rem;font-family:inherit;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
-.auth-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.f-msg{margin-bottom:.45rem}
+.auth-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.1rem}
+.auth-tab{flex:1;padding:.58rem;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:.88rem;font-family:inherit;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .suc{text-align:center;padding:2rem 1rem}
-.suc .si{font-size:2.8rem;margin-bottom:.55rem}
-.suc h3{font-size:1.05rem;font-weight:800;color:var(--green);margin-bottom:.35rem}
-.suc p{font-size:.84rem;color:var(--muted2);line-height:1.6}
-.img-upload-area{display:flex;gap:.7rem;margin-top:.1rem}
-.img-upload-box{flex:1;border:1.5px dashed var(--border);border-radius:10px;padding:.6rem;text-align:center;cursor:pointer;transition:border-color .15s;position:relative;min-height:88px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.25rem;overflow:hidden}
-.img-upload-box:hover{border-color:var(--cyan)}
-.img-upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.img-upload-box .up-icon{font-size:1.4rem;pointer-events:none}
-.img-upload-box .up-label{font-size:.72rem;color:var(--muted);pointer-events:none}
-.img-upload-box img.up-prev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px}
+.suc .si{font-size:2.8rem;margin-bottom:.5rem}
+.suc h3{font-size:1rem;font-weight:800;color:var(--green);margin-bottom:.3rem}
+.suc p{font-size:.83rem;color:var(--muted);line-height:1.6}
 
-/* Chat */
-.chat-modal{max-width:480px;display:flex;flex-direction:column;height:72vh;max-height:620px}
-.chat-header{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-.chat-header-info h3{font-size:.95rem;font-weight:800}
-.chat-header-info small{font-size:.73rem;color:var(--muted)}
-.btn-meet{padding:.35rem .75rem;border-radius:8px;border:1px solid var(--amber);background:transparent;color:var(--amber);font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
-.btn-meet:hover{background:rgba(245,158,11,.1)}
-.chat-body{flex:1;overflow-y:auto;padding:.9rem;display:flex;flex-direction:column;gap:.55rem}
-.chat-bubble{max-width:75%;padding:.55rem .85rem;border-radius:14px;font-size:.86rem;line-height:1.5;word-break:break-word}
-.bubble-me{align-self:flex-end;background:var(--cyan);color:#0b0f1a;border-bottom-right-radius:4px}
-.bubble-them{align-self:flex-start;background:var(--surface2);color:var(--text);border-bottom-left-radius:4px}
-.bubble-time{font-size:.68rem;margin-top:.2rem;opacity:.65}
+/* ── Image upload ── */
+.img-upload-grid{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.3rem}
+.img-slot{position:relative;width:76px;height:76px;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);flex-shrink:0;background:var(--surface2)}
+.img-slot img{width:100%;height:100%;object-fit:cover;display:block}
+.img-slot-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.55);border:none;color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center}
+.img-slot-del:hover{background:rgba(220,38,38,.85)}
+.img-add-btn{width:76px;height:76px;border-radius:8px;border:1.5px dashed var(--border);background:#fff;color:var(--muted2);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;font-size:.67rem;transition:all .15s;flex-shrink:0}
+.img-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+.img-add-btn .ia{font-size:1.3rem}
+
+/* ── Contact row ── */
+.contact-row{display:flex;gap:.4rem;align-items:center;margin-bottom:.42rem}
+.contact-row select{flex:0 0 128px;padding:.48rem .55rem;font-size:.82rem}
+.contact-row input{flex:1;padding:.48rem .7rem;font-size:.82rem}
+.del-btn{background:#fff;border:1.5px solid #fecaca;color:var(--red);border-radius:8px;width:32px;height:34px;cursor:pointer;flex-shrink:0;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.del-btn:hover{background:#fef2f2}
+
+/* ── Inbox ── */
+.inbox-modal{max-width:460px}
+.conv-list{max-height:70vh;overflow-y:auto}
+.conv-item{display:flex;align-items:center;gap:.75rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.conv-item:hover{background:var(--surface2)}
+.conv-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:#fff;flex-shrink:0}
+.conv-info{flex:1;min-width:0}
+.conv-top{display:flex;justify-content:space-between;align-items:center;gap:.4rem;margin-bottom:.15rem}
+.conv-name{font-size:.86rem;font-weight:700;color:var(--text)}
+.conv-time{font-size:.7rem;color:var(--muted2);flex-shrink:0}
+.conv-book{font-size:.73rem;color:var(--accent);margin-bottom:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-last{font-size:.76rem;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-unread{background:var(--red);color:#fff;border-radius:99px;font-size:.62rem;font-weight:800;min-width:17px;height:17px;display:flex;align-items:center;justify-content:center;padding:0 3px;flex-shrink:0}
+.inbox-empty{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:.86rem}
+
+/* ── Chat ── */
+.chat-modal{max-width:460px;display:flex;flex-direction:column;height:72vh;max-height:600px}
+.chat-header{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.5rem;background:#fff}
+.chat-header-info h3{font-size:.92rem;font-weight:800;color:var(--text)}
+.chat-header-info small{font-size:.72rem;color:var(--muted)}
+.btn-meet{padding:.33rem .7rem;border-radius:7px;border:1.5px solid var(--amber);background:#fff;color:var(--amber);font-size:.76rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
+.btn-meet:hover{background:#fffbeb}
+.chat-body{flex:1;overflow-y:auto;padding:.85rem;display:flex;flex-direction:column;gap:.5rem;background:var(--bg)}
+.chat-bubble{max-width:75%;padding:.5rem .82rem;border-radius:14px;font-size:.85rem;line-height:1.52;word-break:break-word}
+.bubble-me{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.bubble-them{align-self:flex-start;background:#fff;color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border)}
+.bubble-time{font-size:.67rem;margin-top:.2rem;opacity:.65}
 .bubble-them .bubble-time{text-align:left}
 .bubble-me .bubble-time{text-align:right}
-
-/* Meet card in chat */
-.meet-card{align-self:center;width:90%;background:var(--surface2);border:1px solid var(--amber);border-radius:12px;padding:.85rem;text-align:center}
-.meet-card .mc-title{font-size:.82rem;font-weight:800;color:var(--amber);margin-bottom:.5rem}
-.meet-card .mc-info{font-size:.83rem;color:var(--text);margin-bottom:.6rem;line-height:1.6}
+.meet-card{align-self:center;width:88%;background:#fff;border:1.5px solid #fde68a;border-radius:11px;padding:.8rem;text-align:center;box-shadow:var(--shadow)}
+.meet-card .mc-title{font-size:.8rem;font-weight:800;color:var(--amber);margin-bottom:.45rem}
+.meet-card .mc-info{font-size:.82rem;color:var(--text);margin-bottom:.55rem;line-height:1.6}
 .meet-card .mc-info b{color:var(--amber)}
-.btn-confirm-meet{width:100%;padding:.55rem;background:var(--amber);border:none;border-radius:8px;color:#0b0f1a;font-weight:800;font-size:.85rem;cursor:pointer;font-family:inherit}
-.btn-confirm-meet:hover{background:#f59e0b}
-.meet-confirmed-card{align-self:center;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:.6rem 1rem;font-size:.81rem;color:#86efac;font-weight:700;text-align:center}
-
-/* Post-confirm action buttons in chat */
-.chat-txn-bar{padding:.6rem .9rem;border-top:1px solid var(--border);display:flex;gap:.5rem}
-.txn-btn{flex:1;padding:.55rem;border-radius:9px;border:none;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
-.txn-btn.seller{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.3)}
-.txn-btn.seller:hover{background:rgba(245,158,11,.25)}
-.txn-btn.buyer{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.25)}
-.txn-btn.buyer:hover{background:rgba(34,197,94,.25)}
+.btn-confirm-meet{width:100%;padding:.52rem;background:var(--amber);border:none;border-radius:7px;color:#fff;font-weight:800;font-size:.83rem;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-confirm-meet:hover{background:#92400e}
+.meet-confirmed-card{align-self:center;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:.55rem 1rem;font-size:.79rem;color:#15803d;font-weight:700;text-align:center}
+.chat-txn-bar{padding:.55rem .85rem;border-top:1px solid var(--border);display:flex;gap:.45rem;background:#fff}
+.txn-btn{flex:1;padding:.52rem;border-radius:8px;border:1.5px solid;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;background:#fff}
+.txn-btn.seller{border-color:#fde68a;color:var(--amber)}.txn-btn.seller:hover{background:#fffbeb}
+.txn-btn.buyer{border-color:#bbf7d0;color:var(--green)}.txn-btn.buyer:hover{background:#f0fdf4}
 .txn-btn:disabled{opacity:.4;cursor:default}
-
-.chat-footer{padding:.65rem .75rem;border-top:1px solid var(--border);display:flex;gap:.5rem}
-.chat-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:.5rem .75rem;font-size:.88rem;font-family:inherit;resize:none;height:40px}
-.chat-input:focus{outline:none;border-color:var(--cyan)}
-.chat-send{background:var(--cyan);border:none;border-radius:10px;color:#0b0f1a;font-size:1.1rem;width:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.chat-send:hover{background:#22d3ee}
-
-/* Inbox */
-.inbox-modal{max-width:480px}
-.conv-list{max-height:70vh;overflow-y:auto}
-.conv-item{display:flex;align-items:center;gap:.8rem;padding:.85rem 1.1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
-.conv-item:hover{background:var(--surface2)}
-.conv-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:#fff;flex-shrink:0}
-.conv-info{flex:1;min-width:0}
-.conv-top{display:flex;justify-content:space-between;align-items:center;gap:.4rem;margin-bottom:.18rem}
-.conv-name{font-size:.88rem;font-weight:700}
-.conv-time{font-size:.72rem;color:var(--muted);flex-shrink:0}
-.conv-book{font-size:.75rem;color:var(--cyan);margin-bottom:.12rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.conv-last{font-size:.78rem;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.conv-unread{background:var(--red);color:#fff;border-radius:99px;font-size:.65rem;font-weight:800;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 4px;flex-shrink:0}
-.inbox-empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.88rem}
-
-/* Meet proposal modal */
-.meet-form{padding:1.2rem}
-.meet-form h3{font-size:1rem;font-weight:800;margin-bottom:1rem;color:var(--amber)}
-
-/* Seller profile modal */
-.seller-modal{max-width:600px;display:flex;flex-direction:column;max-height:90vh}
-.seller-header{padding:1.4rem 1.4rem 1rem;border-bottom:1px solid var(--border)}
-.seller-hdr-top{display:flex;align-items:center;gap:1rem;margin-bottom:.9rem}
-.seller-av{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#fff;flex-shrink:0}
-.seller-info h2{font-size:1.1rem;font-weight:800;margin-bottom:.2rem}
-.seller-info .join{font-size:.76rem;color:var(--muted)}
-.seller-stats{display:flex;gap:.6rem}
-.stat-chip{flex:1;background:var(--surface2);border-radius:10px;padding:.55rem;text-align:center}
-.stat-chip .sv{font-size:1.15rem;font-weight:800;color:var(--cyan)}
-.stat-chip .sl{font-size:.7rem;color:var(--muted);margin-top:.1rem}
-.stat-chip.sold .sv{color:#fca5a5}
-.stat-chip.active .sv{color:#86efac}
-.seller-body{flex:1;overflow-y:auto;padding:1rem}
-.seller-body .sub-title{font-size:.78rem;color:var(--muted);margin-bottom:.75rem;font-weight:600}
-.mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.7rem}
-.mini-card{background:var(--surface2);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .15s}
-.mini-card:hover{border-color:var(--cyan);transform:translateY(-1px)}
-.mini-card.sold{opacity:.6;cursor:default}
-.mini-card.sold:hover{border-color:var(--border);transform:none}
-.mini-card.reserved{border-color:var(--amber);opacity:.8}
-.mini-thumb{height:75px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--surface);position:relative;overflow:hidden}
-.mini-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.mini-sold-tag{position:absolute;inset:0;background:rgba(11,15,26,.6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fca5a5}
-.mini-reserved-tag{position:absolute;inset:0;background:rgba(11,15,26,.55);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fcd34d}
-.mini-body{padding:.55rem .6rem}
-.mini-title{font-size:.8rem;font-weight:700;margin-bottom:.18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini-sub{font-size:.68rem;color:var(--muted2);margin-bottom:.25rem}
-.mini-footer{display:flex;justify-content:space-between;align-items:center}
-.mini-price{font-size:.88rem;font-weight:800;color:var(--cyan)}
-.seller-name-link{color:var(--muted2);text-decoration:none;cursor:pointer;border-bottom:1px dashed var(--border);transition:color .15s}
-.seller-name-link:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
-/* Multi-image upload */
-.img-upload-grid{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.3rem}
-.img-slot{position:relative;width:76px;height:76px;border-radius:9px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
-.img-slot img{width:100%;height:100%;object-fit:cover;display:block}
-.img-slot-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.65);border:none;color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;line-height:1}
-.img-slot-del:hover{background:rgba(239,68,68,.85)}
-.img-add-btn{width:76px;height:76px;border-radius:9px;border:1.5px dashed var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;font-size:.7rem;transition:border-color .15s;flex-shrink:0}
-.img-add-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.img-add-btn .ia{font-size:1.3rem}
-/* Chat image bubble */
-.chat-img-bubble{max-width:200px;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid var(--border)}
+.chat-footer{padding:.6rem .7rem;border-top:1px solid var(--border);display:flex;gap:.45rem;background:#fff}
+.chat-input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:.48rem .72rem;font-size:.86rem;font-family:inherit;resize:none;height:38px;transition:border-color .15s}
+.chat-input:focus{outline:none;border-color:var(--accent);background:#fff}
+.chat-send{background:var(--accent);border:none;border-radius:9px;color:#fff;font-size:1rem;width:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.chat-send:hover{background:var(--accent2)}
+.chat-cam-btn{background:#fff;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:all .15s}
+.chat-cam-btn:hover{border-color:var(--accent);color:var(--accent)}
+.chat-img-bubble{max-width:200px;border-radius:11px;overflow:hidden;cursor:pointer;border:1px solid var(--border)}
 .chat-img-bubble img{width:100%;display:block}
-.chat-img-sending{align-self:flex-end;padding:.4rem .7rem;background:var(--surface2);border-radius:10px;font-size:.78rem;color:var(--muted);animation:pulse .8s ease-in-out infinite alternate}
+.chat-img-sending{align-self:flex-end;padding:.38rem .7rem;background:#fff;border:1px solid var(--border);border-radius:9px;font-size:.76rem;color:var(--muted);animation:pulse .8s ease-in-out infinite alternate}
 @keyframes pulse{from{opacity:.4}to{opacity:1}}
-.chat-cam-btn{background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted2);width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:all .15s}
-.chat-cam-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* ── Seller profile ── */
+.seller-modal{max-width:600px;display:flex;flex-direction:column;max-height:90vh}
+.seller-header{padding:1.3rem;border-bottom:1px solid var(--border)}
+.seller-hdr-top{display:flex;align-items:center;gap:.9rem;margin-bottom:.85rem}
+.seller-av{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:#fff;flex-shrink:0}
+.seller-info h2{font-size:1.05rem;font-weight:800;margin-bottom:.15rem;color:var(--text)}
+.seller-info .join{font-size:.73rem;color:var(--muted)}
+.seller-stats{display:flex;gap:.55rem}
+.stat-chip{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:.5rem;text-align:center}
+.stat-chip .sv{font-size:1.1rem;font-weight:800;color:var(--text)}
+.stat-chip .sl{font-size:.68rem;color:var(--muted);margin-top:.1rem}
+.stat-chip.sold .sv{color:#991b1b}
+.stat-chip.active .sv{color:var(--green)}
+.seller-body{flex:1;overflow-y:auto;padding:1rem}
+.seller-body .sub-title{font-size:.76rem;color:var(--muted);margin-bottom:.7rem;font-weight:600}
+.mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:.65rem}
+.mini-card{background:#fff;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.mini-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
+.mini-card.sold{opacity:.55;cursor:default}.mini-card.sold:hover{border-color:var(--border);box-shadow:var(--shadow)}
+.mini-card.reserved{border-color:var(--amber)}
+.mini-thumb{height:80px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--surface2);position:relative;overflow:hidden}
+.mini-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.mini-sold-tag,.mini-reserved-tag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;background:rgba(255,255,255,.75)}
+.mini-sold-tag{color:#991b1b}
+.mini-reserved-tag{color:var(--amber)}
+.mini-body{padding:.5rem .55rem}
+.mini-title{font-size:.78rem;font-weight:700;margin-bottom:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.mini-sub{font-size:.66rem;color:var(--accent);margin-bottom:.22rem}
+.mini-footer{display:flex;justify-content:space-between;align-items:center}
+.mini-price{font-size:.86rem;font-weight:800;color:var(--text)}
+.seller-name-link{color:var(--muted);cursor:pointer;border-bottom:1px dashed var(--border);transition:color .15s;display:inline}
+.seller-name-link:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ── Meet form ── */
+.meet-form{padding:1.15rem}
+.meet-form h3{font-size:.98rem;font-weight:800;margin-bottom:.9rem;color:var(--amber)}
 </style>
 </head>
 <body>
 <header>
   <div class="hdr">
-    <div class="logo"><span class="logo-icon">📚</span>資料科學系 <span>二手教科書</span></div>
-    <div id="hdrRight"></div>
-  </div>
-</header>
-<main>
-  <div class="toolbar">
+    <div class="logo"><span class="logo-icon">📚</span>資料科學系 <em>二手書</em></div>
     <div class="search-wrap">
       <span class="s-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="搜尋書名、作者..." oninput="onSearch()">
     </div>
-    <select id="subjectFilter" onchange="loadListings()">
-      <option value="all">所有科目</option>
-      <option>微積分</option><option>線性代數</option><option>統計學</option>
-      <option>機率論</option><option>計算機概論</option><option>程式設計</option>
-      <option>資料結構</option><option>演算法</option><option>資料庫系統</option>
-      <option>機器學習</option><option>深度學習</option><option>資料視覺化</option>
-      <option>大數據分析</option><option>自然語言處理</option><option>資訊安全</option>
-      <option>其他</option>
-    </select>
-    <select id="conditionFilter" onchange="loadListings()">
-      <option value="all">所有成色</option>
-      <option>全新</option><option>近全新</option><option>良好</option>
-      <option>普通</option><option>有筆記</option>
-    </select>
+    <div class="hdr-right" id="hdrRight"></div>
+  </div>
+</header>
+
+<main>
+  <div class="toolbar">
+    <div class="filter-row">
+      <select id="subjectFilter" onchange="loadListings()">
+        <option value="all">所有科目</option>
+        <option>微積分</option><option>線性代數</option><option>統計學</option>
+        <option>機率論</option><option>計算機概論</option><option>程式設計</option>
+        <option>資料結構</option><option>演算法</option><option>資料庫系統</option>
+        <option>機器學習</option><option>深度學習</option><option>資料視覺化</option>
+        <option>大數據分析</option><option>自然語言處理</option><option>資訊安全</option>
+        <option>其他</option>
+      </select>
+      <select id="conditionFilter" onchange="loadListings()">
+        <option value="all">所有成色</option>
+        <option>全新</option><option>近全新</option><option>良好</option>
+        <option>普通</option><option>有筆記</option>
+      </select>
+    </div>
   </div>
   <div class="section-bar"><div class="section-title" id="sectionTitle"></div></div>
   <div class="grid" id="grid"></div>
@@ -328,7 +325,7 @@ select:focus{outline:none;border-color:var(--cyan)}
 
 <!-- Auth modal -->
 <div class="overlay" id="authOv" onclick="closeAuth(event)">
-  <div class="modal" style="max-width:380px"><button class="mc" onclick="closeAuthBtn()">✕</button><div id="authInner"></div></div>
+  <div class="modal" style="max-width:360px"><button class="mc" onclick="closeAuthBtn()">✕</button><div id="authInner"></div></div>
 </div>
 
 <!-- Inbox modal -->
@@ -343,7 +340,7 @@ select:focus{outline:none;border-color:var(--cyan)}
 
 <!-- Meet proposal modal -->
 <div class="overlay" id="meetOv" onclick="closeMeetForm(event)">
-  <div class="modal" style="max-width:360px"><button class="mc" onclick="closeMeetFormBtn()">✕</button><div id="meetInner"></div></div>
+  <div class="modal" style="max-width:340px"><button class="mc" onclick="closeMeetFormBtn()">✕</button><div id="meetInner"></div></div>
 </div>
 
 <!-- Seller profile modal -->
@@ -370,6 +367,14 @@ const EMOJI = {
   資料庫系統:'🗄️',機器學習:'🤖',深度學習:'🧠',資料視覺化:'📈',
   大數據分析:'🔬',自然語言處理:'💬',資訊安全:'🔐',其他:'📖',
 };
+const CTYPES={
+  line:   {label:'LINE ID',  cls:'line',     icon:'💬', href:null},
+  phone:  {label:'電話',     cls:'phone',    icon:'📞', href:'tel:'},
+  email:  {label:'Email',    cls:'email',    icon:'📧', href:'mailto:'},
+  messenger:{label:'Messenger',cls:'messenger',icon:'💙',href:null},
+  ig:     {label:'IG',       cls:'ig',       icon:'📸', href:null},
+  other:  {label:'其他',     cls:'other',    icon:'📬', href:null},
+};
 
 async function api(method, path, body) {
   const headers = {'Content-Type':'application/json'};
@@ -381,7 +386,6 @@ async function api(method, path, body) {
   if (!res.ok) throw new Error(data.detail || '操作失敗');
   return data;
 }
-
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function bodyLock(on){ document.body.style.overflow = on?'hidden':''; }
 function fmtTime(ts){
@@ -393,18 +397,18 @@ function fmtTime(ts){
   return (d.getMonth()+1)+'/'+ d.getDate();
 }
 
-// ── Header ─────────────────────────────────────────────────────────────────
+// ── Header ──────────────────────────────────────────────────────────────────
 function renderHeader() {
   const el = document.getElementById('hdrRight');
   if (auth.token) {
     el.innerHTML =
-      '<button class="btn btn-ghost" id="mineBtn" onclick="cycleView()">' +
-        (viewFavs ? '❤️ 我的收藏' : viewMine ? '👤 我的刊登' : '📋 全部書籍') +
+      '<button class="btn btn-ghost" onclick="cycleView()">' +
+        (viewFavs ? '❤️ 收藏' : viewMine ? '👤 我的' : '📋 全部') +
       '</button>' +
       '<div class="user-chip"><div class="av">'+esc(auth.username[0].toUpperCase())+'</div>'+esc(auth.username)+'</div>' +
-      '<div class="msg-btn"><button class="btn" onclick="openInbox()">💬<span id="unreadBadge" style="display:none" class="unread-badge">0</span></button></div>' +
-      '<button class="btn" onclick="doLogout()" style="color:var(--red);border-color:rgba(239,68,68,.3)">登出</button>' +
-      '<button class="btn btn-primary" onclick="openPost()">＋ 刊登書籍</button>';
+      '<div class="msg-btn"><button class="btn" onclick="openInbox()" style="padding:.42rem .7rem">💬<span id="unreadBadge" style="display:none" class="unread-badge">0</span></button></div>' +
+      '<button class="btn btn-ghost" onclick="doLogout()" style="color:var(--red)">登出</button>' +
+      '<button class="btn btn-primary" onclick="openPost()">＋ 刊登</button>';
     startUnreadPoll();
   } else {
     el.innerHTML =
@@ -413,81 +417,68 @@ function renderHeader() {
     stopUnreadPoll();
   }
 }
-
 function cycleView() {
-  if (!viewMine && !viewFavs) { viewMine = true; viewFavs = false; }
-  else if (viewMine) { viewMine = false; viewFavs = true; }
-  else { viewMine = false; viewFavs = false; }
+  if (!viewMine && !viewFavs) { viewMine=true; viewFavs=false; }
+  else if (viewMine) { viewMine=false; viewFavs=true; }
+  else { viewMine=false; viewFavs=false; }
   renderHeader(); loadListings();
 }
-
-// ── Unread poll ────────────────────────────────────────────────────────────
-function startUnreadPoll(){ checkUnread(); unreadPollTimer = setInterval(checkUnread, 8000); }
+function startUnreadPoll(){ checkUnread(); unreadPollTimer=setInterval(checkUnread,8000); }
 function stopUnreadPoll(){ clearInterval(unreadPollTimer); }
 async function checkUnread(){
   if(!auth.token) return;
   try{
-    const d = await api('GET','/api/conversations/unread');
-    const b = document.getElementById('unreadBadge');
-    if(b){ if(d.count>0){b.style.display='flex';b.textContent=d.count>99?'99+':d.count;}else{b.style.display='none';} }
+    const d=await api('GET','/api/conversations/unread');
+    const b=document.getElementById('unreadBadge');
+    if(b){ if(d.count>0){b.style.display='flex';b.textContent=d.count>99?'99+':d.count;}else b.style.display='none'; }
   }catch(e){}
 }
 
-// ── Auth ───────────────────────────────────────────────────────────────────
+// ── Auth ─────────────────────────────────────────────────────────────────────
 function openAuth(tab){ renderAuthModal(tab||'login'); document.getElementById('authOv').classList.add('open'); bodyLock(true); }
 function closeAuth(e){ if(e.target===document.getElementById('authOv')) closeAuthBtn(); }
 function closeAuthBtn(){ document.getElementById('authOv').classList.remove('open'); bodyLock(false); }
 function renderAuthModal(tab){
-  document.getElementById('authInner').innerHTML =
+  document.getElementById('authInner').innerHTML=
     '<div class="f-wrap"><div class="auth-tabs">' +
     '<button class="auth-tab'+(tab==='login'?' active':'')+'" onclick="renderAuthModal(\'login\')">登入</button>' +
-    '<button class="auth-tab'+(tab==='register'?' active':'')+'" onclick="renderAuthModal(\'register\')">註冊帳號</button>' +
+    '<button class="auth-tab'+(tab==='register'?' active':'')+'" onclick="renderAuthModal(\'register\')">建立帳號</button>' +
     '</div><div id="authFormMsg" class="f-msg"></div>' +
-    (tab==='login' ? buildLoginForm() : buildRegisterForm()) + '</div>';
-}
-function buildLoginForm(){
-  return '<div class="fg"><label>帳號</label><input id="a-user" type="text" placeholder="輸入帳號"></div>' +
-    '<div class="fg"><label>密碼</label><input id="a-pass" type="password" placeholder="輸入密碼"></div>' +
-    '<button class="btn-sub" onclick="submitLogin()">登入</button>';
-}
-function buildRegisterForm(){
-  return '<div class="fg"><label>帳號 <span class="req">*</span><small style="color:var(--muted);font-weight:400"> 英文數字底線 3-20字</small></label><input id="a-user" type="text" placeholder="自訂帳號名稱"></div>' +
-    '<div class="fg"><label>密碼 <span class="req">*</span><small style="color:var(--muted);font-weight:400"> 至少6字元</small></label><input id="a-pass" type="password" placeholder="設定密碼"></div>' +
-    '<div class="fg"><label>確認密碼 <span class="req">*</span></label><input id="a-pass2" type="password" placeholder="再輸入一次密碼"></div>' +
-    '<button class="btn-sub" onclick="submitRegister()">建立帳號</button>';
+    (tab==='login' ?
+      '<div class="fg"><label>帳號</label><input id="a-user" type="text" placeholder="輸入帳號"></div><div class="fg"><label>密碼</label><input id="a-pass" type="password" placeholder="輸入密碼"></div><button class="btn-sub" onclick="submitLogin()">登入</button>' :
+      '<div class="fg"><label>帳號 <span class="req">*</span></label><input id="a-user" type="text" placeholder="英文數字底線 3-20字"></div><div class="fg"><label>密碼 <span class="req">*</span></label><input id="a-pass" type="password" placeholder="至少6字元"></div><div class="fg"><label>確認密碼 <span class="req">*</span></label><input id="a-pass2" type="password" placeholder="再輸入一次"></div><button class="btn-sub" onclick="submitRegister()">建立帳號</button>'
+    ) + '</div>';
 }
 async function submitLogin(){
   const u=document.getElementById('a-user').value.trim(), p=document.getElementById('a-pass').value;
   const msg=document.getElementById('authFormMsg');
   if(!u||!p){msg.innerHTML='<div class="msg err">請填寫所有欄位</div>';return;}
   try{ const d=await api('POST','/api/auth/login',{username:u,password:p}); setAuth(d.token,d.username); closeAuthBtn(); }
-  catch(e){ msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+  catch(e){ msg.innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; }
 }
 async function submitRegister(){
   const u=document.getElementById('a-user').value.trim(), p=document.getElementById('a-pass').value, p2=document.getElementById('a-pass2').value;
   const msg=document.getElementById('authFormMsg');
   if(!u||!p||!p2){msg.innerHTML='<div class="msg err">請填寫所有欄位</div>';return;}
-  if(p!==p2){msg.innerHTML='<div class="msg err">❌ 兩次密碼不一致</div>';return;}
+  if(p!==p2){msg.innerHTML='<div class="msg err">兩次密碼不一致</div>';return;}
   try{ const d=await api('POST','/api/auth/register',{username:u,password:p}); setAuth(d.token,d.username); closeAuthBtn(); }
-  catch(e){ msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+  catch(e){ msg.innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; }
 }
 function setAuth(token,username){ auth.token=token; auth.username=username; localStorage.setItem('ds_token',token); localStorage.setItem('ds_username',username); renderHeader(); loadListings(); }
 async function doLogout(){
   try{ await api('POST','/api/auth/logout'); }catch(e){}
-  auth.token=null; auth.username=null;
-  localStorage.removeItem('ds_token'); localStorage.removeItem('ds_username');
-  viewMine=false; viewFavs=false;
-  renderHeader(); loadListings();
+  auth.token=null; auth.username=null; localStorage.removeItem('ds_token'); localStorage.removeItem('ds_username');
+  viewMine=false; viewFavs=false; renderHeader(); loadListings();
 }
 
-// ── Listings grid ──────────────────────────────────────────────────────────
+// ── Grid ─────────────────────────────────────────────────────────────────────
 function onSearch(){ clearTimeout(searchTimer); searchTimer=setTimeout(loadListings,350); }
 async function loadListings(){
   const grid=document.getElementById('grid'), title=document.getElementById('sectionTitle');
   grid.innerHTML='<div class="spinner"></div>'; title.innerHTML='';
   const params=new URLSearchParams();
-  if(viewMine){ params.set('mine','true'); }
-  else if(viewFavs){ params.set('favorites','true'); }
+  if(viewMine) params.set('mine','true');
+  else if(viewFavs) params.set('favorites','true');
   else{
     const s=document.getElementById('searchInput').value.trim();
     const sub=document.getElementById('subjectFilter').value;
@@ -499,65 +490,57 @@ async function loadListings(){
   try{
     const data=await api('GET','/api/listings?'+params);
     renderGrid(data);
-    if(viewMine) title.innerHTML='👤 我的刊登（共 <b>'+data.length+'</b> 筆）';
-    else if(viewFavs) title.innerHTML='❤️ 我的收藏（共 <b>'+data.length+'</b> 筆）';
-    else title.innerHTML='在售書籍 <b>'+data.length+'</b> 筆';
+    if(viewMine) title.innerHTML='👤 我的刊登 <b>'+data.length+'</b> 筆';
+    else if(viewFavs) title.innerHTML='❤️ 收藏 <b>'+data.length+'</b> 筆';
+    else title.innerHTML='共 <b>'+data.length+'</b> 本';
   }catch(e){ grid.innerHTML='<div class="empty"><div class="ei">⚠️</div><p>無法連線到伺服器</p></div>'; }
 }
-
 function renderGrid(items){
   const grid=document.getElementById('grid');
   if(!items.length){
-    const m=viewMine?'你還沒有刊登任何書籍':viewFavs?'還沒有收藏任何書籍':'找不到符合條件的書籍';
+    const m=viewMine?'還沒有刊登任何書籍':viewFavs?'還沒有收藏任何書籍':'找不到符合條件的書籍';
     grid.innerHTML='<div class="empty"><div class="ei">📭</div><p>'+m+'</p></div>'; return;
   }
   grid.innerHTML=items.map(b=>{
     const emoji=EMOJI[b.subject]||'📖';
-    const sc='subj-'+(b.subject||'其他');
     const isReserved=(b.status==='reserved'||b.status==='pending')&&!b.is_sold;
     const cls=b.is_sold?' sold':isReserved?' reserved':'';
     const mine=b.is_mine?'<div class="mine-dot" title="我的刊登"></div>':'';
-    const thumb=b.image1?'<img src="/uploads/'+esc(b.image1)+'" alt="" style="width:100%;height:100%;object-fit:cover">':emoji;
+    let thumbContent='';
+    let imgs=[];try{if(b.images)imgs=JSON.parse(b.images);}catch(e){}
+    if(!imgs.length){if(b.image1)imgs.push(b.image1);}
+    thumbContent=imgs[0]?'<img src="/uploads/'+esc(imgs[0])+'" alt="">':emoji;
     const overlay=b.is_sold?'<div class="sold-tag">已售出</div>':isReserved?'<div class="reserved-tag">🔒 占售中</div>':'';
-    const click=b.is_sold?'':'openDetail('+b.id+')';
-    return '<div class="card'+cls+'" onclick="'+click+'">' +
-      '<div class="card-thumb">'+thumb+overlay+'</div>' +
+    const click=b.is_sold?'':'onclick="openDetail('+b.id+')"';
+    return '<div class="card'+cls+'" '+click+'>' +
+      '<div class="card-thumb">'+thumbContent+overlay+'</div>' +
       '<div class="card-body">' +
-        (b.subject?'<div class="card-subject '+sc+'">'+esc(b.subject)+'</div>':'') +
+        (b.subject?'<div class="card-subject">'+esc(b.subject)+'</div>':'') +
         '<div class="card-title">'+esc(b.title)+'</div>' +
         (b.author?'<div class="card-author">'+esc(b.author)+'</div>':'') +
         '<div class="card-footer">' +
           '<div class="price">$'+b.price+'<small>元</small></div>' +
-          '<div style="display:flex;align-items:center;gap:.4rem">'+mine+'<span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></div>' +
+          '<div style="display:flex;align-items:center;gap:.35rem">'+mine+'<span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></div>' +
         '</div>' +
       '</div></div>';
   }).join('');
 }
 
-// ── Detail modal ───────────────────────────────────────────────────────────
+// ── Detail ────────────────────────────────────────────────────────────────────
 async function openDetail(lid){
   currentLid=lid;
   document.getElementById('detailScroll').innerHTML='<div class="spinner"></div>';
   document.getElementById('detailBar').innerHTML='';
-  document.getElementById('detailOv').classList.add('open');
-  bodyLock(true);
+  document.getElementById('detailOv').classList.add('open'); bodyLock(true);
   try{
-    const [b, txn] = await Promise.all([
+    const [b,txn]=await Promise.all([
       api('GET','/api/listings/'+lid),
-      auth.token ? api('GET','/api/listings/'+lid+'/transaction').catch(()=>null) : Promise.resolve(null)
+      auth.token?api('GET','/api/listings/'+lid+'/transaction').catch(()=>null):Promise.resolve(null)
     ]);
-    renderDetail(b, txn);
-  }catch(e){ document.getElementById('detailScroll').innerHTML='<div style="padding:2rem;color:#fca5a5">載入失敗</div>'; }
+    renderDetail(b,txn);
+  }catch(e){ document.getElementById('detailScroll').innerHTML='<div style="padding:2rem;color:var(--red)">載入失敗</div>'; }
 }
 
-const CTYPES={
-  line:   {label:'LINE ID',   cls:'line',      icon:'💬', href:null},
-  phone:  {label:'電話',      cls:'phone',     icon:'📞', href:'tel:'},
-  email:  {label:'Email',     cls:'email',     icon:'📧', href:'mailto:'},
-  messenger:{label:'Messenger',cls:'messenger',icon:'💙', href:null},
-  ig:     {label:'IG',        cls:'ig',        icon:'📸', href:null},
-  other:  {label:'其他',      cls:'other',     icon:'📬', href:null},
-};
 function renderContactBtns(b){
   let contacts=[];
   if(b.contacts){try{contacts=JSON.parse(b.contacts);}catch(e){}}
@@ -566,92 +549,75 @@ function renderContactBtns(b){
     const cfg=CTYPES[c.type]||{label:c.type,cls:'other',icon:'📬',href:null};
     const href=cfg.href?cfg.href+c.info:null;
     if(href) return '<a href="'+esc(href)+'" class="btn-contact '+cfg.cls+'">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'</a>';
-    return '<button class="btn-contact '+cfg.cls+'" onclick="copyText(\''+esc(c.info).replace(/'/g,"&#39;")+'\')">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'<span style="opacity:.6;font-size:.8em;margin-left:.4rem">點擊複製</span></button>';
+    return '<button class="btn-contact '+cfg.cls+'" onclick="copyText(\''+esc(c.info).replace(/'/g,"&#39;")+'\')">'+cfg.icon+' '+cfg.label+'：'+esc(c.info)+'<span style="opacity:.55;font-size:.8em;margin-left:.4rem">複製</span></button>';
   }).join('');
 }
 
-function renderDetail(b, txn){
+function renderDetail(b,txn){
   const emoji=EMOJI[b.subject]||'📖';
-  const sc='subj-'+(b.subject||'其他');
+  let imgs=[];try{if(b.images)imgs=JSON.parse(b.images);}catch(e){}
+  if(!imgs.length){if(b.image1)imgs.push(b.image1);if(b.image2)imgs.push(b.image2);}
   const date=new Date(b.created_at).toLocaleDateString('zh-TW');
   const seller=b.username&&!b.is_mine?'由 <span class="seller-name-link" onclick="openSellerProfile(\''+esc(b.username)+'\')">'+esc(b.username)+'</span> 刊登':b.username&&b.is_mine?'由 <b>我</b> 刊登':'';
   const isReserved=(b.status==='reserved'||b.status==='pending')&&!b.is_sold;
-
   let statusBanner='';
   if(b.is_sold) statusBanner='<div class="status-banner sold">✅ 此書已售出</div>';
   else if(isReserved) statusBanner='<div class="status-banner reserved">🔒 占售中 — 正在進行交易</div>';
+  const thumbHtml=imgs[0]?'<img src="/uploads/'+esc(imgs[0])+'" alt="" style="width:100%;height:100%;object-fit:cover">':emoji;
 
   let scrollHtml=
-    '<div class="d-thumb">'+emoji+'</div>' +
-    statusBanner +
-    '<div class="d-body">' +
-    (b.subject?'<div class="d-subject '+sc+'">'+esc(b.subject)+'</div>':'') +
-    '<div class="d-title">'+esc(b.title)+'</div>' +
-    (b.author?'<div class="d-author">作者：'+esc(b.author)+'</div>':'') +
-    '<div class="d-meta">' +
-      '<span class="meta-chip"><b>成色</b> <span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></span>' +
-      (b.edition?'<span class="meta-chip"><b>版次</b> '+esc(b.edition)+'</span>':'') +
-      '<span class="meta-chip">'+date+'</span>' +
-      (seller?'<span class="meta-chip">'+seller+'</span>':'') +
-    '</div>' +
-    (b.description?'<div class="d-desc">'+esc(b.description)+'</div>':'') +
-    (()=>{let imgs=[];try{if(b.images)imgs=JSON.parse(b.images);}catch(e){}if(!imgs.length){if(b.image1)imgs.push(b.image1);if(b.image2)imgs.push(b.image2);}return imgs.length?'<div class="d-imgs" style="flex-wrap:wrap">'+imgs.map(fn=>'<div class="d-img"><img src="/uploads/'+esc(fn)+'" alt="" onclick="window.open(this.src)" style="cursor:zoom-in"></div>').join('')+'</div>':''})() +
-    '<div class="d-price">$'+b.price+'<small>元</small></div>' +
-    '<div class="d-contact" style="display:flex;flex-direction:column;gap:.5rem">'+renderContactBtns(b)+'</div>';
-
-  scrollHtml+='<div id="actionMsg" style="margin:.3rem 0"></div></div>';
+    '<div class="d-thumb">'+thumbHtml+'</div>'+
+    statusBanner+
+    '<div class="d-body">'+
+    (b.subject?'<div class="d-subject">'+esc(b.subject)+'</div>':'')+
+    '<div class="d-title">'+esc(b.title)+'</div>'+
+    (b.author?'<div class="d-author">'+esc(b.author)+'</div>':'')+
+    '<div class="d-meta">'+
+      '<span class="meta-chip"><b>成色</b> <span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></span>'+
+      (b.edition?'<span class="meta-chip"><b>版次</b> '+esc(b.edition)+'</span>':'')+
+      '<span class="meta-chip">'+date+'</span>'+
+      (seller?'<span class="meta-chip">'+seller+'</span>':'')+
+    '</div>'+
+    (b.description?'<div class="d-desc">'+esc(b.description)+'</div>':'')+
+    (imgs.length?'<div class="d-imgs">'+imgs.map(fn=>'<div class="d-img"><img src="/uploads/'+esc(fn)+'" alt="" onclick="window.open(this.src)" style="cursor:zoom-in"></div>').join('')+'</div>':'')+
+    '<div class="d-price">$'+b.price+'<small>元</small></div>'+
+    '<div class="d-contact">'+renderContactBtns(b)+'</div>'+
+    '<div id="actionMsg" style="margin:.3rem 0"></div></div>';
   document.getElementById('detailScroll').innerHTML=scrollHtml;
 
   // Bottom bar
   const isFav=b.is_favorited;
-  const favHtml='<button class="icon-btn'+(isFav?' active':'')+'" onclick="toggleFav('+b.id+',this)" title="收藏"><span class="ib">'+(isFav?'❤️':'🤍')+'</span><span>收藏</span></button>';
-
+  const favHtml='<button class="icon-btn'+(isFav?' active':'')+'" onclick="toggleFav('+b.id+',this)"><span class="ib">'+(isFav?'❤️':'🤍')+'</span><span>收藏</span></button>';
   let barHtml='';
   if(b.is_mine){
-    // Seller view
-    if(txn && txn.is_seller){
-      const sellerDoneLabel=txn.seller_done?'已完成':'✅ 面交完成';
-      barHtml=favHtml+
-        '<button class="bar-btn seller-manage">' +
-          '<button class="btn-sm2 btn-sold2" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+sellerDoneLabel+'</button>' +
-          '<button class="btn-sm2 btn-del2" onclick="doDel()">🗑️ 刪除</button>' +
-        '</button>';
+    if(txn&&txn.is_seller){
+      barHtml=favHtml+'<div style="flex:1;display:flex;gap:.45rem">'+
+        '<button class="btn-sm2 btn-sold2" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+(txn.seller_done?'✅ 已完成':'✅ 面交完成')+'</button>'+
+        '<button class="btn-sm2 btn-del2" onclick="doDel()">刪除</button>'+
+      '</div>';
     } else {
-      barHtml=favHtml+
-        '<div style="flex:1;display:flex;gap:.5rem">' +
-          '<button class="btn-sm2 btn-sold2" style="flex:1" onclick="doSold()">✅ 標記售出</button>' +
-          '<button class="btn-sm2 btn-del2" style="flex:1" onclick="doDel()">🗑️ 刪除</button>' +
-        '</div>';
+      barHtml=favHtml+'<div style="flex:1;display:flex;gap:.45rem">'+
+        '<button class="btn-sm2 btn-sold2" onclick="doSold()" style="flex:1">標記售出</button>'+
+        '<button class="btn-sm2 btn-del2" onclick="doDel()" style="flex:1">刪除</button>'+
+      '</div>';
     }
   } else {
-    // Buyer view
-    const chatHtml='<button class="icon-btn'+(auth.token?' active-cyan':'')+'" onclick="'+(auth.token?'startChat('+b.id+')':'openAuth(\'login\')')+'" title="聊聊"><span class="ib">💬</span><span>聊聊</span></button>';
+    const chatHtml='<button class="icon-btn'+(auth.token?' active-cyan':'')+'" onclick="'+(auth.token?'startChat('+b.id+')':'openAuth(\'login\')')+'" ><span class="ib">💬</span><span>聊聊</span></button>';
     if(b.is_sold){
       barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>已售出</button>';
-    } else if(txn && txn.buyer_id===parseInt(txn.buyer_id)){
-      // There's a transaction involving the current user as buyer
-      if(txn.is_buyer){
-        const buyerDoneLabel=txn.buyer_done?'已確認收到':'📦 確認已收到';
-        barHtml=favHtml+chatHtml+'<button class="bar-btn done-btn" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+buyerDoneLabel+'</button>';
-      } else if(isReserved){
-        barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>🔒 暫時保留中</button>';
-      } else {
-        barHtml=favHtml+chatHtml+'<button class="bar-btn buy" onclick="startChat('+b.id+')">📦 我要買</button>';
-      }
+    } else if(txn&&txn.is_buyer){
+      barHtml=favHtml+chatHtml+'<button class="bar-btn done-btn" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+(txn.buyer_done?'✅ 已收到':'📦 確認已收到')+'</button>';
+    } else if(isReserved){
+      barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>🔒 暫時保留中</button>';
     } else {
-      if(isReserved){
-        barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>🔒 暫時保留中</button>';
-      } else {
-        barHtml=favHtml+chatHtml+'<button class="bar-btn buy" onclick="startChat('+b.id+')">📦 我要買</button>';
-      }
+      barHtml=favHtml+chatHtml+'<button class="bar-btn buy" onclick="startChat('+b.id+')">📦 我要買</button>';
     }
   }
   document.getElementById('detailBar').innerHTML=barHtml;
 }
 
 function copyText(t){ navigator.clipboard.writeText(t).then(()=>alert('已複製：'+t)); }
-
-async function toggleFav(lid, btn){
+async function toggleFav(lid,btn){
   if(!auth.token){ openAuth('login'); return; }
   try{
     const d=await api('POST','/api/listings/'+lid+'/favorite');
@@ -659,38 +625,32 @@ async function toggleFav(lid, btn){
     btn.innerHTML='<span class="ib">'+(d.favorited?'❤️':'🤍')+'</span><span>收藏</span>';
   }catch(e){}
 }
-
 async function doSold(){
-  if(!confirm('確定要將此書標記為已售出？')) return;
-  try{
-    await api('POST','/api/listings/'+currentLid+'/sold');
-    document.getElementById('actionMsg').innerHTML='<div class="msg ok">✅ 已標記為售出</div>';
-    setTimeout(()=>{ closeDetailBtn(); loadListings(); },1200);
-  }catch(e){ document.getElementById('actionMsg').innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+  if(!confirm('確定標記為已售出？')) return;
+  try{ await api('POST','/api/listings/'+currentLid+'/sold');
+    document.getElementById('actionMsg').innerHTML='<div class="msg ok">✅ 已標記售出</div>';
+    setTimeout(()=>{ closeDetailBtn(); loadListings(); },1000);
+  }catch(e){ document.getElementById('actionMsg').innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; }
 }
 async function doDel(){
-  if(!confirm('確定要刪除此刊登？此動作無法復原。')) return;
-  try{
-    await api('DELETE','/api/listings/'+currentLid);
-    document.getElementById('actionMsg').innerHTML='<div class="msg ok">🗑️ 已刪除</div>';
-    setTimeout(()=>{ closeDetailBtn(); loadListings(); },1000);
-  }catch(e){ document.getElementById('actionMsg').innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+  if(!confirm('確定要刪除？')) return;
+  try{ await api('DELETE','/api/listings/'+currentLid);
+    document.getElementById('actionMsg').innerHTML='<div class="msg ok">已刪除</div>';
+    setTimeout(()=>{ closeDetailBtn(); loadListings(); },900);
+  }catch(e){ document.getElementById('actionMsg').innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; }
 }
 async function doTxnSellerDone(tid){
   if(!confirm('確認面交已完成？')) return;
-  try{ await api('POST','/api/transactions/'+tid+'/seller-done'); openDetail(currentLid); }
-  catch(e){ alert('❌ '+e.message); }
+  try{ await api('POST','/api/transactions/'+tid+'/seller-done'); openDetail(currentLid); }catch(e){ alert(e.message); }
 }
 async function doTxnBuyerDone(tid){
-  if(!confirm('確認你已收到書籍？')) return;
-  try{ await api('POST','/api/transactions/'+tid+'/buyer-done'); openDetail(currentLid); loadListings(); }
-  catch(e){ alert('❌ '+e.message); }
+  if(!confirm('確認已收到書籍？')) return;
+  try{ await api('POST','/api/transactions/'+tid+'/buyer-done'); openDetail(currentLid); loadListings(); }catch(e){ alert(e.message); }
 }
-
 function closeDetail(e){ if(e.target===document.getElementById('detailOv')) closeDetailBtn(); }
 function closeDetailBtn(){ document.getElementById('detailOv').classList.remove('open'); bodyLock(false); }
 
-// ── Post modal ─────────────────────────────────────────────────────────────
+// ── Post modal ────────────────────────────────────────────────────────────────
 function openPost(){ if(!auth.token){ openAuth('login'); return; } renderPostForm(); document.getElementById('postOv').classList.add('open'); bodyLock(true); }
 function closePost(e){ if(e.target===document.getElementById('postOv')) closePostBtn(); }
 function closePostBtn(){ document.getElementById('postOv').classList.remove('open'); bodyLock(false); }
@@ -707,151 +667,109 @@ function renderPostForm(){
     '<div class="fg"><label>成色 <span class="req">*</span></label><select id="f-cond">'+cOpts+'</select></div></div>' +
     '<div class="fg"><label>售價（元）<span class="req">*</span></label><input id="f-price" type="text" placeholder="例：250"></div>' +
     '<div class="fg"><label>補充說明</label><textarea id="f-desc" placeholder="書況、有無劃線..."></textarea></div>' +
-    '<div class="fg"><label>聯絡方式 <span class="req">*</span> <small style="color:var(--muted);font-weight:400">可新增多種</small></label>' +
+    '<div class="fg"><label>聯絡方式 <span class="req">*</span> <small style="color:var(--muted2);font-weight:400">可新增多種</small></label>' +
       '<div id="contacts-list"></div>' +
-      '<button type="button" class="btn" style="margin-top:.45rem;font-size:.8rem;width:100%;justify-content:center;display:flex;gap:.3rem" onclick="addContact()">＋ 新增聯絡方式</button>' +
+      '<button type="button" class="btn" style="margin-top:.4rem;font-size:.8rem;width:100%;justify-content:center;display:flex" onclick="addContact()">＋ 新增聯絡方式</button>' +
     '</div>' +
-    '<div class="fg"><label>書況照片 <small style="color:var(--muted);font-weight:400">不限張數</small></label>' +
+    '<div class="fg"><label>書況照片 <span class="req">*</span> <small style="color:var(--muted2);font-weight:400">封面＋內頁必填，其餘選填</small></label>' +
     '<div class="img-upload-grid" id="imgGrid"></div>' +
     '<input type="file" id="f-imgs-hidden" accept="image/*" multiple style="display:none" onchange="onImagesSelected(event)">' +
     '</div>' +
-    '<button class="btn-sub" id="f-sub" onclick="submitPost()">📤 刊登書籍</button></div>';
-  // Add first contact row
+    '<button class="btn-sub" id="f-sub" onclick="submitPost()">刊登書籍</button></div>';
   addContact();
-  // Init image grid: 封面(必) + 內頁(必) + 其餘選填
-  selectedImages = [null, null];
-  imgTargetIdx = null;
-  renderImgGrid();
+  selectedImages=[null,null]; imgTargetIdx=null; renderImgGrid();
 }
-let contactRowCount = 0;
-const CTYPE_OPTS = [
-  {v:'line',      l:'💬 LINE ID'},
-  {v:'phone',     l:'📞 電話'},
-  {v:'email',     l:'📧 Email'},
-  {v:'messenger', l:'💙 Messenger'},
-  {v:'ig',        l:'📸 IG'},
-  {v:'other',     l:'📬 其他'},
+
+// Contact rows
+let contactRowCount=0;
+const CTYPE_OPTS=[
+  {v:'line',l:'💬 LINE ID'},{v:'phone',l:'📞 電話'},{v:'email',l:'📧 Email'},
+  {v:'messenger',l:'💙 Messenger'},{v:'ig',l:'📸 IG'},{v:'other',l:'📬 其他'},
 ];
-const CTYPE_PLACEHOLDER = {
-  line:'例：my_line_id',phone:'例：0912345678',email:'例：abc@gmail.com',
-  messenger:'貼上 Messenger 連結',ig:'例：@ig_username',other:'聯絡資訊',
-};
+const CTYPE_PH={line:'例：my_line_id',phone:'例：0912345678',email:'例：abc@gmail.com',messenger:'Messenger 連結',ig:'例：@ig_username',other:'聯絡資訊'};
 function addContact(){
-  const list = document.getElementById('contacts-list');
-  if(!list) return;
-  const n = ++contactRowCount;
-  const opts = CTYPE_OPTS.map(o=>'<option value="'+o.v+'">'+o.l+'</option>').join('');
-  const row = document.createElement('div');
-  row.className = 'contact-row'; row.id = 'crow-'+n;
-  row.innerHTML =
-    '<select id="ct-'+n+'" onchange="updatePlaceholder('+n+')" style="flex:0 0 140px">'+opts+'</select>' +
-    '<input id="ci-'+n+'" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="'+CTYPE_PLACEHOLDER.line+'">' +
+  const list=document.getElementById('contacts-list'); if(!list) return;
+  const n=++contactRowCount;
+  const opts=CTYPE_OPTS.map(o=>'<option value="'+o.v+'">'+o.l+'</option>').join('');
+  const row=document.createElement('div'); row.className='contact-row'; row.id='crow-'+n;
+  row.innerHTML='<select id="ct-'+n+'" onchange="updatePH('+n+')">'+opts+'</select>'+
+    '<input id="ci-'+n+'" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="'+CTYPE_PH.line+'">'+
     (contactRowCount>1?'<button type="button" class="del-btn" onclick="removeContact('+n+')">✕</button>':'<div style="width:32px"></div>');
   list.appendChild(row);
 }
-function removeContact(n){
-  const row=document.getElementById('crow-'+n); if(row) row.remove();
-}
-function updatePlaceholder(n){
-  const sel=document.getElementById('ct-'+n), inp=document.getElementById('ci-'+n);
-  if(sel&&inp) inp.placeholder=CTYPE_PLACEHOLDER[sel.value]||'聯絡資訊';
-}
+function removeContact(n){ const r=document.getElementById('crow-'+n); if(r) r.remove(); }
+function updatePH(n){ const s=document.getElementById('ct-'+n),i=document.getElementById('ci-'+n); if(s&&i) i.placeholder=CTYPE_PH[s.value]||'聯絡資訊'; }
 
-// selectedImages[0]=封面(必), [1]=內頁(必), [2+]=選填
-let selectedImages = [null, null];
-let imgTargetIdx = null;   // which slot the next file-pick targets
-
-function triggerImgPick(idx){
-  imgTargetIdx = idx;
-  document.getElementById('f-imgs-hidden').click();
-}
+// Image upload
+let selectedImages=[null,null], imgTargetIdx=null;
+function triggerImgPick(idx){ imgTargetIdx=idx; document.getElementById('f-imgs-hidden').click(); }
 function onImagesSelected(e){
-  const files = Array.from(e.target.files);
-  if(imgTargetIdx !== null && imgTargetIdx < 2){
-    // Fill a required slot; extra files become optional
-    if(files[0]) selectedImages[imgTargetIdx] = files[0];
+  const files=Array.from(e.target.files);
+  if(imgTargetIdx!==null&&imgTargetIdx<2){
+    if(files[0]) selectedImages[imgTargetIdx]=files[0];
     for(let i=1;i<files.length;i++) selectedImages.push(files[i]);
   } else {
-    // Append optional
     for(const f of files) selectedImages.push(f);
   }
-  imgTargetIdx = null;
-  e.target.value = '';
-  renderImgGrid();
+  imgTargetIdx=null; e.target.value=''; renderImgGrid();
 }
-function removeImage(i){
-  if(i < 2) selectedImages[i] = null;   // keep required slot, just clear
-  else selectedImages.splice(i, 1);
-  renderImgGrid();
-}
+function removeImage(i){ if(i<2) selectedImages[i]=null; else selectedImages.splice(i,1); renderImgGrid(); }
 function renderImgGrid(){
-  const grid = document.getElementById('imgGrid'); if(!grid) return;
-  const REQ_LABELS = ['封面', '內頁'];
-  let html = '';
-  // Required slots 0 & 1
+  const grid=document.getElementById('imgGrid'); if(!grid) return;
+  const RL=['封面','內頁'];
+  let html='';
   for(let i=0;i<2;i++){
     if(selectedImages[i]){
-      html += '<div class="img-slot">' +
-        '<img src="'+URL.createObjectURL(selectedImages[i])+'">' +
-        '<button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button>' +
-        '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:.6rem;color:#fff;text-align:center;padding:1px 0">'+REQ_LABELS[i]+'</div>' +
-      '</div>';
+      html+='<div class="img-slot"><img src="'+URL.createObjectURL(selectedImages[i])+'">'+
+        '<button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button>'+
+        '<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);font-size:.6rem;color:#fff;text-align:center;padding:1px">'+RL[i]+'</div></div>';
     } else {
-      html += '<button type="button" class="img-add-btn" onclick="triggerImgPick('+i+')" style="border-color:var(--cyan);color:var(--cyan)">' +
-        '<span class="ia">📷</span>' +
-        '<span style="font-size:.65rem">'+REQ_LABELS[i]+'<span style="color:var(--red)"> *</span></span>' +
-      '</button>';
+      html+='<button type="button" class="img-add-btn" onclick="triggerImgPick('+i+')" style="border-color:var(--accent);color:var(--accent)">'+
+        '<span class="ia">📷</span><span style="font-size:.63rem">'+RL[i]+' <span style="color:var(--red)">*</span></span></button>';
     }
   }
-  // Optional slots 2+
   for(let i=2;i<selectedImages.length;i++){
-    if(selectedImages[i]) html += '<div class="img-slot">' +
-      '<img src="'+URL.createObjectURL(selectedImages[i])+'">' +
-      '<button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button>' +
-    '</div>';
+    if(selectedImages[i]) html+='<div class="img-slot"><img src="'+URL.createObjectURL(selectedImages[i])+'">'+
+      '<button type="button" class="img-slot-del" onclick="removeImage('+i+')">✕</button></div>';
   }
-  // Add-more button
-  html += '<button type="button" class="img-add-btn" onclick="triggerImgPick(99)"><span class="ia">📷</span><span>新增</span></button>';
-  grid.innerHTML = html;
+  html+='<button type="button" class="img-add-btn" onclick="triggerImgPick(99)"><span class="ia">📷</span><span>新增</span></button>';
+  grid.innerHTML=html;
 }
+
 async function submitPost(){
   const g=id=>document.getElementById(id).value.trim();
   const msg=document.getElementById('postMsg'), btn=document.getElementById('f-sub');
   const title=g('f-title'), price=parseInt(g('f-price'));
-  if(!title){msg.innerHTML='<div class="msg err">❌ 請填寫書名</div>';return;}
-  if(isNaN(price)||price<0){msg.innerHTML='<div class="msg err">❌ 請填寫正確的價格</div>';return;}
-  // Collect contacts
+  if(!title){msg.innerHTML='<div class="msg err">請填寫書名</div>';return;}
+  if(isNaN(price)||price<0){msg.innerHTML='<div class="msg err">請填寫正確的價格</div>';return;}
   const contactRows=document.querySelectorAll('#contacts-list .contact-row');
   const contacts=[];
-  contactRows.forEach(row=>{
-    const sel=row.querySelector('select'), inp=row.querySelector('input');
-    if(sel&&inp&&inp.value.trim()) contacts.push({type:sel.value, info:inp.value.trim()});
-  });
-  if(!contacts.length){msg.innerHTML='<div class="msg err">❌ 請填寫至少一種聯絡方式</div>';return;}
-  if(!selectedImages[0]||!selectedImages[1]){msg.innerHTML='<div class="msg err">❌ 請上傳封面和內頁照片（必填）</div>';return;}
+  contactRows.forEach(row=>{ const s=row.querySelector('select'),i=row.querySelector('input'); if(s&&i&&i.value.trim()) contacts.push({type:s.value,info:i.value.trim()}); });
+  if(!contacts.length){msg.innerHTML='<div class="msg err">請填寫至少一種聯絡方式</div>';return;}
+  if(!selectedImages[0]||!selectedImages[1]){msg.innerHTML='<div class="msg err">請上傳封面和內頁照片（必填）</div>';return;}
   btn.disabled=true; btn.textContent='刊登中...';
   const fd=new FormData();
   fd.append('title',title); fd.append('author',g('f-author')); fd.append('subject',g('f-subj'));
   fd.append('edition',g('f-ed')); fd.append('condition',g('f-cond')); fd.append('price',price);
   fd.append('description',g('f-desc')); fd.append('contacts',JSON.stringify(contacts));
-  selectedImages.filter(f=>f).forEach(f => fd.append('images', f));
+  selectedImages.filter(f=>f).forEach(f=>fd.append('images',f));
   try{
     const headers={}; if(auth.token) headers['Authorization']='Bearer '+auth.token;
     const res=await fetch('/api/listings',{method:'POST',headers,body:fd});
     const data=await res.json();
     if(!res.ok) throw new Error(data.detail||'操作失敗');
-    document.getElementById('postInner').innerHTML='<div class="suc"><div class="si">🎉</div><h3>刊登成功！</h3><p>你的書籍已上架，同學可以搜尋到它。</p><br><button class="btn btn-primary" onclick="closePostBtn();loadListings()" style="display:block;margin:0 auto">回到書籍列表</button></div>';
+    document.getElementById('postInner').innerHTML='<div class="suc"><div class="si">🎉</div><h3>刊登成功！</h3><p>你的書籍已上架，同學可以搜尋到它。</p><br><button class="btn btn-primary" onclick="closePostBtn();loadListings()" style="display:block;margin:0 auto">查看書籍列表</button></div>';
     loadListings();
-  }catch(e){ msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; btn.disabled=false; btn.textContent='📤 刊登書籍'; }
+  }catch(e){ msg.innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; btn.disabled=false; btn.textContent='刊登書籍'; }
 }
 
-// ── Inbox ──────────────────────────────────────────────────────────────────
+// ── Inbox ─────────────────────────────────────────────────────────────────────
 function openInbox(){ document.getElementById('inboxOv').classList.add('open'); bodyLock(true); loadInbox(); }
 function closeInbox(e){ if(e.target===document.getElementById('inboxOv')) closeInboxBtn(); }
 function closeInboxBtn(){ document.getElementById('inboxOv').classList.remove('open'); bodyLock(false); }
 async function loadInbox(){
   document.getElementById('inboxInner').innerHTML=
-    '<div style="padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-weight:800;font-size:1rem">💬 我的聊聊</div>' +
+    '<div style="padding:.85rem 1.1rem;border-bottom:1px solid var(--border);font-weight:800;font-size:.97rem;color:var(--text)">💬 我的聊聊</div>'+
     '<div class="conv-list"><div class="spinner"></div></div>';
   try{
     const convs=await api('GET','/api/conversations');
@@ -859,142 +777,94 @@ async function loadInbox(){
     if(!convs.length){ list.innerHTML='<div class="inbox-empty">還沒有任何對話<br><small>點擊書籍的「聊聊」開始對話</small></div>'; return; }
     list.innerHTML=convs.map(c=>{
       const initial=(c.other_name||'?')[0].toUpperCase();
-      const lastMsgDisplay=c.last_msg&&c.last_msg.startsWith('__MEET__')?'📅 面交邀請':c.last_msg&&c.last_msg==='__MEET_CONFIRMED__'?'✅ 已確認面交':c.last_msg||'';
+      const lastDisplay=c.last_msg&&c.last_msg.startsWith('__MEET__')?'📅 面交邀請':c.last_msg==='__MEET_CONFIRMED__'?'✅ 已確認面交':c.last_msg&&c.last_msg.startsWith('__IMG__')?'📷 圖片':c.last_msg||'';
       return '<div class="conv-item" onclick="openChat('+c.id+',\''+esc(c.other_name)+'\',\''+esc(c.listing_title)+'\','+c.listing_id+','+c.seller_id+')">' +
         '<div class="conv-av">'+initial+'</div>' +
-        '<div class="conv-info">' +
-          '<div class="conv-top"><span class="conv-name">'+esc(c.other_name)+'</span><span class="conv-time">'+fmtTime(c.last_at)+'</span></div>' +
-          '<div class="conv-book">📚 '+esc(c.listing_title)+'</div>' +
-          '<div class="conv-last">'+(lastMsgDisplay?esc(lastMsgDisplay):'<i>開始對話吧</i>')+'</div>' +
-        '</div>' +
+        '<div class="conv-info"><div class="conv-top"><span class="conv-name">'+esc(c.other_name)+'</span><span class="conv-time">'+fmtTime(c.last_at)+'</span></div>' +
+        '<div class="conv-book">📚 '+esc(c.listing_title)+'</div>' +
+        '<div class="conv-last">'+(lastDisplay?esc(lastDisplay):'<i>開始對話吧</i>')+'</div></div>' +
         (c.unread>0?'<div class="conv-unread">'+c.unread+'</div>':'') +
       '</div>';
     }).join('');
   }catch(e){ document.querySelector('#inboxInner .conv-list').innerHTML='<div class="inbox-empty">載入失敗</div>'; }
 }
 
-// ── Chat ───────────────────────────────────────────────────────────────────
+// ── Chat ─────────────────────────────────────────────────────────────────────
 async function startChat(lid){
   try{
-    const [d, listing] = await Promise.all([
-      api('POST','/api/conversations',{listing_id:lid}),
-      api('GET','/api/listings/'+lid)
-    ]);
+    const [d,listing]=await Promise.all([api('POST','/api/conversations',{listing_id:lid}),api('GET','/api/listings/'+lid)]);
     closeDetailBtn();
-    openChat(d.id, listing.username, listing.title, lid, listing.user_id);
+    openChat(d.id,listing.username,listing.title,lid,listing.user_id);
   }catch(e){ alert('❌ '+e.message); }
 }
-
-function openChat(cid, otherName, listingTitle, listingId, sellerId){
-  currentCid=cid;
-  currentConvInfo={otherName, listingTitle, listingId, sellerId, cid};
+function openChat(cid,otherName,listingTitle,listingId,sellerId){
+  currentCid=cid; currentConvInfo={otherName,listingTitle,listingId,sellerId,cid};
   document.getElementById('inboxOv').classList.remove('open');
-  document.getElementById('chatOv').classList.add('open');
-  bodyLock(true);
-  renderChatShell(otherName, listingTitle, sellerId);
-  loadMessages();
-  startChatPoll();
+  document.getElementById('chatOv').classList.add('open'); bodyLock(true);
+  renderChatShell(otherName,listingTitle);
+  loadMessages(); startChatPoll();
 }
-
-function renderChatShell(otherName, listingTitle, sellerId){
-  const isSeller=(auth.username && sellerId && auth.token); // Will check properly in loadMessages
+function renderChatShell(otherName,listingTitle){
   document.getElementById('chatInner').innerHTML=
-    '<div class="chat-header">' +
-      '<div class="chat-header-info"><h3>'+esc(otherName)+'</h3><small>📚 '+esc(listingTitle)+'</small></div>' +
-      '<button class="btn-meet" id="btnMeet" style="display:none" onclick="openMeetForm()">📅 約定面交</button>' +
-    '</div>' +
-    '<div class="chat-body" id="chatBody"><div class="spinner"></div></div>' +
-    '<div id="chatTxnBar"></div>' +
-    '<div class="chat-footer">' +
-      '<button class="chat-cam-btn" onclick="document.getElementById(\'chatImgFile\').click()" title="傳送圖片">📷</button>' +
-      '<input type="file" id="chatImgFile" accept="image/*" style="display:none" onchange="sendChatImage(event)">' +
-      '<textarea class="chat-input" id="chatInput" placeholder="輸入訊息..." onkeydown="chatEnter(event)"></textarea>' +
-      '<button class="chat-send" onclick="sendMsg()">➤</button>' +
+    '<div class="chat-header"><div class="chat-header-info"><h3>'+esc(otherName)+'</h3><small>📚 '+esc(listingTitle)+'</small></div>'+
+    '<button class="btn-meet" id="btnMeet" style="display:none" onclick="openMeetForm()">📅 約定面交</button></div>'+
+    '<div class="chat-body" id="chatBody"><div class="spinner"></div></div>'+
+    '<div id="chatTxnBar"></div>'+
+    '<div class="chat-footer">'+
+      '<button class="chat-cam-btn" onclick="document.getElementById(\'chatImgFile\').click()" title="傳圖片">📷</button>'+
+      '<input type="file" id="chatImgFile" accept="image/*" style="display:none" onchange="sendChatImage(event)">'+
+      '<textarea class="chat-input" id="chatInput" placeholder="輸入訊息..." onkeydown="chatEnter(event)"></textarea>'+
+      '<button class="chat-send" onclick="sendMsg()">➤</button>'+
     '</div>';
 }
-
 async function loadMessages(){
   if(!currentCid) return;
   try{
     const msgs=await api('GET','/api/conversations/'+currentCid+'/messages');
-    const body=document.getElementById('chatBody');
-    if(!body) return;
+    const body=document.getElementById('chatBody'); if(!body) return;
     const wasBottom=body.scrollHeight-body.scrollTop-body.clientHeight<80;
-
-    const {sellerId, listingId} = currentConvInfo;
-    const amISeller = sellerId && auth.token; // Need to check by fetching listing owner
-
-    // Show "約定面交" button for seller
+    const {listingId}=currentConvInfo;
     const btnMeet=document.getElementById('btnMeet');
-    if(btnMeet && listingId){
-      // Check if I'm the seller by seeing if I have a listing with this id
-      try{
-        const listing=await api('GET','/api/listings/'+listingId).catch(()=>null);
-        if(listing && listing.is_mine && btnMeet){
-          btnMeet.style.display='block';
-        }
-      }catch(e){}
+    if(btnMeet&&listingId){
+      const listing=await api('GET','/api/listings/'+listingId).catch(()=>null);
+      if(listing&&listing.is_mine&&btnMeet) btnMeet.style.display='block';
     }
-
-    // Get transaction
     let txn=null;
     if(listingId) txn=await api('GET','/api/listings/'+listingId+'/transaction').catch(()=>null);
-
-    body.innerHTML=msgs.length ? msgs.map(m=>{
+    body.innerHTML=msgs.length?msgs.map(m=>{
       const isMe=m.sender_name===auth.username;
       if(m.content.startsWith('__MEET__')){
         const parts=m.content.slice(8).split('||');
-        const time=parts[0]||'', loc=parts[1]||'', tid=parts[2]||'';
-        const alreadyConfirmed=txn&&(txn.buyer_done||txn.seller_done||(txn.meet_time&&txn.buyer_done===0&&txn.seller_done===0));
-        const confirmed=txn&&txn.is_buyer===false; // buyer not yet confirmed
-        return '<div class="meet-card">' +
-          '<div class="mc-title">📅 面交邀請</div>' +
-          '<div class="mc-info"><b>時間：</b>'+esc(time)+'<br><b>地點：</b>'+esc(loc)+'</div>' +
+        const time=parts[0]||'',loc=parts[1]||'',tid=parts[2]||'';
+        return '<div class="meet-card"><div class="mc-title">📅 面交邀請</div>'+
+          '<div class="mc-info"><b>時間：</b>'+esc(time)+'<br><b>地點：</b>'+esc(loc)+'</div>'+
           (!isMe&&txn&&!txn.seller_done&&!txn.buyer_done?
             '<button class="btn-confirm-meet" onclick="confirmMeet('+tid+')">✅ 確認面交</button>':
-            '<div style="font-size:.78rem;color:var(--muted)">等待買家確認...</div>') +
+            '<div style="font-size:.75rem;color:var(--muted)">等待買家確認...</div>')+
         '</div>';
       }
-      if(m.content==='__MEET_CONFIRMED__'){
-        return '<div class="meet-confirmed-card">✅ 買家已確認面交！</div>';
-      }
+      if(m.content==='__MEET_CONFIRMED__') return '<div class="meet-confirmed-card">✅ 買家已確認面交！</div>';
       if(m.content.startsWith('__IMG__')){
         const fn=m.content.slice(7);
-        return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+';gap:.15rem">' +
-          '<div class="chat-img-bubble" onclick="window.open(\'/uploads/'+esc(fn)+'\')">' +
-            '<img src="/uploads/'+esc(fn)+'" alt="圖片">' +
-          '</div>' +
-          '<div class="bubble-time" style="'+(isMe?'text-align:right':'text-align:left')+';font-size:.68rem;opacity:.6">'+fmtTime(m.created_at)+'</div>' +
-        '</div>';
+        return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+';gap:.12rem">'+
+          '<div class="chat-img-bubble" onclick="window.open(\'/uploads/'+esc(fn)+'\')"><img src="/uploads/'+esc(fn)+'" alt="圖片"></div>'+
+          '<div style="'+(isMe?'text-align:right':'text-align:left')+';font-size:.66rem;color:var(--muted2)">'+fmtTime(m.created_at)+'</div></div>';
       }
-      return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+'">' +
+      return '<div style="display:flex;flex-direction:column;align-items:'+(isMe?'flex-end':'flex-start')+'">'+
         '<div class="chat-bubble '+(isMe?'bubble-me':'bubble-them')+'">'+esc(m.content)+'<div class="bubble-time">'+fmtTime(m.created_at)+'</div></div></div>';
-    }).join('') : '<div style="text-align:center;color:var(--muted);font-size:.82rem;padding:1.5rem">說聲嗨吧 👋</div>';
-
-    // Transaction action bar
+    }).join(''):'<div style="text-align:center;color:var(--muted2);font-size:.82rem;padding:2rem">說聲嗨吧 👋</div>';
     const txnBar=document.getElementById('chatTxnBar');
-    if(txnBar && txn && (txn.status==='reserved'||txn.meet_location)){
-      let txnHtml='<div class="chat-txn-bar">';
-      if(txn.is_seller){
-        txnHtml+='<button class="txn-btn seller" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+(txn.seller_done?'✅ 已完成':'✅ 我已面交完成')+'</button>';
-      }
-      if(txn.is_buyer){
-        txnHtml+='<button class="txn-btn buyer" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+(txn.buyer_done?'✅ 已收到':'📦 我已收到書')+'</button>';
-      }
-      txnHtml+='</div>';
-      txnBar.innerHTML=txnHtml;
+    if(txnBar&&txn&&(txn.status==='reserved'||txn.meet_location)){
+      let h='<div class="chat-txn-bar">';
+      if(txn.is_seller) h+='<button class="txn-btn seller" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+(txn.seller_done?'✅ 已完成':'✅ 我已面交完成')+'</button>';
+      if(txn.is_buyer) h+='<button class="txn-btn buyer" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+(txn.buyer_done?'✅ 已收到':'📦 我已收到書')+'</button>';
+      txnBar.innerHTML=h+'</div>';
     }
-
     if(wasBottom||msgs.length<5) body.scrollTop=body.scrollHeight;
     checkUnread();
   }catch(e){}
 }
-
-async function confirmMeet(tid){
-  try{ await api('POST','/api/transactions/'+tid+'/confirm'); loadMessages(); loadListings(); }
-  catch(e){ alert('❌ '+e.message); }
-}
-
+async function confirmMeet(tid){ try{ await api('POST','/api/transactions/'+tid+'/confirm'); loadMessages(); loadListings(); }catch(e){ alert(e.message); } }
 function startChatPoll(){ stopChatPoll(); chatPollTimer=setInterval(loadMessages,4000); }
 function stopChatPoll(){ clearInterval(chatPollTimer); }
 function closeChat(e){ if(e.target===document.getElementById('chatOv')) closeChatBtn(); }
@@ -1002,117 +872,85 @@ function closeChatBtn(){ stopChatPoll(); currentCid=null; document.getElementByI
 function chatEnter(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMsg(); } }
 async function sendMsg(){
   const input=document.getElementById('chatInput');
-  const content=input.value.trim();
-  if(!content||!currentCid) return;
+  const content=input.value.trim(); if(!content||!currentCid) return;
   input.value='';
   try{ await api('POST','/api/conversations/'+currentCid+'/messages',{content}); loadMessages(); }
-  catch(e){ input.value=content; alert('❌ 發送失敗'); }
+  catch(e){ input.value=content; alert('發送失敗'); }
 }
-
 async function sendChatImage(e){
-  const file = e.target.files[0]; e.target.value='';
-  if(!file||!currentCid) return;
-  // Optimistic: show sending indicator
+  const file=e.target.files[0]; e.target.value=''; if(!file||!currentCid) return;
   const body=document.getElementById('chatBody');
-  const sending=document.createElement('div');
-  sending.className='chat-img-sending'; sending.textContent='傳送圖片中...';
+  const sending=document.createElement('div'); sending.className='chat-img-sending'; sending.textContent='傳送圖片中...';
   if(body){ body.appendChild(sending); body.scrollTop=body.scrollHeight; }
   try{
     const fd=new FormData(); fd.append('image',file);
     const headers={}; if(auth.token) headers['Authorization']='Bearer '+auth.token;
     const res=await fetch('/api/conversations/'+currentCid+'/image',{method:'POST',headers,body:fd});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.detail||'上傳失敗');
+    const data=await res.json(); if(!res.ok) throw new Error(data.detail||'上傳失敗');
     loadMessages();
   }catch(ex){ alert('❌ '+ex.message); }
   finally{ if(sending.parentNode) sending.remove(); }
 }
 
-// ── Meet form ──────────────────────────────────────────────────────────────
+// ── Meet form ─────────────────────────────────────────────────────────────────
 function openMeetForm(){
-  const {listingId, cid} = currentConvInfo;
+  const {listingId,cid}=currentConvInfo;
   document.getElementById('meetInner').innerHTML=
-    '<div class="meet-form">' +
-    '<h3>📅 約定面交</h3>' +
-    '<div class="fg"><label>面交時間 <span class="req">*</span></label><input id="m-time" type="text" placeholder="例：6/20（五）下午 2:00"></div>' +
-    '<div class="fg"><label>面交地點 <span class="req">*</span></label><input id="m-loc" type="text" placeholder="例：圖書館一樓大廳"></div>' +
-    '<div id="meetMsg" class="f-msg"></div>' +
-    '<button class="btn-sub" onclick="submitMeetForm('+listingId+','+cid+')">發送面交邀請</button>' +
-    '</div>';
+    '<div class="meet-form"><h3>📅 約定面交</h3>'+
+    '<div class="fg"><label>面交時間 <span class="req">*</span></label><input id="m-time" type="text" placeholder="例：6/20（五）下午 2:00"></div>'+
+    '<div class="fg"><label>面交地點 <span class="req">*</span></label><input id="m-loc" type="text" placeholder="例：圖書館一樓大廳"></div>'+
+    '<div id="meetMsg" class="f-msg"></div>'+
+    '<button class="btn-sub" onclick="submitMeetForm('+listingId+','+cid+')">發送面交邀請</button></div>';
   document.getElementById('meetOv').classList.add('open');
 }
 function closeMeetForm(e){ if(e.target===document.getElementById('meetOv')) closeMeetFormBtn(); }
 function closeMeetFormBtn(){ document.getElementById('meetOv').classList.remove('open'); }
-async function submitMeetForm(listingId, convId){
-  const time=document.getElementById('m-time').value.trim();
-  const loc=document.getElementById('m-loc').value.trim();
+async function submitMeetForm(listingId,convId){
+  const time=document.getElementById('m-time').value.trim(), loc=document.getElementById('m-loc').value.trim();
   const msg=document.getElementById('meetMsg');
   if(!time||!loc){ msg.innerHTML='<div class="msg err">請填寫時間和地點</div>'; return; }
-  try{
-    await api('POST','/api/transactions',{listing_id:listingId, conv_id:convId, meet_time:time, meet_location:loc});
-    closeMeetFormBtn();
-    loadMessages();
-  }catch(e){ msg.innerHTML='<div class="msg err">❌ '+esc(e.message)+'</div>'; }
+  try{ await api('POST','/api/transactions',{listing_id:listingId,conv_id:convId,meet_time:time,meet_location:loc}); closeMeetFormBtn(); loadMessages(); }
+  catch(e){ msg.innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; }
 }
 
-// ── Seller profile ─────────────────────────────────────────────────────────
+// ── Seller profile ─────────────────────────────────────────────────────────────
 async function openSellerProfile(username){
-  document.getElementById('sellerOv').classList.add('open');
-  bodyLock(true);
+  document.getElementById('sellerOv').classList.add('open'); bodyLock(true);
   document.getElementById('sellerInner').innerHTML='<div class="spinner" style="margin-top:3rem"></div>';
-  try{
-    const d = await api('GET', '/api/users/'+encodeURIComponent(username));
-    renderSellerProfile(d);
-  }catch(e){
-    document.getElementById('sellerInner').innerHTML='<div style="padding:2rem;color:#fca5a5;text-align:center">找不到此用戶</div>';
-  }
+  try{ const d=await api('GET','/api/users/'+encodeURIComponent(username)); renderSellerProfile(d); }
+  catch(e){ document.getElementById('sellerInner').innerHTML='<div style="padding:2rem;text-align:center;color:var(--red)">找不到此用戶</div>'; }
 }
 function renderSellerProfile(d){
-  const initial = (d.username||'?')[0].toUpperCase();
-  const joinDate = d.created_at ? new Date(d.created_at).toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'}) : '';
-  const listings = d.listings || [];
-
-  const miniCards = listings.length ? listings.map(b=>{
-    const emoji = EMOJI[b.subject]||'📖';
-    const sc = 'subj-'+(b.subject||'其他');
-    const isReserved = (b.status==='reserved'||b.status==='pending')&&!b.is_sold;
-    const cls = b.is_sold?' sold' : isReserved?' reserved' : '';
-    const thumb = b.image1 ? '<img src="/uploads/'+esc(b.image1)+'" alt="">' : emoji;
-    const overlay = b.is_sold ? '<div class="mini-sold-tag">已售出</div>' : isReserved ? '<div class="mini-reserved-tag">占售中</div>' : '';
-    const click = b.is_sold ? '' : 'onclick="openDetailFromSeller('+b.id+')"';
-    return '<div class="mini-card'+cls+'" '+click+'>' +
-      '<div class="mini-thumb">'+thumb+overlay+'</div>' +
-      '<div class="mini-body">' +
-        '<div class="mini-title">'+esc(b.title)+'</div>' +
-        (b.subject?'<div class="mini-sub '+sc+'">'+esc(b.subject)+'</div>':'') +
-        '<div class="mini-footer"><span class="mini-price">$'+b.price+'</span><span class="badge badge-'+b.condition+'" style="font-size:.62rem">'+esc(b.condition)+'</span></div>' +
-      '</div></div>';
-  }).join('') : '<div class="empty" style="padding:2rem"><div class="ei">📭</div><p>還沒有刊登任何書籍</p></div>';
-
-  document.getElementById('sellerInner').innerHTML =
-    '<div class="seller-header">' +
-      '<div class="seller-hdr-top">' +
-        '<div class="seller-av">'+initial+'</div>' +
-        '<div class="seller-info">' +
-          '<h2>'+esc(d.username)+'</h2>' +
-          (joinDate?'<div class="join">加入於 '+joinDate+'</div>':'') +
-        '</div>' +
-      '</div>' +
-      '<div class="seller-stats">' +
-        '<div class="stat-chip"><div class="sv">'+d.total+'</div><div class="sl">刊登數量</div></div>' +
-        '<div class="stat-chip active"><div class="sv">'+d.active+'</div><div class="sl">在售中</div></div>' +
-        '<div class="stat-chip sold"><div class="sv">'+d.sold+'</div><div class="sl">已售出</div></div>' +
-      '</div>' +
-    '</div>' +
-    '<div class="seller-body">' +
-      '<div class="sub-title">📚 刊登的書籍（'+listings.length+'）</div>' +
-      '<div class="mini-grid">'+miniCards+'</div>' +
-    '</div>';
+  const initial=(d.username||'?')[0].toUpperCase();
+  const joinDate=d.created_at?new Date(d.created_at).toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric'}):'';
+  const listings=d.listings||[];
+  const miniCards=listings.length?listings.map(b=>{
+    const emoji=EMOJI[b.subject]||'📖';
+    const sc='subj-'+(b.subject||'其他');
+    const isReserved=(b.status==='reserved'||b.status==='pending')&&!b.is_sold;
+    const cls=b.is_sold?' sold':isReserved?' reserved':'';
+    let imgs=[];try{if(b.images)imgs=JSON.parse(b.images);}catch(e){}
+    if(!imgs.length){if(b.image1)imgs.push(b.image1);}
+    const thumb=imgs[0]?'<img src="/uploads/'+esc(imgs[0])+'" alt="">':emoji;
+    const overlay=b.is_sold?'<div class="mini-sold-tag">已售出</div>':isReserved?'<div class="mini-reserved-tag">占售中</div>':'';
+    const click=b.is_sold?'':'onclick="openDetailFromSeller('+b.id+')"';
+    return '<div class="mini-card'+cls+'" '+click+'><div class="mini-thumb">'+thumb+overlay+'</div>'+
+      '<div class="mini-body"><div class="mini-title">'+esc(b.title)+'</div>'+
+      (b.subject?'<div class="mini-sub">'+esc(b.subject)+'</div>':'')+
+      '<div class="mini-footer"><span class="mini-price">$'+b.price+'</span><span class="badge badge-'+b.condition+'" style="font-size:.6rem">'+esc(b.condition)+'</span></div></div></div>';
+  }).join(''):'<div class="empty" style="padding:1.5rem"><div class="ei">📭</div><p>還沒有刊登任何書籍</p></div>';
+  document.getElementById('sellerInner').innerHTML=
+    '<div class="seller-header">'+
+    '<div class="seller-hdr-top"><div class="seller-av">'+initial+'</div>'+
+    '<div class="seller-info"><h2>'+esc(d.username)+'</h2>'+(joinDate?'<div class="join">加入於 '+joinDate+'</div>':'')+'</div></div>'+
+    '<div class="seller-stats">'+
+      '<div class="stat-chip"><div class="sv">'+d.total+'</div><div class="sl">刊登數量</div></div>'+
+      '<div class="stat-chip active"><div class="sv">'+d.active+'</div><div class="sl">在售中</div></div>'+
+      '<div class="stat-chip sold"><div class="sv">'+d.sold+'</div><div class="sl">已售出</div></div>'+
+    '</div></div>'+
+    '<div class="seller-body"><div class="sub-title">刊登的書籍（'+listings.length+'）</div><div class="mini-grid">'+miniCards+'</div></div>';
 }
-async function openDetailFromSeller(lid){
-  closeSellerProfileBtn();
-  await openDetail(lid);
-}
+async function openDetailFromSeller(lid){ closeSellerProfileBtn(); await openDetail(lid); }
 function closeSellerProfile(e){ if(e.target===document.getElementById('sellerOv')) closeSellerProfileBtn(); }
 function closeSellerProfileBtn(){ document.getElementById('sellerOv').classList.remove('open'); bodyLock(false); }
 
