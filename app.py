@@ -90,6 +90,14 @@ def init_db():
         buyer_done INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (listing_id) REFERENCES listings(id))""")
+    conn.execute("""CREATE TABLE IF NOT EXISTS reviews (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        listing_id INTEGER NOT NULL,
+        reviewer_id INTEGER NOT NULL,
+        rating INTEGER NOT NULL,
+        comment TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(listing_id, reviewer_id))""")
     for col in ("image1", "image2", "status", "contacts", "images"):
         try:
             default = "'available'" if col == "status" else "''"
@@ -586,6 +594,38 @@ def buyer_done_route(tid):
     txn2 = conn.execute("SELECT seller_done FROM transactions WHERE id=?", [tid]).fetchone()
     if txn2 and txn2["seller_done"]:
         conn.execute("UPDATE listings SET is_sold=1, status='sold' WHERE id=?", [txn["listing_id"]])
+    conn.commit(); conn.close()
+    return jsonify({"ok": True})
+
+@app.route("/api/listings/<int:lid>/reviews", methods=["GET"])
+def get_reviews(lid):
+    conn = get_db()
+    rows = conn.execute("""
+        SELECT r.rating, r.comment, r.created_at, u.username
+        FROM reviews r JOIN users u ON r.reviewer_id = u.id
+        WHERE r.listing_id = ? ORDER BY r.created_at DESC
+    """, [lid]).fetchall()
+    conn.close()
+    return jsonify([dict(r) for r in rows])
+
+@app.route("/api/listings/<int:lid>/reviews", methods=["POST"])
+def post_review(lid):
+    user, err = require_user()
+    if err: return err
+    data = request.json or {}
+    try: rating = int(data.get("rating", 0))
+    except: rating = 0
+    if not 1 <= rating <= 5:
+        return jsonify({"detail": "評分需在 1-5 之間"}), 400
+    comment = (data.get("comment") or "").strip()
+    conn = get_db()
+    listing = conn.execute("SELECT user_id FROM listings WHERE id=?", [lid]).fetchone()
+    if not listing:
+        conn.close(); return jsonify({"detail": "找不到此商品"}), 404
+    if listing["user_id"] == user["id"]:
+        conn.close(); return jsonify({"detail": "不能評論自己的商品"}), 400
+    conn.execute("INSERT OR REPLACE INTO reviews (listing_id, reviewer_id, rating, comment) VALUES (?,?,?,?)",
+                 [lid, user["id"], rating, comment])
     conn.commit(); conn.close()
     return jsonify({"ok": True})
 

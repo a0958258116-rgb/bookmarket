@@ -161,6 +161,77 @@ select:focus{outline:none;border-color:var(--accent)}
 .msg.ok{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
 .msg.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
 
+/* ── Detail full-page view ── */
+.dv-outer{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
+.dv-back{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.84rem;border:none;background:none;cursor:pointer;padding:.3rem 0;margin-bottom:1.4rem;font-family:inherit;transition:color .15s;line-height:1}
+.dv-back:hover{color:var(--text)}
+.dv-wrap{display:grid;grid-template-columns:1fr 285px;gap:2rem;align-items:start}
+@media(max-width:720px){.dv-wrap{grid-template-columns:1fr}}
+/* Gallery */
+.dvg-main{width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--surface2);margin-bottom:.5rem;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;max-height:350px}
+.dvg-main img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+.dvg-thumbs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.dvg-thumb{width:58px;height:58px;border-radius:5px;overflow:hidden;cursor:pointer;border:2px solid var(--border);background:var(--surface2);flex-shrink:0;transition:border-color .15s}
+.dvg-thumb.active{border-color:var(--accent)}
+.dvg-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+/* Info */
+.dv-subject{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+.dv-title{font-size:1.35rem;font-weight:700;line-height:1.3;color:var(--text);font-family:'Noto Serif TC',serif;margin-bottom:.2rem}
+.dv-author{font-size:.88rem;color:var(--muted);margin-bottom:.85rem}
+.dv-meta{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
+.dv-desc-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.85rem;font-size:.86rem;color:var(--muted);line-height:1.8;white-space:pre-wrap;margin-bottom:1.5rem}
+/* Section heading */
+.dv-sec-title{font-size:.92rem;font-weight:700;color:var(--text);padding-bottom:.55rem;border-bottom:1.5px solid var(--border);margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem}
+.avg-wrap{margin-left:auto;display:flex;align-items:center;gap:.3rem}
+.avg-star{font-size:.85rem;color:var(--border2)}.avg-star.on{color:#f59e0b}
+.avg-score{font-size:.84rem;font-weight:700;color:var(--text)}
+.avg-ct{font-size:.76rem;color:var(--muted)}
+/* Review form */
+.rev-form{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.9rem;margin-bottom:1rem}
+.rev-form-lbl{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:.55rem;display:block}
+.star-row{display:flex;gap:.2rem;margin-bottom:.65rem}
+.s-btn{font-size:1.55rem;cursor:pointer;color:var(--border2);background:none;border:none;padding:0;line-height:1;user-select:none;transition:color .1s}
+.s-btn.on{color:#f59e0b}
+.rev-ta{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:.5rem .7rem;font-size:.85rem;font-family:inherit;resize:vertical;min-height:66px;color:var(--text);background:#fff;transition:border-color .15s;outline:none}
+.rev-ta:focus{border-color:var(--accent)}
+.btn-rev{margin-top:.5rem;background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.48rem .9rem;font-size:.83rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-rev:hover{background:var(--accent2)}
+/* Review list */
+.rev-list{display:flex;flex-direction:column;gap:.8rem}
+.rev-item{padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.rev-item:last-child{border-bottom:none;padding-bottom:0}
+.rev-hd{display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem}
+.rev-av{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rev-name{font-size:.83rem;font-weight:600;color:var(--text)}
+.rev-date{font-size:.72rem;color:var(--muted2);margin-left:auto}
+.rev-stars{display:flex;gap:.1rem;margin-bottom:.22rem}
+.rev-s{font-size:.82rem;color:var(--border2)}.rev-s.on{color:#f59e0b}
+.rev-comment{font-size:.83rem;color:var(--muted);line-height:1.65}
+.rev-empty{font-size:.83rem;color:var(--muted2);padding:.8rem 0;text-align:center}
+/* Sidebar */
+.dv-sidebar-col{position:sticky;top:78px;display:flex;flex-direction:column;gap:.7rem}
+.dv-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem}
+.dv-price-big{font-size:1.85rem;font-weight:900;color:var(--text);margin-bottom:.25rem;line-height:1.1}
+.dv-price-big small{font-size:.8rem;color:var(--muted);font-weight:400;margin-left:2px}
+.dv-s-chip{display:inline-block;padding:.2rem .55rem;border-radius:4px;font-size:.72rem;font-weight:600;margin-bottom:.8rem;border:1px solid}
+.dv-s-chip.available{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.dv-s-chip.reserved{background:#fffbeb;color:var(--amber);border-color:#fde68a}
+.dv-s-chip.sold{background:#fef2f2;color:#991b1b;border-color:#fecaca}
+.dv-btn{width:100%;padding:.7rem;border-radius:7px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;margin-bottom:.38rem;border:none;text-align:center}
+.dv-btn-buy{background:var(--accent);color:#fff}.dv-btn-buy:hover{background:var(--accent2)}
+.dv-btn-buy:disabled{opacity:.5;cursor:default;background:var(--accent)}
+.dv-btn-sec{background:#fff;color:var(--text);border:1.5px solid var(--border) !important}.dv-btn-sec:hover{border-color:var(--accent) !important;color:var(--accent)}
+.dv-btn-del{background:#fff;color:var(--red);border:1.5px solid var(--red) !important}.dv-btn-del:hover{background:#fef2f2}
+.dv-btn-fav{width:100%;padding:.5rem;border-radius:6px;font-size:.82rem;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s;background:transparent;color:var(--muted);border:none;display:flex;align-items:center;justify-content:center;gap:.35rem;margin-top:.1rem}
+.dv-btn-fav:hover,.dv-btn-fav.active{color:var(--red)}
+/* Seller card in sidebar */
+.dv-s-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.75rem}
+.dv-s-av{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;font-size:.9rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dv-s-name{font-weight:700;font-size:.88rem;color:var(--text)}
+.dv-s-sub{font-size:.7rem;color:var(--muted);margin-top:.1rem}
+.dv-s-goto{width:100%;padding:.46rem;border-radius:5px;border:1px solid var(--border);background:#fff;color:var(--muted);font-size:.78rem;font-family:inherit;cursor:pointer;transition:all .15s}
+.dv-s-goto:hover{border-color:var(--accent);color:var(--accent)}
+
 /* ── Auth / Post forms ── */
 .f-wrap{padding:1.3rem}
 .f-wrap h2{font-size:1.05rem;font-weight:800;margin-bottom:1rem;color:var(--text)}
@@ -313,7 +384,7 @@ select:focus{outline:none;border-color:var(--accent)}
   </div>
 </header>
 
-<main>
+<main id="mainView">
   <div class="toolbar">
     <div class="filter-row">
       <select id="subjectFilter" onchange="loadListings()">
@@ -336,12 +407,17 @@ select:focus{outline:none;border-color:var(--accent)}
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Detail modal -->
-<div class="overlay" id="detailOv" onclick="closeDetail(event)">
-  <div class="modal detail-modal">
-    <button class="mc" onclick="closeDetailBtn()">✕</button>
-    <div class="detail-scroll" id="detailScroll"></div>
-    <div class="detail-bar" id="detailBar"></div>
+<!-- Detail full-page view -->
+<div id="detailView" style="display:none">
+  <div class="dv-outer">
+    <button class="dv-back" onclick="closeDetailPage()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      返回書單
+    </button>
+    <div class="dv-wrap">
+      <div id="dvLeft"></div>
+      <div class="dv-sidebar-col" id="dvSidebar"></div>
+    </div>
   </div>
 </div>
 
@@ -563,20 +639,38 @@ function renderGrid(items){
   }).join('');
 }
 
-// ── Detail ────────────────────────────────────────────────────────────────────
+// ── Detail Page ───────────────────────────────────────────────────────────────
+let currentRating=0;
+
 async function openDetail(lid){
-  currentLid=lid;
-  document.getElementById('detailScroll').innerHTML='<div class="spinner"></div>';
-  document.getElementById('detailBar').innerHTML='';
-  document.getElementById('detailOv').classList.add('open'); bodyLock(true);
+  currentLid=lid; currentRating=0;
+  document.getElementById('mainView').style.display='none';
+  document.getElementById('detailView').style.display='block';
+  window.scrollTo(0,0);
+  document.getElementById('dvLeft').innerHTML='<div class="spinner"></div>';
+  document.getElementById('dvSidebar').innerHTML='';
+  history.pushState({lid},'','#listing-'+lid);
   try{
-    const [b,txn]=await Promise.all([
+    const [b,txn,reviews]=await Promise.all([
       api('GET','/api/listings/'+lid),
-      auth.token?api('GET','/api/listings/'+lid+'/transaction').catch(()=>null):Promise.resolve(null)
+      auth.token?api('GET','/api/listings/'+lid+'/transaction').catch(()=>null):Promise.resolve(null),
+      api('GET','/api/listings/'+lid+'/reviews').catch(()=>[]),
     ]);
-    renderDetail(b,txn);
-  }catch(e){ document.getElementById('detailScroll').innerHTML='<div style="padding:2rem;color:var(--red)">載入失敗</div>'; }
+    renderDetailPage(b,txn,reviews);
+  }catch(e){
+    document.getElementById('dvLeft').innerHTML='<div style="padding:2rem;color:var(--red)">載入失敗</div>';
+  }
 }
+
+function closeDetailPage(){
+  document.getElementById('detailView').style.display='none';
+  document.getElementById('mainView').style.display='block';
+  window.scrollTo(0,0);
+  history.pushState({},'',location.pathname);
+}
+window.addEventListener('popstate',()=>{
+  if(document.getElementById('detailView').style.display!=='none') closeDetailPage();
+});
 
 function renderContactBtns(b){
   let contacts=[];
@@ -592,98 +686,190 @@ function renderContactBtns(b){
   }).join('');
 }
 
-function renderDetail(b,txn){
+function starsHtml(rating,cls){
+  return [1,2,3,4,5].map(i=>'<span class="'+cls+(i<=Math.round(rating)?' on':'')+'">★</span>').join('');
+}
+
+function renderDetailPage(b,txn,reviews){
   const emoji=EMOJI[b.subject]||'📖';
   let imgs=[];try{if(b.images)imgs=JSON.parse(b.images);}catch(e){}
   if(!imgs.length){if(b.image1)imgs.push(b.image1);if(b.image2)imgs.push(b.image2);}
-  const date=new Date(b.created_at).toLocaleDateString('zh-TW');
-  const seller=b.username&&!b.is_mine?'由 <span class="seller-name-link" onclick="openSellerProfile(\''+esc(b.username)+'\')">'+esc(b.username)+'</span> 刊登':b.username&&b.is_mine?'由 <b>我</b> 刊登':'';
   const isReserved=(b.status==='reserved'||b.status==='pending')&&!b.is_sold;
-  let statusBanner='';
-  if(b.is_sold) statusBanner='<div class="status-banner sold">✅ 此書已售出</div>';
-  else if(isReserved) statusBanner='<div class="status-banner reserved">🔒 占售中 — 正在進行交易</div>';
-  const thumbHtml=imgs[0]?'<img src="/uploads/'+esc(imgs[0])+'" alt="" style="width:100%;height:100%;object-fit:cover">':emoji;
+  const date=new Date(b.created_at).toLocaleDateString('zh-TW');
 
-  let scrollHtml=
-    '<div class="d-thumb">'+thumbHtml+'</div>'+
-    statusBanner+
-    '<div class="d-body">'+
-    (b.subject?'<div class="d-subject">'+esc(b.subject)+'</div>':'')+
-    '<div class="d-title">'+esc(b.title)+'</div>'+
-    (b.author?'<div class="d-author">'+esc(b.author)+'</div>':'')+
-    '<div class="d-meta">'+
-      '<span class="meta-chip"><b>成色</b> <span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></span>'+
-      (b.edition?'<span class="meta-chip"><b>版次</b> '+esc(b.edition)+'</span>':'')+
-      '<span class="meta-chip">'+date+'</span>'+
-      (seller?'<span class="meta-chip">'+seller+'</span>':'')+
-    '</div>'+
-    (b.description?'<div class="d-desc">'+esc(b.description)+'</div>':'')+
-    (imgs.length?'<div class="d-imgs">'+imgs.map(fn=>'<div class="d-img"><img src="/uploads/'+esc(fn)+'" alt="" onclick="window.open(this.src)" style="cursor:zoom-in"></div>').join('')+'</div>':'')+
-    '<div class="d-price">$'+b.price+'<small>元</small></div>'+
-    '<div class="d-contact">'+renderContactBtns(b)+'</div>'+
-    '<div id="actionMsg" style="margin:.3rem 0"></div></div>';
-  document.getElementById('detailScroll').innerHTML=scrollHtml;
-
-  // Bottom bar
-  const isFav=b.is_favorited;
-  const svgHeart=(filled)=>filled
-    ?'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35z"/></svg>'
-    :'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-  const svgChat='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-  const favHtml='<button class="icon-btn'+(isFav?' active':'')+'" onclick="toggleFav('+b.id+',this)">'+svgHeart(isFav)+'<span>收藏</span></button>';
-  let barHtml='';
-  if(b.is_mine){
-    if(txn&&txn.is_seller){
-      barHtml=favHtml+'<div style="flex:1;display:flex;gap:.45rem">'+
-        '<button class="btn-sm2 btn-sold2" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+(txn.seller_done?'已完成':'面交完成')+'</button>'+
-        '<button class="btn-sm2 btn-del2" onclick="doDel()">刪除</button>'+
-      '</div>';
-    } else {
-      barHtml=favHtml+'<div style="flex:1;display:flex;gap:.45rem">'+
-        '<button class="btn-sm2 btn-sold2" onclick="doSold()" style="flex:1">標記售出</button>'+
-        '<button class="btn-sm2 btn-del2" onclick="doDel()" style="flex:1">刪除</button>'+
-      '</div>';
+  // Photo gallery
+  let galleryHtml='';
+  if(imgs.length){
+    galleryHtml='<div class="dvg-main"><img id="dvgMain" src="/uploads/'+esc(imgs[0])+'" alt="" onclick="window.open(this.src)"></div>';
+    if(imgs.length>1){
+      galleryHtml+='<div class="dvg-thumbs">'+imgs.map((fn,i)=>
+        '<div class="dvg-thumb'+(i===0?' active':'')+'" onclick="setGalleryPhoto(this,\''+esc(fn)+'\')"><img src="/uploads/'+esc(fn)+'" alt=""></div>'
+      ).join('')+'</div>';
     }
   } else {
-    const chatHtml='<button class="icon-btn'+(auth.token?' active-cyan':'')+'" onclick="'+(auth.token?'startChat('+b.id+')':'openAuth(\'login\')')+'" >'+svgChat+'<span>聊聊</span></button>';
-    if(b.is_sold){
-      barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>已售出</button>';
-    } else if(txn&&txn.is_buyer){
-      barHtml=favHtml+chatHtml+'<button class="bar-btn done-btn" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+(txn.buyer_done?'已收到':'確認已收到')+'</button>';
-    } else if(isReserved){
-      barHtml=favHtml+chatHtml+'<button class="bar-btn reserved" disabled>暫時保留中</button>';
-    } else {
-      barHtml=favHtml+chatHtml+'<button class="bar-btn buy" onclick="startChat('+b.id+')">我要買</button>';
-    }
+    galleryHtml='<div class="dvg-main">'+emoji+'</div>';
   }
-  document.getElementById('detailBar').innerHTML=barHtml;
+
+  // Reviews avg
+  const avgRating=reviews.length?reviews.reduce((a,r)=>a+r.rating,0)/reviews.length:0;
+  const avgHtml=reviews.length?'<span class="avg-wrap">'+starsHtml(avgRating,'avg-star')+'<span class="avg-score">'+avgRating.toFixed(1)+'</span><span class="avg-ct">('+reviews.length+')</span></span>':'';
+
+  // Left column
+  let leftHtml=
+    galleryHtml+
+    (b.subject?'<div class="dv-subject">'+esc(b.subject)+'</div>':'')+
+    '<div class="dv-title">'+esc(b.title)+'</div>'+
+    (b.author?'<div class="dv-author">'+esc(b.author)+'</div>':'')+
+    '<div class="dv-meta">'+
+      '<span class="meta-chip"><b>成色</b> <span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></span>'+
+      (b.edition?'<span class="meta-chip"><b>版次</b> '+esc(b.edition)+'</span>':'')+
+      '<span class="meta-chip">刊登 '+date+'</span>'+
+    '</div>'+
+    (b.description?'<div class="dv-desc-box">'+esc(b.description)+'</div>':'')+
+    '<div class="dv-sec-title">評論'+avgHtml+'</div>'+
+    renderRevForm(b)+
+    '<div id="revListEl">'+renderRevList(reviews)+'</div>';
+
+  document.getElementById('dvLeft').innerHTML=leftHtml;
+
+  // Sidebar
+  const statusCls=b.is_sold?'sold':isReserved?'reserved':'available';
+  const statusLabel=b.is_sold?'已售出':isReserved?'占售中':'出售中';
+  const isFav=b.is_favorited;
+  const svgH=(f)=>f
+    ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35z"/></svg>'
+    :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+  let actHtml='';
+  if(b.is_mine){
+    if(txn&&txn.is_seller){
+      actHtml='<button class="dv-btn dv-btn-buy" '+(txn.seller_done?'disabled':'')+' onclick="doTxnSellerDone('+txn.id+')">'+(txn.seller_done?'✓ 已完成':'面交完成')+'</button>'+
+        '<button class="dv-btn dv-btn-sec" onclick="doSold()">標記售出</button>'+
+        '<button class="dv-btn dv-btn-del" onclick="doDel()">刪除</button>';
+    } else {
+      actHtml='<button class="dv-btn dv-btn-buy" onclick="doSold()">標記售出</button>'+
+        '<button class="dv-btn dv-btn-del" onclick="doDel()">刪除</button>';
+    }
+  } else {
+    const chatFn=auth.token?'startChat('+b.id+')':'openAuth(\'login\')';
+    if(b.is_sold){
+      actHtml='<button class="dv-btn dv-btn-buy" disabled>已售出</button>';
+    } else if(txn&&txn.is_buyer){
+      actHtml='<button class="dv-btn dv-btn-buy" '+(txn.buyer_done?'disabled':'')+' onclick="doTxnBuyerDone('+txn.id+')">'+(txn.buyer_done?'✓ 已收到':'確認已收到')+'</button>';
+    } else if(isReserved){
+      actHtml='<button class="dv-btn dv-btn-buy" disabled>暫時保留中</button>';
+    } else {
+      actHtml='<button class="dv-btn dv-btn-buy" onclick="'+chatFn+'">我要買</button>';
+    }
+    actHtml+='<button class="dv-btn dv-btn-sec" onclick="'+chatFn+'">聊聊</button>';
+  }
+  actHtml+='<button id="dvFavBtn" class="dv-btn-fav'+(isFav?' active':'')+'" onclick="toggleFavPage('+b.id+',this)">'+svgH(isFav)+(isFav?' 已收藏':' 收藏')+'</button>';
+
+  const hasContact=(b.contacts&&b.contacts!=='[]'&&b.contacts!=='')||b.contact_info;
+  const contactBox=hasContact?'<div class="dv-box"><div style="font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.6rem">聯絡方式</div>'+renderContactBtns(b)+'</div>':'';
+
+  let sellerBox='';
+  if(b.username){
+    const initials=esc(b.username[0].toUpperCase());
+    sellerBox='<div class="dv-box">'+
+      '<div class="dv-s-row">'+
+        '<div class="dv-s-av">'+initials+'</div>'+
+        '<div><div class="dv-s-name">'+(b.is_mine?'我':esc(b.username))+'</div>'+
+        '<div class="dv-s-sub">賣家</div></div>'+
+      '</div>'+
+      (!b.is_mine?'<button class="dv-s-goto" onclick="openSellerProfile(\''+esc(b.username)+'\')">查看賣家所有刊登</button>':'')+
+    '</div>';
+  }
+
+  document.getElementById('dvSidebar').innerHTML=
+    '<div class="dv-box">'+
+      '<div class="dv-price-big">$'+b.price+'<small>元</small></div>'+
+      '<div class="dv-s-chip '+statusCls+'">'+statusLabel+'</div>'+
+      actHtml+
+    '</div>'+
+    contactBox+
+    sellerBox;
+}
+
+function setGalleryPhoto(thumb,fn){
+  document.querySelectorAll('.dvg-thumb').forEach(t=>t.classList.remove('active'));
+  thumb.classList.add('active');
+  const m=document.getElementById('dvgMain');
+  if(m) m.src='/uploads/'+fn;
+}
+
+function renderRevForm(b){
+  if(b.is_mine) return '';
+  if(!auth.token) return '<p style="font-size:.82rem;color:var(--muted);margin-bottom:.9rem"><a href="#" onclick="openAuth(\'login\');return false" style="color:var(--accent)">登入</a>後可留下評論</p>';
+  return '<div class="rev-form">'+
+    '<span class="rev-form-lbl">寫評論</span>'+
+    '<div class="star-row" id="starRow">'+
+      [1,2,3,4,5].map(n=>'<button class="s-btn" onclick="setRating('+n+')" title="'+n+'星">★</button>').join('')+
+    '</div>'+
+    '<textarea class="rev-ta" id="revText" placeholder="分享你的使用體驗（選填）"></textarea>'+
+    '<button class="btn-rev" onclick="submitReview('+b.id+')">送出</button>'+
+    '<div id="revMsg" style="margin-top:.4rem;font-size:.8rem"></div>'+
+  '</div>';
+}
+
+function setRating(n){
+  currentRating=n;
+  document.querySelectorAll('.s-btn').forEach((b,i)=>b.classList.toggle('on',i<n));
+}
+
+function renderRevList(reviews){
+  if(!reviews.length) return '<div class="rev-empty">還沒有評論</div>';
+  return '<div class="rev-list">'+reviews.map(r=>{
+    const dt=new Date(r.created_at).toLocaleDateString('zh-TW');
+    return '<div class="rev-item">'+
+      '<div class="rev-hd">'+
+        '<div class="rev-av">'+esc(r.username[0].toUpperCase())+'</div>'+
+        '<span class="rev-name">'+esc(r.username)+'</span>'+
+        '<span class="rev-date">'+dt+'</span>'+
+      '</div>'+
+      '<div class="rev-stars">'+starsHtml(r.rating,'rev-s')+'</div>'+
+      (r.comment?'<div class="rev-comment">'+esc(r.comment)+'</div>':'')+
+    '</div>';
+  }).join('')+'</div>';
+}
+
+async function submitReview(lid){
+  if(!currentRating){alert('請先選擇星數');return;}
+  const comment=(document.getElementById('revText')||{}).value||'';
+  const msg=document.getElementById('revMsg');
+  try{
+    await api('POST','/api/listings/'+lid+'/reviews',{rating:currentRating,comment});
+    if(msg) msg.innerHTML='<span style="color:var(--green)">✓ 評論已送出</span>';
+    const reviews=await api('GET','/api/listings/'+lid+'/reviews').catch(()=>[]);
+    document.getElementById('revListEl').innerHTML=renderRevList(reviews);
+    currentRating=0;
+    document.querySelectorAll('.s-btn').forEach(b=>b.classList.remove('on'));
+    if(document.getElementById('revText')) document.getElementById('revText').value='';
+  }catch(e){
+    if(msg) msg.innerHTML='<span style="color:var(--red)">'+esc(e.message)+'</span>';
+  }
 }
 
 function copyText(t){ navigator.clipboard.writeText(t).then(()=>alert('已複製：'+t)); }
-async function toggleFav(lid,btn){
-  if(!auth.token){ openAuth('login'); return; }
+async function toggleFavPage(lid,btn){
+  if(!auth.token){openAuth('login');return;}
   try{
     const d=await api('POST','/api/listings/'+lid+'/favorite');
-    const svgHeart=(filled)=>filled
-      ?'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35z"/></svg>'
-      :'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
-    btn.className='icon-btn'+(d.favorited?' active':'');
-    btn.innerHTML=svgHeart(d.favorited)+'<span>收藏</span>';
+    const svgF='<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53L12 21.35z"/></svg>';
+    const svgE='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    btn.className='dv-btn-fav'+(d.favorited?' active':'');
+    btn.innerHTML=(d.favorited?svgF:svgE)+(d.favorited?' 已收藏':' 收藏');
   }catch(e){}
 }
 async function doSold(){
   if(!confirm('確定標記為已售出？')) return;
-  try{ await api('POST','/api/listings/'+currentLid+'/sold');
-    document.getElementById('actionMsg').innerHTML='<div class="msg ok">✅ 已標記售出</div>';
-    setTimeout(()=>{ closeDetailBtn(); loadListings(); },1000);
-  }catch(e){ document.getElementById('actionMsg').innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; }
+  try{ await api('POST','/api/listings/'+currentLid+'/sold'); closeDetailPage(); loadListings(); }
+  catch(e){ alert(e.message); }
 }
 async function doDel(){
   if(!confirm('確定要刪除？')) return;
-  try{ await api('DELETE','/api/listings/'+currentLid);
-    document.getElementById('actionMsg').innerHTML='<div class="msg ok">已刪除</div>';
-    setTimeout(()=>{ closeDetailBtn(); loadListings(); },900);
-  }catch(e){ document.getElementById('actionMsg').innerHTML='<div class="msg err">'+esc(e.message)+'</div>'; }
+  try{ await api('DELETE','/api/listings/'+currentLid); closeDetailPage(); loadListings(); }
+  catch(e){ alert(e.message); }
 }
 async function doTxnSellerDone(tid){
   if(!confirm('確認面交已完成？')) return;
@@ -693,8 +879,7 @@ async function doTxnBuyerDone(tid){
   if(!confirm('確認已收到書籍？')) return;
   try{ await api('POST','/api/transactions/'+tid+'/buyer-done'); openDetail(currentLid); loadListings(); }catch(e){ alert(e.message); }
 }
-function closeDetail(e){ if(e.target===document.getElementById('detailOv')) closeDetailBtn(); }
-function closeDetailBtn(){ document.getElementById('detailOv').classList.remove('open'); bodyLock(false); }
+function closeDetailBtn(){ closeDetailPage(); }
 
 // ── Post modal ────────────────────────────────────────────────────────────────
 function openPost(){ if(!auth.token){ openAuth('login'); return; } renderPostForm(); document.getElementById('postOv').classList.add('open'); bodyLock(true); }
