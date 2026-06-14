@@ -236,8 +236,8 @@ select:focus{outline:none;border-color:var(--accent)}
 .f-wrap{padding:1.3rem}
 .f-wrap h2{font-size:1.05rem;font-weight:800;margin-bottom:1rem;color:var(--text)}
 .fg{margin-bottom:.78rem}
-.fg label{display:block;font-size:.75rem;color:var(--muted);margin-bottom:.25rem;font-weight:600}
-.fg label .req{color:var(--accent)}
+.fg>label{display:block;font-size:.75rem;color:var(--muted);margin-bottom:.25rem;font-weight:600}
+.fg>label .req{color:var(--accent)}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:.78rem}
 @media(max-width:440px){.f2{grid-template-columns:1fr}}
 .fg input,.fg select,.fg textarea{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:.5rem .75rem;font-size:.86rem;font-family:inherit;transition:border-color .15s;appearance:none}
@@ -739,7 +739,7 @@ function renderDetailPage(b,txn,reviews){
     '<div class="dv-meta">'+
       '<span class="meta-chip"><b>成色</b> <span class="badge badge-'+b.condition+'">'+esc(b.condition)+'</span></span>'+
       (b.edition?'<span class="meta-chip"><b>版次</b> '+esc(b.edition)+'</span>':'')+
-      (b.shipping==='yes'?'<span class="meta-chip" style="color:#0369a1;background:#e0f2fe;border-color:#bae6fd">📦 支援賣貨便</span>':'')+
+      (b.shipping==='yes'?'<span class="meta-chip" style="color:#0369a1;background:#e0f2fe;border-color:#bae6fd">📦 可賣貨便</span>':'')+
       '<span class="meta-chip">刊登 '+date+'</span>'+
     '</div>'+
     (b.description?'<div class="dv-desc-box">'+esc(b.description)+'</div>':'')+
@@ -918,7 +918,7 @@ function renderPostForm(){
     '<div class="fg"><label>運送方式</label>' +
       '<label class="shipping-label">' +
         '<input type="checkbox" id="f-shipping">'+
-        '<span>支援賣貨便（7-11 取貨付款）</span>' +
+        '<span>可賣貨便（7-11 取貨付款）</span>' +
       '</label>' +
     '</div>' +
     '<div class="fg"><label>聯絡方式 <span class="req">*</span> <small style="color:var(--muted2);font-weight:400">可新增多種</small></label>' +
