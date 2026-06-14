@@ -18,30 +18,44 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px}
 
 /* ── Header ── */
-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
-.hdr{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:62px}
-.logo{display:flex;align-items:center;gap:.55rem;font-weight:800;font-size:1rem;color:var(--text);white-space:nowrap;text-decoration:none;margin-right:.5rem}
-.logo-icon{font-size:1.4rem}
-.logo em{color:var(--accent);font-style:normal}
-.search-wrap{flex:1;max-width:420px;position:relative}
-.search-wrap input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:99px;color:var(--text);padding:.48rem 1rem .48rem 2.5rem;font-size:.88rem;font-family:inherit;transition:all .15s}
-.search-wrap input:focus{outline:none;border-color:var(--accent);background:#fff}
+header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border)}
+.hdr{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;gap:1.4rem;height:66px}
+/* Logo */
+.logo{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0;margin-right:.3rem}
+.logo-mark{width:36px;height:36px;background:linear-gradient(140deg,var(--accent) 0%,#0891b2 50%,var(--purple) 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 2px 8px rgba(13,148,136,.25)}
+.logo-text{display:flex;flex-direction:column;line-height:1}
+.logo-brand{font-size:.95rem;font-weight:900;color:var(--text);letter-spacing:-.01em}
+.logo-sub{font-size:.65rem;color:var(--muted);font-weight:400;margin-top:.15rem;letter-spacing:.01em}
+/* Search */
+.search-wrap{flex:1;max-width:480px;display:flex;border:1.5px solid var(--border2);border-radius:4px;overflow:hidden;background:#fff;transition:border-color .15s}
+.search-wrap:focus-within{border-color:var(--accent)}
+.search-wrap input{flex:1;border:none;background:transparent;color:var(--text);padding:.52rem 1rem;font-size:.88rem;font-family:inherit;outline:none}
 .search-wrap input::placeholder{color:var(--muted2)}
-.s-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--muted2);pointer-events:none;font-size:.95rem}
-.hdr-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+.search-btn{background:#4a4540;border:none;color:#fff;padding:0 1.1rem;cursor:pointer;font-size:.95rem;transition:background .15s;flex-shrink:0}
+.search-btn:hover{background:#333}
+/* Nav right */
+.hdr-right{display:flex;align-items:center;margin-left:auto;gap:0}
+.nav-div{width:1px;height:16px;background:var(--border);margin:0 .7rem;flex-shrink:0}
+.nav-link{background:none;border:none;font-family:inherit;font-size:.84rem;color:var(--muted);cursor:pointer;padding:.2rem .1rem;transition:color .15s;white-space:nowrap;text-decoration:none}
+.nav-link:hover{color:var(--text)}
+.nav-link.accent{color:var(--accent)}.nav-link.accent:hover{color:var(--accent2)}
+.nav-link.danger{color:var(--red)}.nav-link.danger:hover{color:#b91c1c}
+.nav-link.active{color:var(--text);font-weight:600}
+.nav-av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;color:#fff;font-weight:800;flex-shrink:0}
+.nav-user{display:flex;align-items:center;gap:.4rem;font-size:.84rem;color:var(--text);font-weight:500}
+.nav-inbox{position:relative;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:.15rem;transition:color .15s;display:flex;align-items:center}
+.nav-inbox:hover{color:var(--text)}
+.unread-badge{position:absolute;top:-4px;right:-5px;background:var(--red);color:#fff;border-radius:99px;font-size:.58rem;font-weight:800;min-width:15px;height:15px;display:flex;align-items:center;justify-content:center;padding:0 2.5px}
+/* Post btn */
+.btn-post{background:var(--accent);border:none;color:#fff;font-family:inherit;font-size:.85rem;font-weight:700;padding:.45rem 1.1rem;border-radius:4px;cursor:pointer;letter-spacing:.02em;transition:background .15s;white-space:nowrap;margin-left:.85rem}
+.btn-post:hover{background:var(--accent2)}
+/* Keep general btn styles for modals */
 .btn{padding:.42rem .85rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;font-size:.84rem;font-family:inherit;transition:all .15s;white-space:nowrap}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
 .btn-primary:hover{background:var(--accent2);border-color:var(--accent2)}
 .btn-ghost{border-color:transparent;background:transparent;color:var(--muted)}
 .btn-ghost:hover{color:var(--text);background:var(--surface2)}
-.icon-pill{display:flex;align-items:center;gap:.35rem;background:transparent;border:1.5px solid var(--border);border-radius:99px;padding:.35rem .75rem;font-size:.82rem;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
-.icon-pill:hover{border-color:var(--accent);color:var(--accent)}
-.icon-pill.active-fav{border-color:var(--red);color:var(--red)}
-.user-chip{display:flex;align-items:center;gap:.4rem;background:var(--surface2);border:1.5px solid var(--border);border-radius:99px;padding:.3rem .75rem .3rem .4rem;font-size:.82rem;color:var(--muted)}
-.user-chip .av{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:.72rem;color:#fff;font-weight:700}
-.msg-btn{position:relative}
-.unread-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;border-radius:99px;font-size:.62rem;font-weight:800;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 3px}
 
 /* ── Main ── */
 main{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 5rem}
@@ -277,10 +291,16 @@ select:focus{outline:none;border-color:var(--accent)}
 <body>
 <header>
   <div class="hdr">
-    <div class="logo"><span class="logo-icon">📚</span>資料科學系 <em>二手書</em></div>
+    <div class="logo">
+      <div class="logo-mark">📚</div>
+      <div class="logo-text">
+        <span class="logo-brand">資料科學系</span>
+        <span class="logo-sub">二手教科書交流平台</span>
+      </div>
+    </div>
     <div class="search-wrap">
-      <span class="s-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="搜尋書名、作者..." oninput="onSearch()">
+      <button class="search-btn" onclick="loadListings()">🔍</button>
     </div>
     <div class="hdr-right" id="hdrRight"></div>
   </div>
@@ -401,19 +421,23 @@ function fmtTime(ts){
 function renderHeader() {
   const el = document.getElementById('hdrRight');
   if (auth.token) {
+    const viewLabel = viewFavs ? '❤️ 收藏' : viewMine ? '我的刊登' : '全部書籍';
     el.innerHTML =
-      '<button class="btn btn-ghost" onclick="cycleView()">' +
-        (viewFavs ? '❤️ 收藏' : viewMine ? '👤 我的' : '📋 全部') +
-      '</button>' +
-      '<div class="user-chip"><div class="av">'+esc(auth.username[0].toUpperCase())+'</div>'+esc(auth.username)+'</div>' +
-      '<div class="msg-btn"><button class="btn" onclick="openInbox()" style="padding:.42rem .7rem">💬<span id="unreadBadge" style="display:none" class="unread-badge">0</span></button></div>' +
-      '<button class="btn btn-ghost" onclick="doLogout()" style="color:var(--red)">登出</button>' +
-      '<button class="btn btn-primary" onclick="openPost()">＋ 刊登</button>';
+      '<button class="nav-link'+((!viewMine&&!viewFavs)?' active':'')+'" onclick="cycleView()">'+viewLabel+'</button>' +
+      '<div class="nav-div"></div>' +
+      '<div class="nav-user"><div class="nav-av">'+esc(auth.username[0].toUpperCase())+'</div>'+esc(auth.username)+'</div>' +
+      '<div class="nav-div"></div>' +
+      '<button class="nav-inbox" onclick="openInbox()" title="聊聊">💬<span id="unreadBadge" style="display:none" class="unread-badge">0</span></button>' +
+      '<div class="nav-div"></div>' +
+      '<button class="nav-link danger" onclick="doLogout()">登出</button>' +
+      '<button class="btn-post" onclick="openPost()">＋ 刊登</button>';
     startUnreadPoll();
   } else {
     el.innerHTML =
-      '<button class="btn" onclick="openAuth(\'login\')">登入</button>' +
-      '<button class="btn btn-primary" onclick="openAuth(\'register\')">註冊</button>';
+      '<button class="nav-link" onclick="openAuth(\'login\')">登入</button>' +
+      '<div class="nav-div"></div>' +
+      '<button class="nav-link" onclick="openAuth(\'register\')">註冊</button>' +
+      '<button class="btn-post" onclick="openAuth(\'register\')">免費刊登</button>';
     stopUnreadPoll();
   }
 }
